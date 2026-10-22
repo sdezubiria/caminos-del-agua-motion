@@ -1,0 +1,919 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Caminos del Agua · Motion lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   DESIGN TOKENS — from the web PDF + Figma "Entre aguas"
+   ============================================================ */
+:root {
+  --cielo: #9ECFEB;
+  --lima: #DBF174;
+  --tinta: #2A2222;
+  --crema: #F9F9F2;
+  --noche: #2E3E76;
+  --azul: #5571D1;
+  --bosque: #3A5930;
+
+  --font: 'Josefin Sans', system-ui, sans-serif;
+  --track-tight: -0.03em;
+
+  --r-card: 20px;
+  --r-badge: 8px;
+
+  --ease-water: cubic-bezier(.65, 0, .35, 1);
+  --ease-out: cubic-bezier(.22, 1, .36, 1);
+  --t-flip: 900ms;
+
+  --header: 60px;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: var(--header); }
+body {
+  margin: 0;
+  background: var(--crema);
+  color: var(--tinta);
+  font-family: var(--font);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+button { font: inherit; color: inherit; cursor: pointer; }
+
+/* ---------- Header ---------- */
+.top {
+  position: fixed; inset: 0 0 auto 0; height: var(--header); z-index: 50;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 0 24px;
+  background: color-mix(in srgb, var(--crema) 88%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(42,34,34,.08);
+}
+.brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: inherit; }
+.brand svg { height: 34px; width: auto; fill: var(--tinta); }
+.brand span { font-weight: 300; font-size: 15px; letter-spacing: .02em; padding-top: 3px; }
+.brand b { font-weight: 600; }
+.top nav { display: flex; gap: 4px; }
+.top nav a {
+  text-decoration: none; color: inherit; font-size: 15px; padding: 9px 14px 6px; border-radius: 999px;
+  transition: background .2s;
+}
+.top nav a:hover { background: rgba(42,34,34,.06); }
+.top nav a small { font-weight: 300; opacity: .55; margin-right: 6px; }
+
+/* ---------- Shared controls ---------- */
+.seg { display: flex; gap: 4px; padding: 4px; border-radius: 14px; background: var(--hint); }
+.seg button {
+  border: 0; background: transparent; padding: 9px 12px 6px; border-radius: 10px; font-size: 14px; white-space: nowrap;
+  color: var(--ui); transition: background .2s, color .2s;
+}
+.seg button small { opacity: .6; margin-right: 5px; font-weight: 300; }
+.seg button[aria-pressed="true"] { background: var(--ui); color: var(--bg); }
+.seg button[aria-pressed="true"] small { opacity: .8; }
+.ghost { border: 1px solid currentColor; background: transparent; border-radius: 999px; padding: 8px 14px 5px; font-size: 14px; color: var(--ui); }
+
+/* ============================================================
+   01 · LOGO
+   ============================================================ */
+.lab { padding-top: var(--header); }
+.lab[data-theme="crema"] { --bg: var(--crema); --ink: var(--tinta); --w1: var(--cielo); --w2: var(--azul); --hint: rgba(42,34,34,.10); --ui: var(--tinta); }
+.lab[data-theme="cielo"] { --bg: var(--cielo); --ink: var(--noche); --w1: var(--crema); --w2: var(--azul); --hint: rgba(46,62,118,.16); --ui: var(--noche); }
+.lab[data-theme="noche"] { --bg: var(--noche); --ink: var(--crema); --w1: var(--cielo); --w2: #7f98ee; --hint: rgba(249,249,242,.13); --ui: var(--crema); }
+
+.track { position: relative; height: calc(100vh - var(--header)); background: var(--bg); transition: background .5s; }
+.track.is-scroll { height: 420vh; }
+.stage {
+  position: sticky; top: var(--header);
+  height: calc(100vh - var(--header));
+  display: grid; grid-template-rows: auto 1fr auto;
+  color: var(--ui); overflow: hidden;
+  --speed: 1;
+}
+.stage-head { padding: 28px 32px 0; }
+.v-num { font-size: 14px; font-weight: 300; letter-spacing: .08em; opacity: .7; }
+.v-name { font-size: clamp(34px, 4.4vw, 56px); font-weight: 600; line-height: .95; letter-spacing: var(--track-tight); margin: 6px 0 0; }
+
+.logo-wrap { position: relative; min-height: 0; }
+#logoSvg { position: absolute; left: 50%; top: 4%; width: min(86%, 680px); height: 92%; transform: translateX(-50%); overflow: visible; }
+#logoSvg .ink { fill: var(--ink); }
+
+.scroll-hint {
+  position: absolute; right: 32px; top: 50%; transform: translateY(-50%);
+  display: none; flex-direction: column; align-items: center; gap: 10px; font-size: 13px; letter-spacing: .08em;
+}
+.is-scroll .scroll-hint { display: flex; }
+.rail { width: 4px; height: 180px; border-radius: 4px; background: var(--hint); position: relative; overflow: hidden; }
+.rail i { position: absolute; inset: 0 0 auto 0; height: 0%; background: var(--w2); border-radius: 4px; }
+.pct { font-variant-numeric: tabular-nums; font-weight: 500; }
+
+.controls {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px 18px;
+  padding: 14px 20px 24px;
+}
+.ctl { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+.ctl input[type="range"] { accent-color: var(--w2); width: 110px; }
+.ctl[hidden] { display: none; }
+
+/* Corriente */
+.flow { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.flow.f1 { stroke: var(--w2); stroke-width: 36; stroke-dasharray: 150 170; animation: dashA calc(4.4s / var(--speed)) linear infinite; }
+.flow.f2 { stroke: var(--w1); stroke-width: 36; stroke-dasharray: 60 260; animation: dashB calc(4.4s / var(--speed)) linear infinite; }
+@keyframes dashA { to { stroke-dashoffset: -320; } }
+@keyframes dashB { from { stroke-dashoffset: -60; } to { stroke-dashoffset: -380; } }
+#logoSvg.manual .flow { animation: none; }
+.tz-fill path, .tz-fill polygon { fill: var(--ink); }
+.tz-line path { fill: none; stroke: var(--ink); stroke-width: 2.4; stroke-linejoin: round; stroke-linecap: round; }
+.sf-shape path, .sf-shape polygon { fill: var(--ink); }
+.sf-pen path { fill: none; stroke: var(--ink); stroke-linecap: square; stroke-linejoin: miter; }
+.tz-m { fill: none; stroke: #fff; stroke-width: 38; stroke-linejoin: round; stroke-linecap: butt; }
+
+/* ============================================================
+   02 · CARDS ON THE RIVER
+   ============================================================ */
+.cards-section {
+  background: var(--cielo); padding: 96px 24px 140px; overflow: hidden;
+  --ui: var(--noche); --bg: var(--cielo); --hint: rgba(46,62,118,.14);
+}
+.section-head { max-width: 1100px; margin: 0 auto 40px; display: flex; flex-wrap: wrap; gap: 16px 24px; align-items: end; justify-content: space-between; }
+.h2 { font-size: clamp(40px, 5vw, 72px); font-weight: 600; line-height: .95; letter-spacing: var(--track-tight); margin: 0; color: var(--noche); }
+.card-controls { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; color: var(--noche); }
+
+.river-wrap { max-width: 1100px; margin: 0 auto; aspect-ratio: 1600 / 3000; position: relative; }
+.canvas { position: absolute; left: 0; top: 0; width: 1600px; height: 3000px; transform-origin: 0 0; transform: scale(var(--s, .5)); }
+.canvas > svg { position: absolute; left: 0; top: 0; width: 1600px; height: 3000px; overflow: visible; }
+.channel, .water { fill: none; stroke-width: 64; stroke-linecap: round; stroke-linejoin: round; }
+.channel { stroke: rgba(249,249,242,.55); }
+.water { stroke: var(--azul); }
+.current { fill: none; stroke: var(--crema); stroke-width: 12; stroke-linecap: round; stroke-dasharray: 34 230; opacity: .85; animation: current 3.2s linear infinite; }
+@keyframes current { to { stroke-dashoffset: -264; } }
+.head { fill: var(--azul); }
+
+.roots-wrap { max-width: 1100px; margin: 0 auto; aspect-ratio: 1920 / 2377; position: relative; }
+.roots-page { position: absolute; left: 0; top: 0; width: 1920px; height: 2377px; transform-origin: 0 0; transform: scale(var(--s, .5)); --rv: 1; }
+.roots-bg {
+  position: absolute; inset: 0; width: 100%; height: 100%; display: block; user-select: none;
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(var(--rv) * 100% - 4%), transparent calc(var(--rv) * 100%));
+          mask-image: linear-gradient(to bottom, #000 calc(var(--rv) * 100% - 4%), transparent calc(var(--rv) * 100%));
+}
+.river-wrap[hidden], .roots-wrap[hidden] { display: none; }
+
+.card {
+  position: absolute; width: 320px; height: 572px; padding: 0; border: 0; background: none;
+  perspective: 1800px; outline: none;
+  transition: opacity .7s var(--ease-out), translate .7s var(--ease-out);
+}
+.card.is-hidden { opacity: 0; translate: 0 -48px; pointer-events: none; }
+.card:focus-visible .card-inner { outline: 6px solid var(--lima); outline-offset: 8px; border-radius: var(--r-card); }
+.card-inner {
+  position: absolute; inset: 0; transform-style: preserve-3d;
+  transition: transform var(--t-flip) var(--ease-water);
+}
+.card.is-flipped .card-inner { transform: rotateY(180deg); }
+.card.lift { animation: lift var(--t-flip) var(--ease-water); }
+@keyframes lift {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(0,0,0,0)); }
+  50% { transform: scale(1.06); filter: drop-shadow(0 40px 40px rgba(46,62,118,.35)); }
+}
+.face {
+  position: absolute; inset: 0; border-radius: var(--r-card); overflow: hidden;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  background: var(--c-bg); color: var(--c-fg); text-align: left;
+  box-shadow: 0 24px 50px -30px rgba(46,62,118,.55);
+}
+.face.back { transform: rotateY(180deg); }
+.face .icon { position: absolute; inset: 0; width: 100%; height: 100%; }
+.c-title { position: absolute; top: 22px; width: 250px; margin: 0; font-size: 35px; font-weight: 500; line-height: .95; letter-spacing: -1.05px; }
+.c-badge {
+  position: absolute; left: 263px; top: 21px; width: 36px; height: 36px; border-radius: var(--r-badge);
+  background: var(--c-fg); color: var(--c-bg); display: grid; place-items: center;
+  font-size: 25px; font-weight: 500; line-height: 1; padding-top: 5px;
+}
+.c-foot { position: absolute; top: 524px; margin: 0; font-size: 20px; font-style: italic; line-height: .9; letter-spacing: -.6px; }
+.photo { position: absolute; left: 0; top: 0; width: 320px; height: 434px; overflow: hidden; }
+.photo img { position: absolute; object-fit: cover; display: block; }
+.photo::after { content: ""; position: absolute; inset: 0; background: var(--c-bg); opacity: .3; }
+.c-body { position: absolute; margin: 0; font-size: 25px; font-weight: 400; line-height: .9; letter-spacing: -.75px; color: var(--c-body); }
+
+footer { padding: 40px 24px 60px; text-align: center; font-size: 14px; font-weight: 300; opacity: .6; }
+
+@media (max-width: 760px) {
+  .top { padding: 0 14px; }
+  .brand span { display: none; }
+  .top nav a { padding: 8px 9px 5px; font-size: 14px; }
+  .top nav a small { display: none; }
+  .stage-head { padding: 18px 16px 0; }
+  .scroll-hint { right: 12px; }
+  .rail { height: 110px; }
+  .controls { padding: 10px 12px 16px; gap: 8px; }
+  .seg { flex-wrap: wrap; justify-content: center; }
+  .seg button { padding: 8px 9px 5px; font-size: 13px; }
+  .cards-section { padding: 64px 16px 100px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <a class="brand" href="#logo" aria-label="Caminos del Agua">
+    <svg id="brandMark" viewBox="170 85 475 425" aria-hidden="true"></svg>
+    <span><b>Caminos del Agua</b> · Motion lab</span>
+  </a>
+  <nav>
+    <a href="#logo"><small>01</small>Logo</a>
+    <a href="#tarjetas"><small>02</small>Tarjetas</a>
+  </nav>
+</header>
+
+<!-- ============================ 01 · LOGO ============================ -->
+<section class="lab" id="logo" data-theme="crema">
+  <div class="track" id="track">
+    <div class="stage" id="stage">
+      <div class="stage-head">
+        <div class="v-num" id="vNum">01 / 04</div>
+        <h1 class="v-name" id="vName">Corriente</h1>
+      </div>
+
+      <div class="logo-wrap">
+        <svg id="logoSvg" viewBox="170 85 475 425" role="img" aria-label="Logo Caminos del Agua animado"></svg>
+      </div>
+
+      <div class="scroll-hint" aria-hidden="true">
+        <span>SCROLL</span>
+        <div class="rail"><i id="railFill"></i></div>
+        <span class="pct" id="pct">0%</span>
+      </div>
+
+      <div class="controls">
+        <div class="seg" id="variantSeg" role="group" aria-label="Animación"></div>
+        <div class="seg" id="logoModeSeg" role="group" aria-label="Modo">
+          <button data-mode="loop" aria-pressed="true">∞ Loop</button>
+          <button data-mode="scroll" aria-pressed="false">↓ Scroll</button>
+        </div>
+        <div class="seg" id="themeSeg" role="group" aria-label="Fondo">
+          <button data-theme="crema" aria-pressed="true">Crema</button>
+          <button data-theme="cielo" aria-pressed="false">Cielo</button>
+          <button data-theme="noche" aria-pressed="false">Noche</button>
+        </div>
+        <label class="ctl" id="speedCtl">Velocidad
+          <input type="range" id="speed" min="0.25" max="2.5" step="0.05" value="1">
+          <span id="speedVal" class="pct">1.0×</span>
+        </label>
+        <button class="ghost" id="replay">↺ Reiniciar</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 02 · TARJETAS ============================ -->
+<section class="cards-section" id="tarjetas">
+  <div class="section-head">
+    <h2 class="h2">Siete Raíces</h2>
+    <div class="card-controls">
+      <div class="seg" id="cardViewSeg" role="group" aria-label="Versión">
+        <button data-view="raices" aria-pressed="true">Raíces</button>
+        <button data-view="rio" aria-pressed="false">Río</button>
+      </div>
+      <div class="seg" id="cardModeSeg" role="group" aria-label="Modo">
+        <button data-mode="loop" aria-pressed="true">∞ Loop</button>
+        <button data-mode="scroll" aria-pressed="false">↓ Scroll</button>
+        <button data-mode="click" aria-pressed="false">Clic</button>
+        <button data-mode="hover" aria-pressed="false">Hover</button>
+      </div>
+    </div>
+  </div>
+  <div class="roots-wrap" id="rootsWrap">
+    <div class="roots-page" id="rootsPage">
+      <img class="roots-bg" src="assets/siete-raices-bg.svg" alt="" draggable="false">
+    </div>
+  </div>
+  <div class="river-wrap" id="riverWrap" hidden>
+    <div class="canvas" id="canvas">
+      <svg viewBox="0 0 1600 3000" aria-hidden="true">
+        <defs>
+          <mask id="mWater" maskUnits="userSpaceOnUse" x="-400" y="-200" width="2400" height="3400">
+            <path id="waterMask" class="water" stroke="#fff" style="stroke:#fff"/>
+          </mask>
+        </defs>
+        <path id="channel" class="channel"/>
+        <path id="water" class="water"/>
+        <path id="current" class="current" mask="url(#mWater)"/>
+        <circle id="head" class="head" r="44" opacity="0"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<footer>Caminos del Agua · pruebas de movimiento · archivo de trabajo</footer>
+
+<script src="assets/logo-data.js"></script>
+<script src="assets/logo-centerlines.js"></script>
+<script src="assets/cards-data.js"></script>
+<script>
+(() => {
+const L = window.LOGO;
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const lerp = (a, b, t) => a + (b - a) * t;
+const easeOut = t => 1 - Math.pow(1 - t, 3);
+const easeInOut = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const store = {
+  get(k) { try { return localStorage.getItem('cda2:' + k); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem('cda2:' + k, v); } catch (e) {} },
+};
+const segSelect = (seg, attr, val) => [...seg.children].forEach(b => b.setAttribute('aria-pressed', b.dataset[attr] === val));
+
+/* ---------- Logo geometry ---------- */
+// Reading order of the pieces; `big` = m + S + g (the river)
+const ORDER = ['c', 'a1', 'big', 'i', 'dot', 'n', 'o', 'tri', 'del', 'a3l', 'u', 'a3r'];
+const piece = (k, attrs = '') => k === 'tri'
+  ? `<polygon data-k="tri" points="${L.tri}" ${attrs}/>`
+  : `<path data-k="${k}" d="${L[k]}" ${attrs}/>`;
+const allPieces = (attrs) => ORDER.map(k => piece(k, attrs)).join('');
+// Centre line of the river inside the logo: right leg of the "m" → S → stem and tail of the "g"
+const ROUTE = 'M596.8 168 L596.8 214 Q596.8 249.6 556 249.6 L444.7 249.6 A21.6 21.6 0 0 0 444.7 292.6 L484.5 292.6 A21.6 21.6 0 0 1 484.5 335.8 L412 335.8 Q390.2 335.8 390.2 360 L390.2 452 Q390.2 494 352 498 Q324 500 309 482';
+const VB = '170 85 475 425';
+
+document.getElementById('brandMark').innerHTML = `<g>${allPieces()}</g>`;
+
+/* ---------- Animations ----------
+   Each one has mount() and update(p). In Scroll mode p comes from the scroll track;
+   in Loop mode it comes from a timeline (fill → hold → empty → hold), except Corriente,
+   whose loop is a continuous CSS flow. */
+const svg = document.getElementById('logoSvg');
+const stage = document.getElementById('stage');
+
+
+/* ---------- Trazo: outlines drawn like a pen, top to bottom ----------
+   Each outline is sampled into points, split into its separate contours, and every contour is
+   cut at its highest point into two strands that run downwards at the same time.
+   The river (m + S + g) is drawn first, then the other letters row by row. */
+function strandsOf(el) {
+  const total = el.getTotalLength(), step = 1.2;
+  const contours = [[]];
+  let prev = null;
+  for (let l = 0; l <= total; l += step) {
+    const pt = el.getPointAtLength(l), q = [pt.x, pt.y];
+    if (prev && Math.hypot(q[0] - prev[0], q[1] - prev[1]) > step * 4) contours.push([]);
+    contours[contours.length - 1].push(q);
+    prev = q;
+  }
+  const strands = [];
+  contours.filter(c => c.length > 3).forEach(c => {
+    let top = 0;
+    c.forEach((q, i) => { if (q[1] < c[top][1] - .01) top = i; });
+    const closed = Math.hypot(c[0][0] - c[c.length - 1][0], c[0][1] - c[c.length - 1][1]) < 6;
+    let a, b;
+    if (closed) {
+      const loop = c.slice(top).concat(c.slice(0, top)), half = Math.floor(loop.length / 2);
+      a = loop.slice(0, half + 1);
+      b = [loop[0]].concat(loop.slice(half).reverse());
+    } else {
+      a = c.slice(top);
+      b = c.slice(0, top + 1).reverse();
+    }
+    const y = c[top][1];
+    [a, b].filter(s => s.length > 1).forEach(s => strands.push({ y, d: 'M' + s.map(q => q[0].toFixed(1) + ' ' + q[1].toFixed(1)).join('L') }));
+  });
+  return strands;
+}
+function makeTrazo(id, name, filled) {
+  return {
+    id, name,
+    mount() {
+      svg.setAttribute('viewBox', VB);
+      // Measure on hidden copies first
+      svg.innerHTML = `<g visibility="hidden">${ORDER.filter(k => k !== 'tri').map(k => piece(k)).join('')}</g>`;
+      const strandsByKey = {};
+      svg.querySelectorAll('[data-k]').forEach(el => { strandsByKey[el.dataset.k] = strandsOf(el); });
+      // Order: river first, then the rest top to bottom (by row, then left to right)
+      const rest = ORDER.filter(k => k !== 'big' && k !== 'tri');
+      const boxes = {};
+      svg.querySelectorAll('[data-k]').forEach(el => { boxes[el.dataset.k] = el.getBBox(); });
+      rest.sort((a, b) => (Math.round(boxes[a].y / 60) - Math.round(boxes[b].y / 60)) || (boxes[a].x - boxes[b].x));
+      const keys = ['big', ...rest];
+      svg.innerHTML = `<defs><filter id="tzSoft" filterUnits="userSpaceOnUse" x="100" y="40" width="650" height="520">
+          <feGaussianBlur stdDeviation="1.6"/></filter></defs>` + keys.map(k => {
+        const shape = k === 'big' ? piece('big') + piece('tri') : piece(k);
+        // Contours that start lower in the letter (e.g. the counter of the g) wait for the pen to get there
+        const bb = boxes[k], st = strandsByKey[k].map(s => ({ d: s.d, off: (.6 * (s.y - bb.y) / bb.height).toFixed(3) }));
+        const mask = filled ? `<mask id="tzm-${k}" maskUnits="userSpaceOnUse" x="100" y="40" width="650" height="520">
+            <g filter="url(#tzSoft)">${st.map(s => `<path class="tz-m" data-off="${s.off}" d="${s.d}"/>`).join('')}</g></mask>` : '';
+        return `<g class="tzp" data-k="${k}">${mask}
+          <g class="tz-fill" ${filled ? `mask="url(#tzm-${k})"` : ''}>${shape}</g>
+          <g class="tz-line">${st.map(s => `<path data-off="${s.off}" d="${s.d}"/>`).join('')}</g></g>`;
+      }).join('');
+      this.items = [...svg.querySelectorAll('.tzp')].map(g => {
+        const k = g.dataset.k, i = rest.indexOf(k);
+        const lines = [...g.querySelectorAll('.tz-line path'), ...g.querySelectorAll('.tz-m')].map(el => {
+          const len = el.getTotalLength();
+          el.style.strokeDasharray = `${len} ${len}`;
+          return { el, len, off: +el.dataset.off };
+        });
+        // [draw start, draw length, fill start, fill length] in 0–1 progress
+        const t = k === 'big' ? [0, .4, .3, .14] : [.4 + i * .035, .2, .52 + i * .035, .12];
+        return { g, k, lines, fill: g.querySelector('.tz-fill'), t };
+      });
+    },
+    update(p) {
+      this.items.forEach(({ lines, fill, t, k }) => {
+        const d = easeInOut(clamp((p - t[0]) / t[1]));
+        lines.forEach(({ el, len, off }) => {
+          const ld = clamp((d - off) / (1 - off));
+          el.style.strokeDashoffset = (len * (1 - ld)).toFixed(2);
+          el.style.opacity = ld > 0 ? 1 : 0;
+        });
+        if (filled) {
+          // The fill follows the pen; once the strokes are complete the mask is dropped for clean edges
+          if (d >= 1) fill.removeAttribute('mask'); else fill.setAttribute('mask', `url(#tzm-${k})`);
+          fill.style.opacity = d > 0 ? 1 : 0;
+        } else {
+          fill.style.opacity = easeOut(clamp((p - t[2]) / t[3])).toFixed(3);
+        }
+      });
+    },
+  };
+}
+
+/* ---------- Trazo relleno: every letter drawn as one heavy stroke along its centre line ----------
+   The pen is as wide as the letter, so the drawn line is the solid letter itself. When a letter
+   is finished the stroke is swapped for the original shape so the final logo is exact. */
+function makeStrokeFill(id, name) {
+  const C = window.LOGO_CENTER;
+  return {
+    id, name,
+    mount() {
+      svg.setAttribute('viewBox', VB);
+      svg.innerHTML = `<g visibility="hidden">${ORDER.filter(k => k !== 'tri').map(k => piece(k)).join('')}</g>`;
+      const boxes = {};
+      svg.querySelectorAll('[data-k]').forEach(el => { boxes[el.dataset.k] = el.getBBox(); });
+      const rest = ORDER.filter(k => k !== 'big' && k !== 'tri');
+      rest.sort((a, b) => (Math.round(boxes[a].y / 60) - Math.round(boxes[b].y / 60)) || (boxes[a].x - boxes[b].x));
+      const keys = ['big', ...rest];
+      // The pen is a little wider than the letter, has square ends, and is clipped to the real
+      // letter shape. So what it draws is exactly the letter: no overflow while drawing, and no
+      // jump when the finished stroke is swapped for the original shape.
+      const pad = w => w + (w > 10 ? 4 : 2.4);
+      svg.innerHTML = keys.map(k => {
+        const shape = k === 'big' ? piece('big') + piece('tri') : piece(k);
+        return `<g class="sf" data-k="${k}">
+          <clipPath id="sfc-${k}">${piece(k)}</clipPath>
+          <g class="sf-shape">${shape}</g>
+          <g class="sf-pen" clip-path="url(#sfc-${k})" stroke-width="${pad(C[k].w)}">${C[k].strokes.map(s => `<path d="${s.d}"${s.w ? ` stroke-width="${pad(s.w)}"` : ''}/>`).join('')}</g></g>`;
+      }).join('');
+      this.items = [...svg.querySelectorAll('.sf')].map(g => {
+        const k = g.dataset.k, i = rest.indexOf(k);
+        const pens = [...g.querySelectorAll('.sf-pen path')].map((el, j) => {
+          const len = el.getTotalLength();
+          el.style.strokeDasharray = `${len} ${len + 1}`;
+          return { el, len, def: C[k].strokes[j], start: 0 };
+        });
+        // Separate strokes (d, e, l) follow one another with the same pen
+        let acc = 0;
+        pens.forEach(p => { p.start = acc; acc += p.len; });
+        const T = acc;
+        const t = k === 'big' ? [0, .44] : [.42 + i * .036, .2];
+        return { g, pens, T, t, shape: g.querySelector('.sf-shape'), pen: g.querySelector('.sf-pen') };
+      });
+    },
+    update(p) {
+      this.items.forEach(({ pens, T, t, shape, pen }) => {
+        const d = easeInOut(clamp((p - t[0]) / t[1]));
+        pens.forEach(({ el, len, start }) => {
+          const drawn = clamp(d * T - start, 0, len);
+          el.style.strokeDashoffset = (len - drawn).toFixed(2);
+          el.style.opacity = drawn > 0 ? 1 : 0;
+        });
+        const done = d >= 1;
+        shape.style.opacity = done ? 1 : 0;
+        pen.style.opacity = done ? 0 : 1;
+      });
+    },
+  };
+}
+
+const VARIANTS = [
+  {
+    id: 'corriente', name: 'Corriente', cssLoop: true,
+    mount() {
+      svg.setAttribute('viewBox', VB);
+      svg.innerHTML = `
+        <defs><mask id="mBig" maskUnits="userSpaceOnUse" x="150" y="60" width="520" height="480">
+          ${piece('big', 'fill="#fff"')}${piece('tri', 'fill="#fff"')}</mask></defs>
+        <g class="ink">${allPieces()}</g>
+        <g mask="url(#mBig)"><path class="flow f1" d="${ROUTE}"/><path class="flow f2" d="${ROUTE}"/></g>`;
+    },
+    update(p) {
+      const travel = p * 1280; // four flow periods across the scroll
+      svg.querySelector('.f1').style.strokeDashoffset = -travel;
+      svg.querySelector('.f2').style.strokeDashoffset = -60 - travel;
+    },
+  },
+  {
+    id: 'gotas', name: 'Gotas',
+    mount() {
+      svg.setAttribute('viewBox', VB);
+      svg.innerHTML = `
+        <defs><filter id="goo" filterUnits="userSpaceOnUse" x="0" y="-200" width="900" height="900" color-interpolation-filters="sRGB">
+          <feGaussianBlur in="SourceGraphic" stdDeviation="8" result="b"/>
+          <feColorMatrix in="b" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -9"/>
+        </filter></defs>
+        <g id="gooG" filter="url(#goo)">${ORDER.map(k => `<g class="pc" data-k="${k}">${piece(k)}</g>`).join('')}</g>`;
+      let s = 7; const rnd = () => (s = (s * 16807) % 2147483647) / 2147483647;
+      const pcs = [...svg.querySelectorAll('.pc')];
+      const boxes = pcs.map(g => g.getBBox());
+      const byY = pcs.map((g, i) => i).sort((a, b) => (boxes[a].y + boxes[a].x * .2) - (boxes[b].y + boxes[b].x * .2));
+      this.items = pcs.map((g, i) => {
+        const b = boxes[i];
+        return { g, path: g.firstElementChild, cx: b.x + b.width / 2, cy: b.y + b.height / 2,
+          dx: (rnd() - .5) * 170, dy: -(90 + rnd() * 190), t0: byY.indexOf(i) * .036 };
+      });
+      this.blur = svg.querySelector('feGaussianBlur');
+      this.gooG = svg.querySelector('#gooG');
+    },
+    update(p) {
+      if (!this.items) return;
+      this.items.forEach(it => {
+        const t = clamp((p - it.t0) / .46);
+        const e = easeOut(t);
+        const sc = .22 + .78 * e;
+        const squash = Math.sin(clamp((t - .78) / .22) * Math.PI) * .12;
+        it.g.setAttribute('transform',
+          `translate(${it.cx + it.dx * (1 - e)} ${it.cy + it.dy * (1 - e)}) scale(${sc * (1 + squash)} ${sc * (1 - squash)}) translate(${-it.cx} ${-it.cy})`);
+        it.path.style.fill = `color-mix(in srgb, var(--ink) ${Math.round(clamp((t - .4) / .6) * 100)}%, var(--w2))`;
+      });
+      const blur = 8 * (1 - easeInOut(clamp((p - .38) / .5)));
+      this.blur.setAttribute('stdDeviation', blur.toFixed(2));
+      if (blur < .05) this.gooG.removeAttribute('filter'); else this.gooG.setAttribute('filter', 'url(#goo)');
+    },
+  },
+  makeTrazo('trazo', 'Trazo', false),
+  makeStrokeFill('trazo-relleno', 'Trazo relleno'),
+];
+
+/* ---------- Logo state ---------- */
+const track = document.getElementById('track');
+const variantSeg = document.getElementById('variantSeg');
+const logoModeSeg = document.getElementById('logoModeSeg');
+const vNum = document.getElementById('vNum'), vName = document.getElementById('vName');
+const speedCtl = document.getElementById('speedCtl');
+const headerH = () => parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header'));
+const trackStart = () => track.getBoundingClientRect().top + scrollY - headerH();
+let current = 0, logoMode = 'loop', loopT = 0;
+
+VARIANTS.forEach((v, i) => {
+  const b = document.createElement('button');
+  b.dataset.i = i;
+  b.innerHTML = `<small>0${i + 1}</small>${v.name}`;
+  b.title = `${v.name} (tecla ${i + 1})`;
+  b.addEventListener('click', () => setVariant(i));
+  variantSeg.appendChild(b);
+});
+
+function render() {
+  const v = VARIANTS[current];
+  segSelect(variantSeg, 'i', String(current));
+  segSelect(logoModeSeg, 'mode', logoMode);
+  track.classList.toggle('is-scroll', logoMode === 'scroll');
+  vNum.textContent = `0${current + 1} / 0${VARIANTS.length}`;
+  vName.textContent = v.name;
+  speedCtl.hidden = logoMode !== 'loop';
+  v.mount();
+  svg.classList.toggle('manual', logoMode === 'scroll' || !v.cssLoop);
+  loopT = 0;
+  applySpeed();
+  if (logoMode === 'scroll') onScroll(); else if (v.loop) v.loop(0); else if (!v.cssLoop) v.update(0);
+}
+function setVariant(i) {
+  current = (i + VARIANTS.length) % VARIANTS.length;
+  store.set('variant', current);
+  render();
+  if (logoMode === 'scroll') scrollTo({ top: trackStart(), behavior: 'auto' });
+}
+function setLogoMode(m) {
+  logoMode = m;
+  store.set('logoMode', m);
+  render();
+  scrollTo({ top: trackStart(), behavior: 'auto' });
+}
+logoModeSeg.addEventListener('click', e => { const b = e.target.closest('button'); if (b) setLogoMode(b.dataset.mode); });
+document.getElementById('replay').addEventListener('click', () => {
+  render();
+  if (logoMode === 'scroll') scrollTo({ top: trackStart(), behavior: reduceMotion ? 'auto' : 'smooth' });
+});
+
+/* Theme */
+const lab = document.getElementById('logo');
+const themeSeg = document.getElementById('themeSeg');
+function setTheme(t) { lab.dataset.theme = t; segSelect(themeSeg, 'theme', t); store.set('theme', t); }
+themeSeg.addEventListener('click', e => { const b = e.target.closest('button'); if (b) setTheme(b.dataset.theme); });
+
+/* Speed */
+const speed = document.getElementById('speed'), speedVal = document.getElementById('speedVal');
+function applySpeed() {
+  const s = parseFloat(speed.value);
+  stage.style.setProperty('--speed', s);
+  speedVal.textContent = s.toFixed(1) + '×';
+}
+speed.addEventListener('input', applySpeed);
+
+/* Keyboard: 1–4 picks an animation, ←/→ steps, L / S switches mode */
+addEventListener('keydown', e => {
+  if (e.target.matches('input, textarea')) return;
+  const r = lab.getBoundingClientRect();
+  const labInView = r.top < innerHeight * .5 && r.bottom > innerHeight * .5;
+  if (/^[1-4]$/.test(e.key)) setVariant(+e.key - 1);
+  else if (!labInView) return;
+  else if (e.key === 'ArrowRight') setVariant(current + 1);
+  else if (e.key === 'ArrowLeft') setVariant(current - 1);
+  else if (e.key.toLowerCase() === 'l') setLogoMode('loop');
+  else if (e.key.toLowerCase() === 's') setLogoMode('scroll');
+});
+
+// Loop timeline: fill → hold → empty → hold (seconds at 1× speed)
+const LOOP = { up: 5.5, hold: 1.8, down: 3.2, rest: .8 };
+function loopProgress(t) {
+  const total = LOOP.up + LOOP.hold + LOOP.down + LOOP.rest;
+  t %= total;
+  if (t < LOOP.up) return t / LOOP.up;
+  t -= LOOP.up;
+  if (t < LOOP.hold) return 1;
+  t -= LOOP.hold;
+  if (t < LOOP.down) return 1 - t / LOOP.down;
+  return 0;
+}
+
+/* ============================================================
+   CARDS — two versions share the same card builder and hover/flip logic
+   ============================================================ */
+function makeCard(c) {
+  const btn = document.createElement('button');
+  btn.className = 'card';
+  btn.style.setProperty('--c-bg', c.bg);
+  btn.style.setProperty('--c-fg', c.fg);
+  btn.style.setProperty('--c-body', c.body);
+  btn.setAttribute('aria-pressed', 'false');
+  btn.setAttribute('aria-label', `Raíz ${c.n}: ${c.title.replace('<br>', ' ')}. Voltear tarjeta`);
+  const [ix, iy, iw, ih] = c.box;
+  btn.innerHTML = `
+    <div class="card-inner">
+      <div class="face front">
+        <svg class="icon" viewBox="0 0 320 572" aria-hidden="true"><g fill="${c.iconFill || c.fg}">${c.icon}</g></svg>
+        <p class="c-title" style="left:${c.tx}px">${c.title}</p>
+        <span class="c-badge">${c.n}</span>
+        <p class="c-foot" style="left:${c.tx}px;font-weight:${c.footW}">Nuestras Raíces</p>
+      </div>
+      <div class="face back">
+        <div class="photo"><img src="assets/cards/${c.img}" alt="" loading="lazy" style="left:${ix}px;top:${iy}px;width:${iw}px;height:${ih}px"></div>
+        <p class="c-body" style="left:${c.bx}px;top:${c.by}px;width:${c.bw}px">${c.text}</p>
+      </div>
+    </div>`;
+  const rec = { el: btn, auto: false, hover: false, pinned: null };
+  // Clicking pins the card on the side you chose; the animation and hover leave it alone
+  // until you click it again. In Hover mode the mouse shows the other side.
+  let lastPointer = '';
+  btn.addEventListener('pointerdown', e => { lastPointer = e.pointerType; });
+  btn.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') { rec.hover = true; apply(rec); } });
+  btn.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') { rec.hover = false; apply(rec); } });
+  btn.addEventListener('click', () => {
+    const showing = btn.classList.contains('is-flipped');
+    // With the mouse in Hover mode the card already shows the other side: the first click keeps it there,
+    // later clicks toggle it. Everywhere else a click toggles. Either way the card then stays put.
+    rec.pinned = (cardMode === 'hover' && lastPointer === 'mouse' && rec.pinned === null) ? showing : !showing;
+    lastPointer = '';
+    apply(rec);
+  });
+  btn.addEventListener('animationend', () => btn.classList.remove('lift'));
+  return rec;
+}
+
+function flip(el, state) {
+  const next = state === undefined ? !el.classList.contains('is-flipped') : state;
+  if (next === el.classList.contains('is-flipped')) return;
+  el.classList.toggle('is-flipped', next);
+  el.setAttribute('aria-pressed', next);
+  el.classList.remove('lift'); void el.offsetWidth; el.classList.add('lift');
+}
+// The animation sets the "auto" side; it only acts when that changes, and never under the cursor
+function apply(rec) {
+  const want = rec.pinned !== null ? rec.pinned
+    : (cardMode === 'hover' && rec.hover) ? !rec.auto : rec.auto;
+  flip(rec.el, want);
+}
+function setAuto(rec, state) {
+  if (state === rec.auto) return;
+  rec.auto = state;
+  apply(rec);
+}
+
+/* ---------- Version A · Raíces (the "Nuestra Visión" page) ---------- */
+const rootsWrap = document.getElementById('rootsWrap');
+const rootsPage = document.getElementById('rootsPage');
+const rootCards = CARDS.map(c => {
+  const rec = makeCard(c);
+  rec.el.style.left = c.pos[0] + 'px';
+  rec.el.style.top = c.pos[1] + 'px';
+  rec.top = c.pos[1] - 90;       // the numbered tag above each card
+  rootsPage.appendChild(rec.el);
+  return rec;
+});
+// rv: how far down the roots have grown (0–1). flipped(i): which cards show their photo side.
+function setRoots(rv, flipped) {
+  rootsPage.style.setProperty('--rv', rv.toFixed(4));
+  const y = rv * 2377;
+  rootCards.forEach((rec, i) => {
+    rec.el.classList.toggle('is-hidden', y < rec.top);
+    setAuto(rec, flipped(i));
+  });
+}
+// Loop: roots grow → cards flip 1→7 → hold → flip back → roots pull back
+const RT = { grow: 4.5, wait: 1.2, step: .32, hold: 3.5, back: 1, retract: 1.6, rest: .6 };
+function rootsLoop(t) {
+  const n = rootCards.length, flips = n * RT.step;
+  const total = RT.grow + RT.wait + flips + RT.hold + flips + RT.back + RT.retract + RT.rest;
+  t %= total;
+  if (t < RT.grow) return setRoots(easeInOut(t / RT.grow) * 1.04, () => false);
+  t -= RT.grow;
+  if (t < RT.wait) return setRoots(1.04, () => false);
+  t -= RT.wait;
+  if (t < flips) return setRoots(1.04, i => i < t / RT.step);
+  t -= flips;
+  if (t < RT.hold) return setRoots(1.04, () => true);
+  t -= RT.hold;
+  if (t < flips) return setRoots(1.04, i => i >= t / RT.step);
+  t -= flips;
+  if (t < RT.back) return setRoots(1.04, () => false);
+  t -= RT.back;
+  if (t < RT.retract) return setRoots(1.04 * (1 - easeInOut(t / RT.retract)), () => false);
+  setRoots(0, () => false);
+}
+// Scroll: roots grow over the first half, then the cards flip one by one
+function rootsScroll() {
+  const r = rootsWrap.getBoundingClientRect();
+  const p = clamp((innerHeight * .75 - r.top) / (r.height - innerHeight * .1));
+  setRoots(clamp(p / .55) * 1.04, i => p >= .6 + i * .05);
+}
+
+/* ---------- Version B · Río ---------- */
+// Same sequence of turns as the river in the logo: comes down (m), turns left, loops back right,
+// loops back left past the first bend, drops down (g) and hooks out to the left.
+const RIVER = 'M1430 40 L1430 600 Q1430 760 1270 760 L650 760 A320 320 0 0 0 650 1400 L1080 1400 A320 320 0 0 1 1080 2040 L340 2040 Q190 2040 190 2190 L190 2780 Q190 2950 20 2970 Q-90 2980 -170 2900';
+// Card centres, all sitting on the river
+const STOPS = [[1430, 330], [1090, 760], [750, 760], [870, 1400], [860, 2040], [520, 2040], [190, 2480]];
+
+const canvas = document.getElementById('canvas');
+const riverWrap = document.getElementById('riverWrap');
+const water = document.getElementById('water'), waterMask = document.getElementById('waterMask');
+const head = document.getElementById('head');
+['channel', 'water', 'waterMask', 'current'].forEach(id => document.getElementById(id).setAttribute('d', RIVER));
+const RL = water.getTotalLength();
+
+// Length along the river where each card sits
+const samples = [];
+for (let l = 0; l <= RL; l += 4) { const pt = water.getPointAtLength(l); samples.push([l, pt.x, pt.y]); }
+const stationOf = ([x, y]) => samples.reduce((best, s) => {
+  const d = (s[1] - x) ** 2 + (s[2] - y) ** 2;
+  return d < best.d ? { d, l: s[0] } : best;
+}, { d: Infinity, l: 0 }).l;
+
+const riverCards = CARDS.map((c, i) => {
+  const rec = makeCard(c);
+  const [cx, cy] = STOPS[i];
+  rec.el.style.left = (cx - 160) + 'px';
+  rec.el.style.top = (cy - 286) + 'px';
+  rec.station = stationOf(STOPS[i]);
+  canvas.appendChild(rec.el);
+  return rec;
+});
+
+// Water occupies the river between lengths a and b. A card shows its back while water covers it.
+function setWater(a, b, filling, wetFn) {
+  const len = Math.max(b - a, 0);
+  [water, waterMask].forEach(p => {
+    p.style.strokeDasharray = `${len} ${RL + 200}`;
+    p.style.strokeDashoffset = -a;
+    p.style.opacity = len > 1 ? 1 : 0;
+  });
+  const showHead = filling && b > 1 && b < RL - 1;
+  head.setAttribute('opacity', showHead ? 1 : 0);
+  if (showHead) { const pt = water.getPointAtLength(b); head.setAttribute('cx', pt.x); head.setAttribute('cy', pt.y); }
+  riverCards.forEach(rec => setAuto(rec, wetFn ? wetFn(rec) : rec.station > a && rec.station <= b));
+}
+// Loop: fill 11 s → hold 2.5 s → water drains out through the tail 6 s → rest 1 s
+const CL = { fill: 11, hold: 2.5, drain: 6, rest: 1 };
+function riverLoop(t) {
+  const total = CL.fill + CL.hold + CL.drain + CL.rest;
+  t %= total;
+  if (t < CL.fill) return setWater(0, RL * easeInOut(t / CL.fill), true);
+  t -= CL.fill;
+  if (t < CL.hold) return setWater(0, RL, false);
+  t -= CL.hold;
+  if (t < CL.drain) return setWater(RL * easeInOut(t / CL.drain), RL, false);
+  setWater(RL, RL, false);
+}
+// Scroll: the water head follows the reader down the page
+function riverScroll() {
+  const r = riverWrap.getBoundingClientRect();
+  const p = clamp((innerHeight * .62 - r.top) / (r.height - innerHeight * .4));
+  setWater(0, RL * p, true);
+}
+
+/* ---------- Version + mode ---------- */
+function fitCards() {
+  rootsPage.style.setProperty('--s', rootsWrap.clientWidth / 1920);
+  canvas.style.setProperty('--s', riverWrap.clientWidth / 1600);
+}
+fitCards();
+const ro = new ResizeObserver(fitCards);
+ro.observe(rootsWrap); ro.observe(riverWrap);
+
+let cardView = 'raices', cardMode = 'loop', cardT = 0;
+const cardViewSeg = document.getElementById('cardViewSeg');
+const cardModeSeg = document.getElementById('cardModeSeg');
+const activeWrap = () => cardView === 'rio' ? riverWrap : rootsWrap;
+function resetCards() {
+  cardT = 0;
+  [...rootCards, ...riverCards].forEach(rec => { rec.pinned = null; rec.hover = false; apply(rec); });
+  if (cardMode === 'scroll') return cardsOnScroll();
+  if (cardMode === 'loop') { if (cardView === 'rio') setWater(0, 0, true); else setRoots(0, () => false); return; }
+  // Click / Hover: full scene, every card on its front, only people flip them
+  if (cardView === 'rio') setWater(0, RL, false, () => false); else setRoots(1.04, () => false);
+}
+function setCardView(v) {
+  cardView = v;
+  store.set('cardView', v);
+  segSelect(cardViewSeg, 'view', v);
+  rootsWrap.hidden = v !== 'raices';
+  riverWrap.hidden = v !== 'rio';
+  fitCards();
+  resetCards();
+}
+function setCardMode(m) {
+  cardMode = m;
+  store.set('cardMode', m);
+  segSelect(cardModeSeg, 'mode', m);
+  resetCards();
+}
+cardViewSeg.addEventListener('click', e => { const b = e.target.closest('button'); if (b) setCardView(b.dataset.view); });
+cardModeSeg.addEventListener('click', e => { const b = e.target.closest('button'); if (b) setCardMode(b.dataset.mode); });
+function cardsOnScroll() {
+  if (cardMode !== 'scroll') return;
+  if (cardView === 'rio') riverScroll(); else rootsScroll();
+}
+
+/* ---------- Drivers ---------- */
+const railFill = document.getElementById('railFill'), pct = document.getElementById('pct');
+let ticking = false;
+function onScroll() {
+  if (logoMode === 'scroll') {
+    const r = track.getBoundingClientRect();
+    const p = clamp(-(r.top - headerH()) / (r.height - stage.offsetHeight));
+    VARIANTS[current].update(p);
+    railFill.style.height = (p * 100) + '%';
+    pct.textContent = Math.round(p * 100) + '%';
+  }
+  cardsOnScroll();
+  ticking = false;
+}
+addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(onScroll); } }, { passive: true });
+addEventListener('resize', onScroll);
+
+const inView = el => { const r = el.getBoundingClientRect(); return r.bottom > 0 && r.top < innerHeight; };
+let last = performance.now();
+function tick(now) {
+  const dt = Math.min((now - last) / 1000, .1);
+  last = now;
+  const v = VARIANTS[current];
+  if (logoMode === 'loop' && !v.cssLoop && inView(track)) {
+    loopT += dt * parseFloat(speed.value);
+    if (v.loop) v.loop(loopT); else v.update(loopProgress(loopT));
+  }
+  if (cardMode === 'loop' && inView(activeWrap())) {
+    cardT += dt;
+    if (cardView === 'rio') riverLoop(cardT); else rootsLoop(cardT);
+  }
+  requestAnimationFrame(tick);
+}
+
+/* ---------- Init ---------- */
+const savedTheme = store.get('theme');
+if (savedTheme) setTheme(savedTheme);
+const hashV = VARIANTS.findIndex(v => location.hash === '#' + v.id);
+current = hashV >= 0 ? hashV : clamp(+store.get('variant') || 0, 0, VARIANTS.length - 1);
+logoMode = store.get('logoMode') === 'scroll' ? 'scroll' : 'loop';
+render();
+cardMode = ['loop', 'scroll', 'click', 'hover'].includes(store.get('cardMode')) ? store.get('cardMode') : 'loop';
+segSelect(cardModeSeg, 'mode', cardMode);
+setCardView(store.get('cardView') === 'rio' ? 'rio' : 'raices');
+requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>
