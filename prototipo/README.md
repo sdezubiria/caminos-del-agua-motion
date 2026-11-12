@@ -15,7 +15,7 @@ One-page HTML prototype of the site, built from the Figma file *Caminos del Agua
 
 ## The river
 
-One line runs from the g of the logo to the underline of the footer logo, and draws as you scroll, with round caps. It is ink at both ends and takes a palette colour in each section in between (`COLORS` in `build.py`), blending into the next colour across each section boundary.
+One line runs from the g of the logo down to the bottom of the page, and draws as you scroll, with round caps. It starts in ink, as the logo, and takes a palette colour in each section (`COLORS` in `build.py`), blending into the next colour across each section boundary.
 
 - `build.py` defines it as orthogonal polylines with rounded corners (radius 80) in page coordinates: on desktop the page is one 1920-wide frame, and each section starts at the sum of the heights above it (`SECTIONS`). Side branches (the pills in "¿Qué te trae por aquí?", the team groups, the form, the allies) leave the line tangentially.
 - Each section gets the pieces of line that cross it in an `<svg class="river">` placed above its photos and below its text and pills. Over photos the line gets a light edge (`ON_PHOTO`).

@@ -134,7 +134,7 @@ def arrows():
 S['agua'] = arrows()
 
 S['footer'] = [
-    pl('footer-dde77.svg', 139, 244, 58, 0, '-4px 0'),
+    pl('footer-dde77.svg', 337, 244, 58, 0, '-4px 0'),
 ]
 
 
@@ -144,7 +144,7 @@ S['footer'] = [
 # is two corners 2R apart. Each section gets the pieces of line that cross it, in an <svg class="river"> whose
 # viewBox is that slice of the page. CSS draws every piece from --rl, the length of river drawn so far (js/site.js).
 SECTIONS = [('hero', 1080), ('intro', 1080), ('trae', 1080), ('donde', 1080), ('ha', 540), ('usos', 1080),
-            ('porque', 540), ('agua', 1250), ('vive', 2880), ('vision', 2377), ('equipo', 1080), ('valla', 1080),
+            ('porque', 540), ('agua', 1250), ('vive', 2680), ('vision', 2377), ('equipo', 1080), ('valla', 1080),
             ('contacto', 420), ('aliados', 800), ('footer', 291)]
 TOP, y0 = {}, 0
 for key, h in SECTIONS:
@@ -154,7 +154,7 @@ R = 80
 RAIL = 131      # the left rail: the lime roots trunk in siete-raices-bg.svg is centred here
 MID = 960       # the centre line through "¿Por qué el agua?", the water photos and "¿Cómo se vive?"
 # The line takes a colour from the palette in each section, chosen to read on that section's ground, and blends
-# into the next one over BLEND page px either side of the boundary. Ink at both ends: the logo and the footer logo.
+# into the next one over BLEND page px either side of the boundary. It starts in ink, as the logo.
 COLORS = {
     'hero': '#2A2222',      # tinta, as the logo
     'intro': '#5571D1',     # azul
@@ -170,7 +170,7 @@ COLORS = {
     'valla': '#5571D1',
     'contacto': '#5571D1',
     'aliados': '#5571D1',
-    'footer': '#2A2222',    # tinta, into the footer logo
+    'footer': '#5571D1',
 }
 BLEND = 160
 ON_PHOTO = {'intro', 'valla'}   # a dark line over a photo gets a light edge
@@ -275,17 +275,15 @@ turn = (math.atan2(ty, tx) - math.pi / 2) % (2 * math.pi)          # from the ta
 G_X = ccx - CURL
 
 river = Line(gx, gy).arc(CURL, 0, G_X, ccy, turn, ccx, ccy)
-FOOT_X = 337                         # where the river comes down into the footer
 A, B, C = G_X, G_X + 209, 1228       # intro S-bends, ending on the trunk of "¿Qué te trae por aquí?"
 ib = lambda y: P('intro', 0, y)[1]
 river.to(
     (A, ib(132)), (B, ib(132)), (B, ib(292)), (A, ib(292)), (A, ib(452)), (B, ib(452)), (B, ib(292)), (C, ib(292)),
     P('trae', C, 860.5), P('trae', RAIL, 860.5),                    # trunk, then left behind "Explora el proyecto"
     P('porque', RAIL, 80), P('porque', MID, 80),                    # down the rail, across "¿Por qué el agua?"
-    P('vive', MID, 2780), P('vive', RAIL, 2780),                    # down the centre of the water and the four zones
-    P('aliados', RAIL, 720), P('aliados', FOOT_X, 720),             # the rail, past the roots, the team and the allies
-    P('footer', FOOT_X, 244), P('footer', 257, 244),                # into the underline of the footer logo
-)
+    P('vision', MID, 80), P('vision', RAIL, 80),                    # down the centre of the water and the four zones
+    P('footer', RAIL, 291 + 40),                                    # the rail, past the roots, the team and the allies,
+)                                                                   # and off the bottom of the page
 TOTAL = river.len
 
 branches = []
@@ -322,8 +320,6 @@ al = branch(river, P('aliados', RAIL, AL_BUS - R), P('aliados', RAIL, AL_BUS), P
 for cx in AL_TILES[:-1]:
     branch(al, P('aliados', cx - R, AL_BUS), P('aliados', cx, AL_BUS), P('aliados', cx, 452))
 
-# The footer logo's underline is thinner (8 px): the river narrows into it once it arrives (class rv-end)
-FOOT_Y = P('footer', 0, 244)[1]
 
 
 def river_svg(sec):
@@ -351,10 +347,9 @@ def river_svg(sec):
     if sec in ON_PHOTO:
         # Over photos the line gets a light edge, drawn with it, so it reads on dark ground too
         paths[:0] = [p.replace('<path ', '<path class="rv-case" ') for p in paths]
-    if sec == 'footer':
-        x0, y, hw = 257, FOOT_Y, STROKE / 2
-        paths.append(f'<path class="rv-end" d="M{x0} {num(y - hw)}C{x0 - 30} {num(y - hw)} {x0 - 30} {num(y - 4)} 196 {num(y - 4)}'
-                     f'V{num(y + 4)}C{x0 - 30} {num(y + 4)} {x0 - 30} {num(y + hw)} {x0} {num(y + hw)}Z"/>')
+    if sec == 'vision':
+        # The lime roots trunk in siete-raices-bg.svg starts at the top edge; hide the stub above the river's corner
+        paths.insert(0, f'<rect x="117" y="{top}" width="28" height="{R * 2}" fill="#9ECFEB"/>')
     return (f'<svg class="river deco" viewBox="0 {top} 1920 {h}" preserveAspectRatio="none" aria-hidden="true" focusable="false">'
             + ''.join(paths) + '</svg>')
 
