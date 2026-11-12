@@ -63,7 +63,8 @@ button.pill:hover, a.pill:hover, .cta:hover { filter: brightness(1.08); transfor
   font: 500 calc(35 * var(--u)) / 1 var(--grotesk); color: #fff; transition: filter .2s, transform .2s; }
 .cta span { position: absolute; right: calc(53 * var(--u)); top: 50%; translate: 0 -50%; rotate: 90deg; color: var(--flecha); font: 700 calc(40 * var(--u)) / 1 var(--josefin); }
 .cta-electrico { background: var(--electrico); }
-.cta-rosa { background: var(--rosa); }
+.cta-rosa { background: var(--rosa); color: var(--tinta); }   /* ink on pink: 6.8:1 (white was 2.3:1) */
+.cta-rosa span { color: var(--tinta); }
 
 /* ---------- El río ---------- */
 /* Every section holds the pieces of river that cross it (build.py). A piece starts at length --a of the river and
@@ -249,6 +250,7 @@ button.pill:hover, a.pill:hover, .cta:hover { filter: brightness(1.08); transfor
   .vive-intro { margin-top: 20px; }
   .vive .rect { display: none; }
   .zona { position: relative; margin-top: 40px; padding: 32px 20px 0; background: var(--bg); }
+  .zona + .zona { margin-top: 0; }   /* the zones stack edge to edge, no strips of background between them */
   .zh { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
   .zn { font-size: 64px; line-height: 1; }
   .zname { font-size: 24px; line-height: 1; }

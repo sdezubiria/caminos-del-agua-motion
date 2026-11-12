@@ -203,7 +203,8 @@ class Line:
         """Arc of radius r around (cx, cy) turning `angle` radians to (x, y). sweep=1 turns clockwise on screen."""
         bbox = (cx - r, cy - r, cx + r, cy + r) if angle > math.pi / 2 + 1e-6 else \
             (min(self.x, x), min(self.y, y), max(self.x, x), max(self.y, y))
-        self._add('A', (x, y), r * angle, bbox, (r, int(angle > math.pi), sweep))
+        a0 = math.atan2(self.y - cy, self.x - cx)
+        self._add('A', (x, y), r * angle, bbox, (r, int(angle > math.pi), sweep, cx, cy, a0))
         return self
 
     def to(self, *pts, r=R):
@@ -235,6 +236,18 @@ class Line:
                 return s['at'] + math.dist(s['a'], p)
         raise ValueError(f'{p} is not on a straight part of the line')
 
+    def point_at(self, length):
+        """The point at a given length along the line."""
+        for s in self.segs:
+            if length <= s['at'] + s['len'] or s is self.segs[-1]:
+                t = min(max(length - s['at'], 0), s['len'])
+                if s['kind'] == 'L':
+                    (ax, ay), (bx, by) = s['a'], s['b']
+                    return ax + (bx - ax) * t / s['len'], ay + (by - ay) * t / s['len']
+                r, _, sweep, cx, cy, a0 = s['extra']
+                a = a0 + (t / r if sweep else -t / r)   # sweep=1 is clockwise on screen: the angle grows
+                return cx + r * math.cos(a), cy + r * math.sin(a)
+
     def d(self, segs):
         out = [f'M{num(segs[0]["a"][0])} {num(segs[0]["a"][1])}']
         for s in segs:
@@ -242,7 +255,7 @@ class Line:
             if s['kind'] == 'L':
                 out.append(f'L{x} {y}')
             else:
-                r, large, sweep = s['extra']
+                r, large, sweep = s['extra'][:3]
                 out.append(f'A{num(r)} {num(r)} 0 {large} {sweep} {x} {y}')
         return ''.join(out)
 
@@ -354,10 +367,32 @@ def river_svg(sec):
             + ''.join(paths) + '</svg>')
 
 
+def scroll_map(lag=.35, step=4, tol=.5):
+    """For js/site.js: pairs (length, scroll target) telling how much river to draw for a scroll position.
+    The scroll target is the page y the reader has reached. Going down, the line is drawn to where the reader is.
+    Where the line runs sideways or up, the target still moves on `lag` page px per px of line, so a horizontal
+    run draws over some scroll instead of all at once. Collinear samples are dropped (within `tol` px)."""
+    pts, yt = [], None
+    n = int(TOTAL // step)
+    for i in range(n + 2):
+        length = min(i * step, TOTAL)
+        y = river.point_at(length)[1]
+        yt = y if yt is None else max(yt + lag * (length - pts[-1][0]), y)
+        pts.append((length, yt))
+    keep = [pts[0]]
+    j0 = 0
+    for j in range(2, len(pts)):
+        (l0, v0), (l1, v1) = pts[j0], pts[j]
+        if any(abs(v0 + (v1 - v0) * (pts[k][0] - l0) / (l1 - l0) - pts[k][1]) > tol for k in range(j0 + 1, j)):
+            keep.append(pts[j - 1])
+            j0 = j - 1
+    keep.append(pts[-1])
+    return '[' + ','.join(f'{num(l)},{num(v)}' for l, v in keep) + ']'
+
+
 def river_ref():
-    """The whole river as one hidden path (js/site.js measures it to map the scroll position to a length), and the
-    colour gradient every river piece strokes with. The gradient is in page coordinates, so it runs on unbroken
-    from one section's SVG to the next."""
+    """The colour gradient every river piece strokes with, and the scroll map for js/site.js. The gradient is in
+    page coordinates, so it runs on unbroken from one section's SVG to the next."""
     stops = [(0, COLORS[SECTIONS[0][0]])]
     for (a, _), (b, _) in zip(SECTIONS, SECTIONS[1:]):
         stops += [(TOP[b] - BLEND, COLORS[a]), (TOP[b] + BLEND, COLORS[b])]
@@ -365,7 +400,8 @@ def river_ref():
     stops = ''.join(f'<stop offset="{y / y0:.5f}" stop-color="{c}"/>' for y, c in stops)
     return (f'<svg class="river-ref" width="0" height="0" aria-hidden="true" focusable="false">'
             f'<defs><linearGradient id="rv-color" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="{y0}">'
-            f'{stops}</linearGradient></defs><path d="{river.d(river.segs)}"/></svg>')
+            f'{stops}</linearGradient></defs></svg>'
+            f'<script type="application/json" id="river-map">{scroll_map()}</script>')
 
 
 def logo_svg():
@@ -389,6 +425,29 @@ html = (here / 'index.src.html').read_text()
 for key, parts in S.items():
     html = html.replace(f'<!--@pl:{key}@-->', '\n'.join(parts))
 html = html.replace('<!--@logo@-->', logo_svg()).replace('@SITE@', SITE)
+
+
+def add_srcset(html):
+    """Photos that have a lighter img/<name>-800.webp version get srcset and sizes, so phones download that one.
+    sizes: full width under 900 px; on desktop, the image's width on the 1920 frame (--w) as a share of the window."""
+    def one(m):
+        tag, name = m.group(0), m.group(1)
+        small = here / f'img/{name}-800.webp'
+        if not small.exists() or 'srcset=' in tag:
+            return tag
+        full_w = int(re.search(r'width="(\d+)"', tag).group(1))
+        w = float(re.search(r'--w:([\d.]+)', tag).group(1))
+        sizes = f'(max-width: 899px) 100vw, {round(w / 19.2)}vw'
+        srcset = f'img/{name}-800.webp 800w, img/{name}.webp {full_w}w'
+        return tag.replace(f'src="img/{name}.webp"', f'src="img/{name}.webp" srcset="{srcset}" sizes="{sizes}"')
+    return re.sub(r'<img [^>]*src="img/([a-z0-9-]+)\.webp"[^>]*>', one, html)
+
+
+html = add_srcset(html)
+# The first photo (largest paint on load) is preloaded: the preload must offer the same choice of files
+m = re.search(r'src="img/walk-photo\.webp" srcset="([^"]+)" sizes="([^"]+)"', html)
+html = html.replace('href="img/walk-photo.webp" fetchpriority="high"><!--@srcset-preload@-->',
+                    f'href="img/walk-photo.webp" imagesrcset="{m.group(1)}" imagesizes="{m.group(2)}" fetchpriority="high">')
 for key, h in SECTIONS:
     html = html.replace(f'<!--@river:{key}@-->', river_svg(key))
     if key != 'vision':   # the Siete Raíces cards keep their own 1920:2377 frame

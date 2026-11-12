@@ -27,10 +27,13 @@
 <link rel="alternate" type="text/plain" href="llms.txt" title="Resumen para modelos de lenguaje">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500&family=Josefin+Sans:ital,wght@0,300..700;1,300..700&display=swap">
-<link rel="stylesheet" href="css/site.css?v=7051c8f0">
+<!-- Fonts load without blocking the first paint; the page shows system fonts for a moment, then swaps -->
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500&family=Josefin+Sans:ital,wght@0,300..700;1,300..700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500&family=Josefin+Sans:ital,wght@0,300..700;1,300..700&display=swap" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500&family=Josefin+Sans:ital,wght@0,300..700;1,300..700&display=swap"></noscript>
+<link rel="stylesheet" href="css/site.css?v=fa444ee4">
 <script>document.documentElement.classList.add('js')</script>
-<link rel="preload" as="image" href="img/walk-photo.webp" fetchpriority="high">
+<link rel="preload" as="image" href="img/walk-photo.webp" imagesrcset="img/walk-photo-800.webp 800w, img/walk-photo.webp 1200w" imagesizes="(max-width: 899px) 100vw, 102vw" fetchpriority="high">
 
 <script type="application/ld+json">
 {
@@ -176,7 +179,7 @@
 <section class="sec intro" data-river="intro" style="--h:1080" aria-labelledby="intro-t">
   <h2 class="sr" id="intro-t">Una nueva ciudad en camino, pensada desde el agua</h2>
   <div class="pl ph" style="--x:-22;--y:-16;--w:1954;--h:1096;transform:scale(-1,1)">
-    <img class="pl" src="img/walk-photo.webp" width="1200" height="800" fetchpriority="high" decoding="async" style="--x:-15.83;--y:-12.71;--w:1954;--h:1302.82" alt="Personas caminando por un sendero junto a un parque con humedales, árboles y un puente de madera">
+    <img class="pl" src="img/walk-photo.webp" srcset="img/walk-photo-800.webp 800w, img/walk-photo.webp 1200w" sizes="(max-width: 899px) 100vw, 102vw" width="1200" height="800" fetchpriority="high" decoding="async" style="--x:-15.83;--y:-12.71;--w:1954;--h:1302.82" alt="Personas caminando por un sendero junto a un parque con humedales, árboles y un puente de madera">
   </div>
   <div class="pl fade" style="--x:0;--y:0;--w:1920;--h:1080"></div>
   <svg class="river deco" viewBox="0 1080 1920 1080" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path class="rv-case" d="M814.73 901.41L814.73 1132A80 80 0 0 0 894.73 1212L943.73 1212A80 80 0 0 1 1023.73 1292A80 80 0 0 1 943.73 1372L894.73 1372A80 80 0 0 0 814.73 1452A80 80 0 0 0 894.73 1532L943.73 1532A80 80 0 0 0 1023.73 1452A80 80 0 0 1 1103.73 1372L1148 1372A80 80 0 0 1 1228 1452L1228 2940.5" pathLength="2915.67" style="--a:102.65;--l:2915.67"/><path d="M814.73 901.41L814.73 1132A80 80 0 0 0 894.73 1212L943.73 1212A80 80 0 0 1 1023.73 1292A80 80 0 0 1 943.73 1372L894.73 1372A80 80 0 0 0 814.73 1452A80 80 0 0 0 894.73 1532L943.73 1532A80 80 0 0 0 1023.73 1452A80 80 0 0 1 1103.73 1372L1148 1372A80 80 0 0 1 1228 1452L1228 2940.5" pathLength="2915.67" style="--a:102.65;--l:2915.67"/></svg>
@@ -201,7 +204,7 @@
 <!-- Final 53 · ¿Dónde estamos? -->
 <section class="sec donde" id="ubicacion" data-river="donde" style="--h:1080" aria-labelledby="donde-t">
   <div class="pl ph bg" style="--x:-408;--y:-68;--w:2791;--h:1160">
-    <img class="pl" src="img/aerial-photo.webp" width="2200" height="894" loading="lazy" decoding="async" style="--x:-262.63;--y:-90.25;--w:3434.33;--h:1393.86" alt="Vista aérea del valle de Ibagué con las montañas al fondo y la ubicación de Caminos del Agua junto a la vía al aeropuerto">
+    <img class="pl" src="img/aerial-photo.webp" srcset="img/aerial-photo-800.webp 800w, img/aerial-photo.webp 2200w" sizes="(max-width: 899px) 100vw, 179vw" width="2200" height="894" loading="lazy" decoding="async" style="--x:-262.63;--y:-90.25;--w:3434.33;--h:1393.86" alt="Vista aérea del valle de Ibagué con las montañas al fondo y la ubicación de Caminos del Agua junto a la vía al aeropuerto">
   </div>
   <div class="pl deco scrim" style="--x:0;--y:0;--w:1920;--h:1080"></div>
   <img class="pl deco" src="img/svg/donde-7b1a4.svg" alt="" loading="lazy" decoding="async" style="--x:1048.5;--y:770.24;--w:74;--h:18.26">
@@ -249,7 +252,7 @@
 <!-- Final 55 · Usos -->
 <section class="sec usos" data-river="usos" style="--h:1080" aria-labelledby="usos-t">
   <h2 class="sr" id="usos-t">Usos del proyecto</h2>
-  <img class="pl ph" src="img/render-photo.webp" width="1792" height="1008" loading="lazy" decoding="async" style="--x:-298;--y:0;--w:2361.95;--h:1241.06" alt="Render aéreo de Caminos del Agua: manzanas de vivienda y comercio alrededor de un parque de agua, con la cordillera al fondo">
+  <img class="pl ph" src="img/render-photo.webp" srcset="img/render-photo-800.webp 800w, img/render-photo.webp 1792w" sizes="(max-width: 899px) 100vw, 123vw" width="1792" height="1008" loading="lazy" decoding="async" style="--x:-298;--y:0;--w:2361.95;--h:1241.06" alt="Render aéreo de Caminos del Agua: manzanas de vivienda y comercio alrededor de un parque de agua, con la cordillera al fondo">
   <div class="pl deco shade" style="--x:-17;--y:0;--w:1944;--h:1245"></div>
   <div class="pl deco" style="--x:433.5;--y:496.5;--w:529;--h:0;transform:rotate(-90deg)"><img class="pl" src="img/svg/usos-8c29e.svg" alt="" loading="lazy" decoding="async" style="--x:-4.02;--y:-2;--w:537.04;--h:10"></div>
 <div class="pl deco" style="--x:309;--y:615;--w:229;--h:1;transform:rotate(-90deg)"><img class="pl" src="img/svg/usos-0dc51.svg" alt="" loading="lazy" decoding="async" style="--x:-4.01;--y:-1;--w:237.01;--h:11"></div>
@@ -301,7 +304,7 @@
   <h2 class="sr" id="agua-t">Cómo gestiona el agua el proyecto</h2>
   <article class="agua-a">
     <div class="pl ph bg" style="--x:0;--y:0;--w:961;--h:1250">
-      <img class="pl" src="img/photo-left.webp" width="1200" height="1800" loading="lazy" decoding="async" style="--x:-12;--y:-185.53;--w:973;--h:1459.6" alt="Niños jugando en un canal de agua lluvia que recorre una calle peatonal arborizada">
+      <img class="pl" src="img/photo-left.webp" srcset="img/photo-left-800.webp 800w, img/photo-left.webp 1200w" sizes="(max-width: 899px) 100vw, 51vw" width="1200" height="1800" loading="lazy" decoding="async" style="--x:-12;--y:-185.53;--w:973;--h:1459.6" alt="Niños jugando en un canal de agua lluvia que recorre una calle peatonal arborizada">
     </div>
     <h3 class="a hl" style="--x:230;--y:1000;--w:700">Espacio Público</h3>
     <p class="a p30" style="--x:230;--y:1099;--w:520">Sistema de recolección y tratamiento de aguas lluvias, diseño integrado al agua.</p>
@@ -378,7 +381,7 @@
     <h3 class="zh"><span class="a zn" style="--x:230;--y:616">1</span> <span class="a zname" style="--x:300;--y:600;--w:400"><b>Eje Comercial</b><br><b>Av. Aeropuerto</b></span></h3>
     <p class="a p25" style="--x:230;--y:720;--w:560">Zona comercial, punto de llegada y comienzo de la Diagonal del Agua. Es un frente urbano comercial, muy activo, conectado con el futuro CAN y la vía del aeropuerto.</p>
     <div class="a ph" style="--x:960;--y:440;--w:960;--h:560">
-      <img class="pl" src="img/zona-1.webp" width="1600" height="1199" loading="lazy" decoding="async" style="--x:0;--y:-80;--w:960;--h:720" alt="Eje comercial de la avenida Aeropuerto con locales en primer piso, fuente y árboles">
+      <img class="pl" src="img/zona-1.webp" srcset="img/zona-1-800.webp 800w, img/zona-1.webp 1600w" sizes="(max-width: 899px) 100vw, 50vw" width="1600" height="1199" loading="lazy" decoding="async" style="--x:0;--y:-80;--w:960;--h:720" alt="Eje comercial de la avenida Aeropuerto con locales en primer piso, fuente y árboles">
     </div>
   </article>
 
@@ -387,7 +390,7 @@
     <h3 class="zh"><span class="a zn" style="--x:1040;--y:1176">2</span> <span class="a zname" style="--x:1110;--y:1160;--w:400"><b>Peatonal</b><br><b>de uso mixto</b></span></h3>
     <p class="a p25" style="--x:1040;--y:1280;--w:560">Eje vital peatonal entre edificios de uso mixtos como hoteles, restaurantes, cafés, bares, viviendas de apartamentos más pequeños que quieren estar dentro del ruido y la vitalidad.</p>
     <div class="a ph" style="--x:0;--y:1000;--w:961;--h:560">
-      <img class="pl" src="img/zona-2.webp" width="1600" height="1186" loading="lazy" decoding="async" style="--x:0;--y:-76;--w:960;--h:712" alt="Calle peatonal de uso mixto con terrazas de restaurantes y cafés bajo los árboles">
+      <img class="pl" src="img/zona-2.webp" srcset="img/zona-2-800.webp 800w, img/zona-2.webp 1600w" sizes="(max-width: 899px) 100vw, 50vw" width="1600" height="1186" loading="lazy" decoding="async" style="--x:0;--y:-76;--w:960;--h:712" alt="Calle peatonal de uso mixto con terrazas de restaurantes y cafés bajo los árboles">
     </div>
   </article>
 
@@ -396,7 +399,7 @@
     <h3 class="zh"><span class="a zn" style="--x:230;--y:1736">3</span> <span class="a zname" style="--x:300;--y:1720;--w:400">Residencial, <br>parque diagonal</span></h3>
     <p class="a p25" style="--x:230;--y:1840;--w:560">Edificios y conjuntos de vivienda con acceso directo al parque en al menos dos esquinas. Una zona tranquila pero con vitalidad.</p>
     <div class="a ph" style="--x:960;--y:1560;--w:960;--h:560;transform:scale(-1,1)">
-      <img class="pl" src="img/zona-3.webp" width="1600" height="1193" loading="lazy" decoding="async" style="--x:0;--y:-78;--w:960;--h:716" alt="Parque diagonal con senderos, agua y edificios de vivienda alrededor">
+      <img class="pl" src="img/zona-3.webp" srcset="img/zona-3-800.webp 800w, img/zona-3.webp 1600w" sizes="(max-width: 899px) 100vw, 50vw" width="1600" height="1193" loading="lazy" decoding="async" style="--x:0;--y:-78;--w:960;--h:716" alt="Parque diagonal con senderos, agua y edificios de vivienda alrededor">
     </div>
   </article>
 
@@ -405,7 +408,7 @@
     <h3 class="zh"><span class="a zn" style="--x:1040;--y:2296">4</span> <span class="a zname" style="--x:1110;--y:2280;--w:400">Residencial junto <br>a la quebrada</span></h3>
     <p class="a p25" style="--x:1040;--y:2400;--w:560">Cerca de la naturaleza, hacia las montañas. Conjuntos cerrados, más silenciosos para las familias y quienes prefieren una zona con mayor tranquilidad.</p>
     <div class="a ph" style="--x:0;--y:2120;--w:961;--h:560">
-      <img class="pl" src="img/zona-4.webp" width="1448" height="1086" loading="lazy" decoding="async" style="--x:0;--y:-80;--w:960;--h:720" alt="Conjuntos residenciales junto a la quebrada, con vegetación y las montañas al fondo">
+      <img class="pl" src="img/zona-4.webp" srcset="img/zona-4-800.webp 800w, img/zona-4.webp 1448w" sizes="(max-width: 899px) 100vw, 50vw" width="1448" height="1086" loading="lazy" decoding="async" style="--x:0;--y:-80;--w:960;--h:720" alt="Conjuntos residenciales junto a la quebrada, con vegetación y las montañas al fondo">
     </div>
   </article>
   <svg class="river deco" viewBox="0 7730 1920 2680" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="M960 6100L960 10410A80 80 0 0 1 880 10490" pathLength="4435.66" style="--a:7966.47;--l:4435.66"/></svg>
@@ -466,7 +469,7 @@
 
 <!-- Final 60 · Valla -->
 <section class="sec valla" data-river="valla" style="--h:1080" aria-label="Campaña">
-  <img class="pl ph" src="img/billboard.webp" width="1792" height="1008" loading="lazy" decoding="async" style="--x:0;--y:0;--w:1920;--h:1080" alt="Valla de Caminos del Agua con el lema «Una nueva ciudad en camino, pensada desde el agua»: un camino amarillo cruza un parque y niños juegan en un canal con fuentes">
+  <img class="pl ph" src="img/billboard.webp" srcset="img/billboard-800.webp 800w, img/billboard.webp 1792w" sizes="(max-width: 899px) 100vw, 100vw" width="1792" height="1008" loading="lazy" decoding="async" style="--x:0;--y:0;--w:1920;--h:1080" alt="Valla de Caminos del Agua con el lema «Una nueva ciudad en camino, pensada desde el agua»: un camino amarillo cruza un parque y niños juegan en un canal con fuentes">
   <svg class="river deco" viewBox="0 13867 1920 1080" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path class="rv-case" d="M131 10570L131 16498" pathLength="5928" style="--a:13196.8;--l:5928"/><path d="M131 10570L131 16498" pathLength="5928" style="--a:13196.8;--l:5928"/></svg>
 </section>
 
@@ -508,7 +511,7 @@
     <a class="a nav" href="#contacto" style="--x:1775.66;--y:224">Contacto</a>
   </nav>
 </footer>
-<svg class="river-ref" width="0" height="0" aria-hidden="true" focusable="false"><defs><linearGradient id="rv-color" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="16458"><stop offset="0.00000" stop-color="#2A2222"/><stop offset="0.05590" stop-color="#2A2222"/><stop offset="0.07534" stop-color="#5571D1"/><stop offset="0.12152" stop-color="#5571D1"/><stop offset="0.14096" stop-color="#5571D1"/><stop offset="0.18714" stop-color="#5571D1"/><stop offset="0.20659" stop-color="#DBF174"/><stop offset="0.25276" stop-color="#DBF174"/><stop offset="0.27221" stop-color="#2D4545"/><stop offset="0.28558" stop-color="#2D4545"/><stop offset="0.30502" stop-color="#DBF174"/><stop offset="0.35120" stop-color="#DBF174"/><stop offset="0.37064" stop-color="#5571D1"/><stop offset="0.38401" stop-color="#5571D1"/><stop offset="0.40345" stop-color="#9ECFEB"/><stop offset="0.45996" stop-color="#9ECFEB"/><stop offset="0.47940" stop-color="#3A5930"/><stop offset="0.62280" stop-color="#3A5930"/><stop offset="0.64224" stop-color="#2E3E76"/><stop offset="0.76723" stop-color="#2E3E76"/><stop offset="0.78667" stop-color="#5571D1"/><stop offset="0.83285" stop-color="#5571D1"/><stop offset="0.85229" stop-color="#5571D1"/><stop offset="0.89847" stop-color="#5571D1"/><stop offset="0.91791" stop-color="#5571D1"/><stop offset="0.92399" stop-color="#5571D1"/><stop offset="0.94343" stop-color="#5571D1"/><stop offset="0.97260" stop-color="#5571D1"/><stop offset="0.99204" stop-color="#5571D1"/><stop offset="1.00000" stop-color="#5571D1"/></linearGradient></defs><path d="M888.29 879.64A40 40 0 0 0 814.73 901.41L814.73 1132A80 80 0 0 0 894.73 1212L943.73 1212A80 80 0 0 1 1023.73 1292A80 80 0 0 1 943.73 1372L894.73 1372A80 80 0 0 0 814.73 1452A80 80 0 0 0 894.73 1532L943.73 1532A80 80 0 0 0 1023.73 1452A80 80 0 0 1 1103.73 1372L1148 1372A80 80 0 0 1 1228 1452L1228 2940.5A80 80 0 0 1 1148 3020.5L211 3020.5A80 80 0 0 0 131 3100.5L131 5940A80 80 0 0 0 211 6020L880 6020A80 80 0 0 1 960 6100L960 10410A80 80 0 0 1 880 10490L211 10490A80 80 0 0 0 131 10570L131 16498"/></svg>
+<svg class="river-ref" width="0" height="0" aria-hidden="true" focusable="false"><defs><linearGradient id="rv-color" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="16458"><stop offset="0.00000" stop-color="#2A2222"/><stop offset="0.05590" stop-color="#2A2222"/><stop offset="0.07534" stop-color="#5571D1"/><stop offset="0.12152" stop-color="#5571D1"/><stop offset="0.14096" stop-color="#5571D1"/><stop offset="0.18714" stop-color="#5571D1"/><stop offset="0.20659" stop-color="#DBF174"/><stop offset="0.25276" stop-color="#DBF174"/><stop offset="0.27221" stop-color="#2D4545"/><stop offset="0.28558" stop-color="#2D4545"/><stop offset="0.30502" stop-color="#DBF174"/><stop offset="0.35120" stop-color="#DBF174"/><stop offset="0.37064" stop-color="#5571D1"/><stop offset="0.38401" stop-color="#5571D1"/><stop offset="0.40345" stop-color="#9ECFEB"/><stop offset="0.45996" stop-color="#9ECFEB"/><stop offset="0.47940" stop-color="#3A5930"/><stop offset="0.62280" stop-color="#3A5930"/><stop offset="0.64224" stop-color="#2E3E76"/><stop offset="0.76723" stop-color="#2E3E76"/><stop offset="0.78667" stop-color="#5571D1"/><stop offset="0.83285" stop-color="#5571D1"/><stop offset="0.85229" stop-color="#5571D1"/><stop offset="0.89847" stop-color="#5571D1"/><stop offset="0.91791" stop-color="#5571D1"/><stop offset="0.92399" stop-color="#5571D1"/><stop offset="0.94343" stop-color="#5571D1"/><stop offset="0.97260" stop-color="#5571D1"/><stop offset="0.99204" stop-color="#5571D1"/><stop offset="1.00000" stop-color="#5571D1"/></linearGradient></defs></svg><script type="application/json" id="river-map">[0,879.64,124,923.04,360,1158.27,384,1179.42,404,1193.89,420,1202.73,480,1224.32,612,1270.7,664,1321.71,688,1342.33,708,1356.15,724,1364.37,912,1430.41,968,1485.08,992,1505.13,1012,1518.28,1028,1525.86,1912,1835.3,1916,1838.18,3044,2965.75,3068,2987.05,3088,3001.7,3104,3010.72,3136,3022.66,4664,3557.86,7072,5965.41,7096,5986.69,7116,6001.31,7132,6010.3,7164,6022.22,8276,6411.42,8280,6413.53,12300,10433.19,12324,10454.78,12344,10469.79,12364,10481.08,12796,10632.79,13508,10881.99,13516,10889.2,19124.8,16498]</script>
 </div>
 
 <dialog class="form-dlg" id="formulario" aria-labelledby="form-t">
@@ -535,7 +538,7 @@
   </form>
 </dialog>
 
-<script src="js/site.js?v=32868810" defer></script>
+<script src="js/site.js?v=66a5739e" defer></script>
 <script src="js/siete-raices.js?v=59d87a4a" defer></script>
 </body>
 </html>

@@ -11,6 +11,7 @@ One-page HTML prototype of the site, built from the Figma file *Caminos del Agua
 - `js/site.js`: section menu, contact form and the river drawing on scroll.
 - `js/siete-raices.js`: the Siete Raíces cards, built from `../cargo/siete-raices.src.html` and `../assets/cards-data.js`.
 - `img/`: photos as WebP, Figma line art in `img/svg/`, `og-image.jpg` for link previews. `img/raw/` keeps the original PNG exports.
+- `img/<name>-800.webp`: lighter versions of the photos for phones. `build.py` adds `srcset` and `sizes` to every photo that has one. If you replace a photo, make its 800 px version again (for example with Pillow: resize to 800 wide, WebP quality 78).
 - `llms.txt`, `robots.txt`, `sitemap.xml`: for search engines and AI assistants.
 
 ## The river
