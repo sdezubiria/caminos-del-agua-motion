@@ -69,10 +69,10 @@ button.pill:hover, a.pill:hover, .cta:hover { filter: brightness(1.08); transfor
 /* Every section holds the pieces of river that cross it (build.py). A piece starts at length --a of the river and
    is --l long; side branches draw --k times faster. The drop (.rv-tip) rides the end of the line. */
 .river { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
-.river path { --k: 1; fill: none; stroke: var(--tinta); stroke-width: 26;
+.river path { --k: 1; fill: none; stroke: var(--tinta); stroke-width: calc(var(--rw, 27.6) * 1px);
   stroke-dasharray: calc(var(--l) * 1px) calc(var(--l) * 1px + 100px);
   stroke-dashoffset: calc(var(--l) * 1px - clamp(0px, (var(--rl) - var(--a)) * var(--k) * 1px, var(--l) * 1px)); }
-.river .rv-case { stroke: var(--niebla); stroke-width: 36; }
+.river .rv-case { stroke: var(--niebla); stroke-width: calc(var(--rw, 27.6) * 1px + 10px); }
 .river .rv-end { fill: var(--tinta); stroke: none; opacity: clamp(0, var(--rl) - var(--rt) + 1.5, 1); transition: opacity .5s; }
 .rv-tip { fill: var(--tinta); opacity: var(--tv); transform: translate(calc(var(--tx) * 1px), calc(var(--ty) * 1px)); }
 .rv-tip.rv-case { fill: var(--niebla); stroke: none; }

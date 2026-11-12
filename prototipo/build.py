@@ -238,11 +238,17 @@ class Branch(Line):
         self.k = k
 
 
-# The g of the logo: viewBox 170 85 475 425 drawn 770 wide at (656, 244). Its river ends at logo point (309, 482),
-# heading up-left; the line starts there, inside the logo's stroke, and curls left and down, under the logo.
+# The g of the logo: viewBox 170 85 475 425 drawn 770 wide at (656, 244). The river channel in the g (mask
+# cdaMaskRio in cargo/logo-corriente.html) ends in a straight cut from (320.44, 472.48) to (306.15, 481.75).
+# The line starts flush on that cut, as wide as the channel and square to it, then curls left and down.
 LS = 770 / 475
-gx, gy = 656 + (309 - 170) * LS, 244 + (482 - 85) * LS
-tx, ty = -15 / math.hypot(15, 18), -18 / math.hypot(15, 18)       # tangent of the g's tail
+CUT = ((320.44, 472.48), (306.15, 481.75))
+cut_w = math.dist(*CUT)                                            # 17.03 logo units: the channel width
+gx = 656 + ((CUT[0][0] + CUT[1][0]) / 2 - 170) * LS
+gy = 244 + ((CUT[0][1] + CUT[1][1]) / 2 - 85) * LS
+tx, ty = (CUT[0][1] - CUT[1][1]) / cut_w, (CUT[1][0] - CUT[0][0]) / cut_w   # square to the cut, out of the g
+assert tx < 0 and ty < 0
+STROKE = cut_w * LS                                                # 27.6 px: the river is as wide as the g's channel
 CURL = 40
 ccx, ccy = gx + ty * CURL, gy - tx * CURL                          # centre of a left turn
 turn = (math.atan2(ty, tx) - math.pi / 2) % (2 * math.pi)          # from the tail's heading round to straight down
@@ -326,9 +332,9 @@ def river_svg(sec):
         # Over photos the line gets a light edge, drawn with it, so it reads on dark ground too
         paths[:0] = [p.replace('<path ', '<path class="rv-case" ') for p in paths]
     if sec == 'footer':
-        x0, y = 257, FOOT_Y
-        paths.append(f'<path class="rv-end" d="M{x0} {num(y - 13)}C{x0 - 30} {num(y - 13)} {x0 - 30} {num(y - 4)} 196 {num(y - 4)}'
-                     f'V{num(y + 4)}C{x0 - 30} {num(y + 4)} {x0 - 30} {num(y + 13)} {x0} {num(y + 13)}Z"/>')
+        x0, y, hw = 257, FOOT_Y, STROKE / 2
+        paths.append(f'<path class="rv-end" d="M{x0} {num(y - hw)}C{x0 - 30} {num(y - hw)} {x0 - 30} {num(y - 4)} 196 {num(y - 4)}'
+                     f'V{num(y + 4)}C{x0 - 30} {num(y + 4)} {x0 - 30} {num(y + hw)} {x0} {num(y + hw)}Z"/>')
     tip = ('<circle class="rv-tip rv-case" r="21"/>' if sec in ON_PHOTO else '') + '<circle class="rv-tip" r="17"/>'
     return (f'<svg class="river deco" viewBox="0 {top} 1920 {h}" preserveAspectRatio="none" aria-hidden="true" focusable="false">'
             + ''.join(paths) + tip + '</svg>')
@@ -365,7 +371,7 @@ for key, h in SECTIONS:
     html = html.replace(f'<!--@river:{key}@-->', river_svg(key))
     if key != 'vision':   # the Siete Raíces cards keep their own 1920:2377 frame
         assert re.search(rf'data-river="{key}"[^>]*--h:{h}"', html), f'section {key} should be {h} tall'
-html = html.replace('<!--@river-ref@-->', river_ref()).replace('@RIVER_TOTAL@', num(TOTAL))
+html = html.replace('<!--@river-ref@-->', river_ref()).replace('@RIVER_TOTAL@', num(TOTAL)).replace('@RIVER_W@', num(STROKE))
 (here / 'js/siete-raices.js').write_text(cards_js())
 # Version the CSS and JS links by content, so a new build is never served from a stale cache
 for asset in ('css/site.css', 'js/site.js', 'js/siete-raices.js'):
