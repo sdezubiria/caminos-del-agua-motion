@@ -153,7 +153,27 @@ for key, h in SECTIONS:
 R = 80
 RAIL = 131      # the left rail: the lime roots trunk in siete-raices-bg.svg is centred here
 MID = 960       # the centre line through "¿Por qué el agua?", the water photos and "¿Cómo se vive?"
-ON_PHOTO = {'intro', 'donde', 'usos', 'agua', 'valla'}
+# The line takes a colour from the palette in each section, chosen to read on that section's ground, and blends
+# into the next one over BLEND page px either side of the boundary. Ink at both ends: the logo and the footer logo.
+COLORS = {
+    'hero': '#2A2222',      # tinta, as the logo
+    'intro': '#5571D1',     # azul
+    'trae': '#5571D1',      # azul, as the pills it feeds
+    'donde': '#DBF174',     # lima, on the dark aerial photo
+    'ha': '#2D4545',        # pino, as "40 ha"
+    'usos': '#DBF174',      # lima, on the render
+    'porque': '#5571D1',    # azul, as the heading
+    'agua': '#9ECFEB',      # cielo, between the two water photos
+    'vive': '#3A5930',      # bosque, as the zone text
+    'vision': '#2E3E76',    # noche, as "Nuestra Visión"
+    'equipo': '#5571D1',    # azul
+    'valla': '#5571D1',
+    'contacto': '#5571D1',
+    'aliados': '#5571D1',
+    'footer': '#2A2222',    # tinta, into the footer logo
+}
+BLEND = 160
+ON_PHOTO = {'intro', 'valla'}   # a dark line over a photo gets a light edge
 BRANCH_K = 2.5  # side branches draw this many times faster than the river, so they finish while still in view
 
 
@@ -335,15 +355,22 @@ def river_svg(sec):
         x0, y, hw = 257, FOOT_Y, STROKE / 2
         paths.append(f'<path class="rv-end" d="M{x0} {num(y - hw)}C{x0 - 30} {num(y - hw)} {x0 - 30} {num(y - 4)} 196 {num(y - 4)}'
                      f'V{num(y + 4)}C{x0 - 30} {num(y + 4)} {x0 - 30} {num(y + hw)} {x0} {num(y + hw)}Z"/>')
-    tip = ('<circle class="rv-tip rv-case" r="21"/>' if sec in ON_PHOTO else '') + '<circle class="rv-tip" r="17"/>'
     return (f'<svg class="river deco" viewBox="0 {top} 1920 {h}" preserveAspectRatio="none" aria-hidden="true" focusable="false">'
-            + ''.join(paths) + tip + '</svg>')
+            + ''.join(paths) + '</svg>')
 
 
 def river_ref():
-    """The whole river as one hidden path: js/site.js measures it to map the scroll position to a length."""
+    """The whole river as one hidden path (js/site.js measures it to map the scroll position to a length), and the
+    colour gradient every river piece strokes with. The gradient is in page coordinates, so it runs on unbroken
+    from one section's SVG to the next."""
+    stops = [(0, COLORS[SECTIONS[0][0]])]
+    for (a, _), (b, _) in zip(SECTIONS, SECTIONS[1:]):
+        stops += [(TOP[b] - BLEND, COLORS[a]), (TOP[b] + BLEND, COLORS[b])]
+    stops.append((y0, COLORS[SECTIONS[-1][0]]))
+    stops = ''.join(f'<stop offset="{y / y0:.5f}" stop-color="{c}"/>' for y, c in stops)
     return (f'<svg class="river-ref" width="0" height="0" aria-hidden="true" focusable="false">'
-            f'<path d="{river.d(river.segs)}"/></svg>')
+            f'<defs><linearGradient id="rv-color" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="{y0}">'
+            f'{stops}</linearGradient></defs><path d="{river.d(river.segs)}"/></svg>')
 
 
 def logo_svg():
@@ -371,6 +398,7 @@ for key, h in SECTIONS:
     html = html.replace(f'<!--@river:{key}@-->', river_svg(key))
     if key != 'vision':   # the Siete Raíces cards keep their own 1920:2377 frame
         assert re.search(rf'data-river="{key}"[^>]*--h:{h}"', html), f'section {key} should be {h} tall'
+html = html.replace('@RIVER_COLORS@', json.dumps(COLORS).replace('"', '&quot;'))
 html = html.replace('<!--@river-ref@-->', river_ref()).replace('@RIVER_TOTAL@', num(TOTAL)).replace('@RIVER_W@', num(STROKE))
 (here / 'js/siete-raices.js').write_text(cards_js())
 # Version the CSS and JS links by content, so a new build is never served from a stale cache

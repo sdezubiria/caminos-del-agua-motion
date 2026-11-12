@@ -32,7 +32,7 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--azul); outline-
 /* ---------- Frame scaling ---------- */
 .page { container-type: inline-size; --u: calc(100cqw / 1920); overflow-x: clip;
   /* --rl: length of river drawn (js/site.js sets it on scroll; without JS the river is drawn in full) */
-  --rl: 999999; --tx: 0; --ty: -100; --tv: 0; --mp: 1; }
+  --rl: 999999; --mp: 1; }
 .js .page { --rl: 0; --mp: 0; }
 .sec { position: relative; overflow: clip; isolation: isolate; height: calc(var(--h) * var(--u)); }
 .a, .pl { position: absolute; margin: 0; left: calc(var(--x) * var(--u)); top: calc(var(--y) * var(--u));
@@ -67,15 +67,15 @@ button.pill:hover, a.pill:hover, .cta:hover { filter: brightness(1.08); transfor
 
 /* ---------- El río ---------- */
 /* Every section holds the pieces of river that cross it (build.py). A piece starts at length --a of the river and
-   is --l long; side branches draw --k times faster. The drop (.rv-tip) rides the end of the line. */
+   is --l long; side branches draw --k times faster. The line has round caps, so a piece stays hidden until it starts
+   (a dash of length 0 would still show its cap as a dot). */
 .river { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
-.river path { --k: 1; fill: none; stroke: var(--tinta); stroke-width: calc(var(--rw, 27.6) * 1px);
+.river path { --k: 1; fill: none; stroke: url(#rv-color); stroke-width: calc(var(--rw, 27.6) * 1px); stroke-linecap: round;
+  opacity: clamp(0, (var(--rl) - var(--a)) * 10, 1);
   stroke-dasharray: calc(var(--l) * 1px) calc(var(--l) * 1px + 100px);
   stroke-dashoffset: calc(var(--l) * 1px - clamp(0px, (var(--rl) - var(--a)) * var(--k) * 1px, var(--l) * 1px)); }
 .river .rv-case { stroke: var(--niebla); stroke-width: calc(var(--rw, 27.6) * 1px + 10px); }
 .river .rv-end { fill: var(--tinta); stroke: none; opacity: clamp(0, var(--rl) - var(--rt) + 1.5, 1); transition: opacity .5s; }
-.rv-tip { fill: var(--tinta); opacity: var(--tv); transform: translate(calc(var(--tx) * 1px), calc(var(--ty) * 1px)); }
-.rv-tip.rv-case { fill: var(--niebla); stroke: none; }
 .river-ref { position: absolute; left: 0; top: 0; visibility: hidden; pointer-events: none; }
 
 /* ---------- Inicio ---------- */
@@ -186,8 +186,8 @@ button.pill:hover, a.pill:hover, .cta:hover { filter: brightness(1.08); transfor
   .deco { display: none !important; }
   /* The river becomes a thin line down the left edge that draws as you scroll */
   main { position: relative; }
-  main::after { content: ""; position: absolute; left: 7px; top: 0; bottom: 0; z-index: 5; width: 4px; border-radius: 2px;
-    background: var(--tinta); transform-origin: 50% 0; transform: scaleY(var(--mp)); pointer-events: none; }
+  main::after { content: ""; position: absolute; left: 7px; top: 0; bottom: 0; z-index: 5; width: 4px;
+    background: var(--mline, var(--tinta)); clip-path: inset(0 0 calc((1 - var(--mp)) * 100%) 0 round 2px); pointer-events: none; }
   .stat { font-size: clamp(88px, 28vw, 140px); }
   .hl { font-size: clamp(40px, 11vw, 58px); }
   .p30 { font-size: 18px; line-height: 1.32; }
