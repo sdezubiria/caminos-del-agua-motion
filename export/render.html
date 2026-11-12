@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Caminos del Agua · render</title>
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=block" rel="stylesheet">
+<style>
+/* Frame-by-frame renderer for the exports. Same artwork as the site, but every moving value is set from
+   window.renderAt(t) instead of CSS animations/transitions, so each frame is exact and repeatable.
+   ?scene=logo | card&n=1..7 | page  (viewport size is set by render.py) */
+html { overflow: hidden; }
+body { margin: 0; background: transparent; font-family: 'Josefin Sans', sans-serif; -webkit-font-smoothing: antialiased; }
+#stage { position: relative; }
+
+#logo { position: absolute; left: 0; top: 0; width: 100vw; height: 100vh; overflow: visible; }
+#logo .ink { fill: #2A2222; }
+.flow { fill: none; stroke-width: 36; stroke-linecap: round; stroke-linejoin: round; }
+.f1 { stroke: #5571D1; stroke-dasharray: 150 170; }
+.f2 { stroke: #9ECFEB; stroke-dasharray: 60 260; }
+
+.solo { position: absolute; width: 320px; height: 572px; zoom: var(--k); }
+.page { position: absolute; left: 0; top: 0; width: 1920px; height: 2377px; background: #9ECFEB; --rv: 1; }
+.page-bg { position: absolute; inset: 0; width: 100%; height: 100%; display: block;
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(var(--rv) * 100% - 4%), transparent calc(var(--rv) * 100%)); }
+
+.card { position: absolute; left: 0; top: 0; width: 320px; height: 572px; perspective: 1800px; }
+.page .card { left: auto; top: auto; }
+.card-inner { position: absolute; inset: 0; transform-style: preserve-3d; }
+.face { position: absolute; inset: 0; border-radius: 20px; overflow: hidden; backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  background: var(--c-bg); color: var(--c-fg); text-align: left; box-shadow: 0 24px 50px -30px rgba(46,62,118,.55); }
+.face.back { transform: rotateY(180deg); }
+.face p { margin: 0; }
+.icon { position: absolute; inset: 0; width: 100%; height: 100%; }
+.c-title { position: absolute; top: 22px; width: 250px; font-size: 35px; font-weight: 500; line-height: .95; letter-spacing: -1.05px; }
+.c-badge { position: absolute; left: 263px; top: 21px; width: 36px; height: 36px; border-radius: 8px; background: var(--c-fg); color: var(--c-bg);
+  display: grid; place-items: center; font-size: 25px; font-weight: 500; line-height: 1; padding-top: 5px; box-sizing: border-box; }
+.c-foot { position: absolute; top: 524px; font-size: 20px; font-style: italic; line-height: .9; letter-spacing: -.6px; }
+.photo { position: absolute; left: 0; top: 0; width: 320px; height: 434px; overflow: hidden; }
+.photo img { position: absolute; object-fit: cover; display: block; }
+.photo::after { content: ""; position: absolute; inset: 0; background: var(--c-bg); opacity: .3; }
+.c-body { position: absolute; font-size: 25px; font-weight: 400; line-height: .9; letter-spacing: -.75px; color: var(--c-body); }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<script src="../assets/logo-data.js"></script>
+<script src="../assets/cards-data.js"></script>
+<script>
+(() => {
+const q = new URLSearchParams(location.search);
+const scene = q.get('scene') || 'logo';
+const stage = document.getElementById('stage');
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const bezier = (x1, y1, x2, y2) => t => {
+  if (t <= 0) return 0;
+  if (t >= 1) return 1;
+  let lo = 0, hi = 1, u = t;
+  for (let i = 0; i < 50; i++) {
+    u = (lo + hi) / 2;
+    const x = 3 * (1 - u) ** 2 * u * x1 + 3 * (1 - u) * u * u * x2 + u ** 3;
+    if (x < t) lo = u; else hi = u;
+  }
+  return 3 * (1 - u) ** 2 * u * y1 + 3 * (1 - u) * u * u * y2 + u ** 3;
+};
+const easeWater = bezier(.65, 0, .35, 1);   // --ease-water: the flip
+const easeOut = bezier(.22, 1, .36, 1);      // --ease-out: cards appearing
+const easeInOut = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+const FLIP = .9, SHOW = .7;
+// The "lift" keyframes (0 → 50% → 100%) with ease-water on each half
+const liftAt = p => p < .5 ? easeWater(p / .5) : 1 - easeWater((p - .5) / .5);
+
+/* ---------- Cards ---------- */
+function makeCard(c) {
+  const el = document.createElement('div');
+  el.className = 'card';
+  el.style.setProperty('--c-bg', c.bg);
+  el.style.setProperty('--c-fg', c.fg);
+  el.style.setProperty('--c-body', c.body);
+  const [ix, iy, iw, ih] = c.box;
+  el.innerHTML = `
+    <div class="card-inner">
+      <div class="face front">
+        <svg class="icon" viewBox="0 0 320 572"><g fill="${c.iconFill || c.fg}">${c.icon}</g></svg>
+        <p class="c-title" style="left:${c.tx}px">${c.title}</p>
+        <span class="c-badge">${c.n}</span>
+        <p class="c-foot" style="left:${c.tx}px;font-weight:${c.footW}">Nuestras Raíces</p>
+      </div>
+      <div class="face back">
+        <div class="photo"><img src="../assets/cards/${c.img}" alt="" style="left:${ix}px;top:${iy}px;width:${iw}px;height:${ih}px"></div>
+        <p class="c-body" style="left:${c.bx}px;top:${c.by}px;width:${c.bw}px">${c.text}</p>
+      </div>
+    </div>`;
+  return el;
+}
+// rot: 0 front → 180 back. lift: 0–1 of the lift peak. shown: 0–1 of the appear transition.
+function poseCard(el, { rot = 0, lift = 0, shown = 1 }) {
+  el.firstElementChild.style.transform = `rotateY(${rot.toFixed(3)}deg)`;
+  el.style.transform = lift > 0 ? `scale(${(1 + .06 * lift).toFixed(5)})` : '';
+  el.style.filter = lift > 0 ? `drop-shadow(0 ${(40 * lift).toFixed(2)}px ${(40 * lift).toFixed(2)}px rgba(46,62,118,${(.35 * lift).toFixed(4)}))` : '';
+  el.style.opacity = shown.toFixed(4);
+  el.style.translate = shown < 1 ? `0 ${(-48 * (1 - shown)).toFixed(2)}px` : '';
+}
+
+const scenes = {
+  /* Corriente: the river in the logo flows at 1.8x (one cycle = 4.4s / 1.8 = 22/9 s) */
+  logo() {
+    const L = window.LOGO;
+    const ORDER = ['c', 'a1', 'big', 'i', 'dot', 'n', 'o', 'tri', 'del', 'a3l', 'u', 'a3r'];
+    const piece = (k, a = '') => k === 'tri' ? `<polygon points="${L.tri}"${a}/>` : `<path d="${L[k]}"${a}/>`;
+    const ROUTE = 'M596.8 168 L596.8 214 Q596.8 249.6 556 249.6 L444.7 249.6 A21.6 21.6 0 0 0 444.7 292.6 L484.5 292.6 A21.6 21.6 0 0 1 484.5 335.8 L412 335.8 Q390.2 335.8 390.2 360 L390.2 452 Q390.2 494 352 498 Q324 500 309 482';
+    // The artwork spans x 182.5–652.5, y 96.4–501.5; this frame leaves 10 units around it
+    stage.innerHTML = `<svg id="logo" viewBox="172 86 491 426">
+      <defs><mask id="mBig" maskUnits="userSpaceOnUse" x="150" y="60" width="520" height="480">${piece('big', ' fill="#fff"')}${piece('tri', ' fill="#fff"')}</mask></defs>
+      <g class="ink">${ORDER.map(k => piece(k)).join('')}</g>
+      <g mask="url(#mBig)">${[1, 2].map(i => `<path class="flow f${i}" d="${ROUTE}"/>`).join('')}</g></svg>`;
+    const [f1, f2] = stage.querySelectorAll('.flow');
+    const PERIOD = 22 / 9;
+    return t => {
+      const travel = 320 * ((t / PERIOD) % 1);
+      f1.style.strokeDashoffset = -travel;
+      f2.style.strokeDashoffset = -60 - travel;
+    };
+  },
+
+  /* One card, 5 s loop: front → flip → photo side → flip back → front */
+  card() {
+    const c = CARDS[+q.get('n') - 1];
+    const k = +(q.get('k') || 2);   // leaves room for the lift, its shadow and the perspective mid-flip
+    const solo = document.createElement('div');
+    solo.className = 'solo';
+    solo.style.setProperty('--k', k);
+    solo.style.left = ((innerWidth - 320 * k) / 2 / k) + 'px';
+    solo.style.top = ((innerHeight - 572 * k) / 2 / k) + 'px';
+    const el = makeCard(c);
+    solo.appendChild(el);
+    stage.appendChild(solo);
+    return t => {
+      t %= 5;
+      if (t < .6) return poseCard(el, { rot: 0 });
+      if (t < .6 + FLIP) { const p = (t - .6) / FLIP; return poseCard(el, { rot: 180 * easeWater(p), lift: liftAt(p) }); }
+      if (t < 3.5) return poseCard(el, { rot: 180 });
+      if (t < 3.5 + FLIP) { const p = (t - 3.5) / FLIP; return poseCard(el, { rot: 180 * (1 - easeWater(p)), lift: liftAt(p) }); }
+      poseCard(el, { rot: 0 });
+    };
+  },
+
+  /* The whole "Nuestra Visión: Siete Raíces" page, same loop as the site (17 s):
+     roots grow → cards flip 1→7 → hold → flip back → roots pull back */
+  page() {
+    stage.innerHTML = '<div class="page"><img class="page-bg" src="../assets/siete-raices-bg.svg" alt=""></div>';
+    const page = stage.firstElementChild;
+    const cards = CARDS.map(c => {
+      const el = makeCard(c);
+      el.style.left = c.pos[0] + 'px';
+      el.style.top = c.pos[1] + 'px';
+      page.appendChild(el);
+      return { el, top: c.pos[1] - 90 };
+    });
+    const RT = { grow: 4.5, wait: 1.2, step: .32, hold: 3.5, back: 1, retract: 1.6, rest: .72 };
+    const n = cards.length, flips = n * RT.step;
+    const TOTAL = RT.grow + RT.wait + flips + RT.hold + flips + RT.back + RT.retract + RT.rest;   // 17 s
+    // Targets at time t, exactly like rootsLoop() on the site: [rv, flipped(i)]
+    function target(t) {
+      t = ((t % TOTAL) + TOTAL) % TOTAL;
+      if (t < RT.grow) return [easeInOut(t / RT.grow) * 1.04, () => false];
+      t -= RT.grow;
+      if (t < RT.wait) return [1.04, () => false];
+      t -= RT.wait;
+      if (t < flips) return [1.04, i => i < t / RT.step];
+      t -= flips;
+      if (t < RT.hold) return [1.04, () => true];
+      t -= RT.hold;
+      if (t < flips) return [1.04, i => i >= t / RT.step];
+      t -= flips;
+      if (t < RT.back) return [1.04, () => false];
+      t -= RT.back;
+      if (t < RT.retract) return [1.04 * (1 - easeInOut(t / RT.retract)), () => false];
+      return [0, () => false];
+    }
+    const flippedAt = (t, i) => target(t)[1](i);
+    const shownAt = (t, i) => target(t)[0] * 2377 >= cards[i].top;
+    // On the site these are CSS transitions; here: find when the target last changed and play it from there
+    const sinceChange = (fn, t, dur) => {
+      const now = fn(t), dt = 1 / 240;
+      for (let k = 1; k * dt <= dur; k++) if (fn(t - k * dt) !== now) return { now, p: (k - .5) * dt / dur };
+      return { now, p: 1 };
+    };
+    return t => {
+      page.style.setProperty('--rv', target(t)[0].toFixed(4));
+      cards.forEach((c, i) => {
+        const f = sinceChange(tt => flippedAt(tt, i), t, FLIP);
+        const s = sinceChange(tt => shownAt(tt, i), t, SHOW);
+        const e = easeWater(f.p);
+        poseCard(c.el, {
+          rot: f.now ? 180 * e : 180 * (1 - e),
+          lift: f.p < 1 ? liftAt(f.p) : 0,
+          shown: s.now ? easeOut(s.p) : 1 - easeOut(s.p),
+        });
+      });
+    };
+  },
+};
+
+const render = scenes[scene]();
+window.renderAt = t => { render(t); return true; };
+window.ready = (async () => {
+  await document.fonts.ready;
+  await document.fonts.load('500 35px "Josefin Sans"');
+  await document.fonts.load('italic 200 20px "Josefin Sans"');
+  await Promise.all([...document.images].map(img => img.decode().catch(() => null)));
+  render(0);
+  return true;
+})();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,221 @@
+<div class="cda-raices" data-mode="scroll"></div>
+<script>
+/* Siete Raíces cards for Cargo. Desktop: the "Nuestra Visión" page with the roots growing and the cards
+   flipping as you scroll. Narrow screens: one big card per row along a single root, two at most per screen.
+   Everything renders inside a shadow root: Cargo saves the page's live HTML, and would otherwise store the
+   generated cards in the page (and its own styles would leak into them). Set data-mode="loop" to animate on a loop. */
+(() => {
+const CSS = `
+:host { display: block; width: 100%; }
+.cda-raices { --lima: #DBF174; --noche: #2E3E76; --cielo: #9ECFEB; --ease-water: cubic-bezier(.65, 0, .35, 1); --ease-out: cubic-bezier(.22, 1, .36, 1); --t-flip: 900ms;
+  position: relative; width: 100%; background: var(--cielo); font-family: 'Josefin Sans Variable', 'Josefin Sans', sans-serif; -webkit-font-smoothing: antialiased; overflow: hidden; }
+.cda-r-desk { position: relative; width: 100%; aspect-ratio: 1920 / 2377; }
+.cda-r-page { position: absolute; left: 0; top: 0; width: 1920px; height: 2377px; transform-origin: 0 0; transform: scale(var(--s, .5)); --rv: 1; }
+.cda-r-bg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; user-select: none; pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(var(--rv) * 100% - 4%), transparent calc(var(--rv) * 100%));
+          mask-image: linear-gradient(to bottom, #000 calc(var(--rv) * 100% - 4%), transparent calc(var(--rv) * 100%)); }
+.cda-r-mob { display: none; position: relative; padding: 14svh 0 10svh; }
+.cda-raices.is-narrow .cda-r-desk { display: none; }
+.cda-raices.is-narrow .cda-r-mob { display: block; }
+.cda-r-stem { position: absolute; left: 50%; top: 0; bottom: 0; width: 10px; margin-left: -5px; background: var(--lima); border-radius: 0 0 5px 5px; transform-origin: 50% 0; transform: scaleY(var(--grow, 0)); }
+.cda-r-cap { position: absolute; left: 50%; top: 6svh; width: 96px; height: 30px; margin-left: -48px; border-radius: 15px; background: var(--lima); }
+.cda-r-item { position: relative; display: flex; flex-direction: column; align-items: center; margin: 0 auto 9svh; transition: opacity .7s var(--ease-out), translate .7s var(--ease-out); }
+.cda-r-item.is-hidden { opacity: 0; translate: 0 48px; }
+.cda-r-tag { width: 40px; height: 40px; margin-bottom: 14px; border-radius: 8px; background: var(--lima); color: var(--noche); display: grid; place-items: center; font-size: 24px; font-weight: 600; line-height: 1; padding-top: 4px; box-sizing: border-box; }
+.cda-r-slot { position: relative; height: min(54svh, calc(80vw * 572 / 320)); aspect-ratio: 320 / 572; }
+.cda-r-scale { position: absolute; left: 0; top: 0; width: 320px; height: 572px; transform-origin: 0 0; transform: scale(var(--k, 1)); }
+
+.cda-card { position: absolute; width: 320px; height: 572px; perspective: 1800px; outline: none; cursor: pointer; -webkit-tap-highlight-color: transparent;
+  transition: opacity .7s var(--ease-out), translate .7s var(--ease-out); }
+.cda-r-scale .cda-card { left: 0; top: 0; }
+.cda-card.is-hidden { opacity: 0; translate: 0 -48px; pointer-events: none; }
+.cda-card:focus-visible .cda-inner { outline: 6px solid var(--lima); outline-offset: 8px; border-radius: 20px; }
+.cda-inner { position: absolute; inset: 0; transform-style: preserve-3d; transition: transform var(--t-flip) var(--ease-water); }
+.cda-card.is-flipped .cda-inner { transform: rotateY(180deg); }
+.cda-card.lift { animation: cdaLift var(--t-flip) var(--ease-water); }
+@keyframes cdaLift { 0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(0,0,0,0)); } 50% { transform: scale(1.06); filter: drop-shadow(0 40px 40px rgba(46,62,118,.35)); } }
+.cda-face { position: absolute; inset: 0; border-radius: 20px; overflow: hidden; backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  background: var(--c-bg); color: var(--c-fg); text-align: left; box-shadow: 0 24px 50px -30px rgba(46,62,118,.55); }
+.cda-face.cda-back { transform: rotateY(180deg); }
+.cda-face p { margin: 0; padding: 0; }
+.cda-icon { position: absolute; inset: 0; width: 100%; height: 100%; }
+.cda-title { position: absolute; top: 22px; width: 250px; font-size: 35px; font-weight: 500; line-height: .95; letter-spacing: -1.05px; }
+.cda-badge { position: absolute; left: 263px; top: 21px; width: 36px; height: 36px; border-radius: 8px; background: var(--c-fg); color: var(--c-bg);
+  display: grid; place-items: center; font-size: 25px; font-weight: 500; line-height: 1; padding-top: 5px; box-sizing: border-box; }
+.cda-foot { position: absolute; top: 524px; font-size: 20px; font-style: italic; line-height: .9; letter-spacing: -.6px; }
+.cda-photo { position: absolute; left: 0; top: 0; width: 320px; height: 434px; overflow: hidden; }
+.cda-photo img { position: absolute; object-fit: cover; display: block; max-width: none; }
+.cda-photo::after { content: ""; position: absolute; inset: 0; background: var(--c-bg); opacity: .3; }
+.cda-body { position: absolute; font-size: 25px; font-weight: 400; line-height: .9; letter-spacing: -.75px; color: var(--c-body); }
+@media (prefers-reduced-motion: reduce) { .cda-inner, .cda-card, .cda-r-item { transition-duration: 1ms; } .cda-card.lift { animation: none; } }
+`;
+const IMG = /*@IMG@*/;
+/*@CARDS@*/
+const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+const easeInOut = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
+document.querySelectorAll('div.cda-raices').forEach(host => {
+  if (host.shadowRoot) return;
+  host.textContent = '';
+  const mode = host.dataset.mode === 'loop' ? 'loop' : 'scroll';
+  const shadow = host.attachShadow({ mode: 'open' });
+  shadow.innerHTML = `<style>${CSS}</style><div class="cda-raices"></div>`;
+  const root = shadow.lastElementChild;
+
+  function makeCard(c) {
+    const el = document.createElement('div');
+    el.className = 'cda-card';
+    el.tabIndex = 0;
+    el.setAttribute('role', 'button');
+    el.setAttribute('aria-pressed', 'false');
+    el.setAttribute('aria-label', `Raíz ${c.n}: ${c.title.replace('<br>', ' ')}. Voltear tarjeta`);
+    el.style.setProperty('--c-bg', c.bg);
+    el.style.setProperty('--c-fg', c.fg);
+    el.style.setProperty('--c-body', c.body);
+    const [ix, iy, iw, ih] = c.box;
+    el.innerHTML = `
+      <div class="cda-inner">
+        <div class="cda-face cda-front">
+          <svg class="cda-icon" viewBox="0 0 320 572" aria-hidden="true"><g fill="${c.iconFill || c.fg}">${c.icon}</g></svg>
+          <p class="cda-title" style="left:${c.tx}px">${c.title}</p>
+          <span class="cda-badge">${c.n}</span>
+          <p class="cda-foot" style="left:${c.tx}px;font-weight:${c.footW}">Nuestras Raíces</p>
+        </div>
+        <div class="cda-face cda-back">
+          <div class="cda-photo"><img src="${IMG['raiz-' + c.n]}" alt="" loading="lazy" style="left:${ix}px;top:${iy}px;width:${iw}px;height:${ih}px"></div>
+          <p class="cda-body" style="left:${c.bx}px;top:${c.by}px;width:${c.bw}px">${c.text}</p>
+        </div>
+      </div>`;
+    // The animation sets the "auto" side; a click or tap pins the card on the side you chose
+    const rec = { el, auto: false, pinned: null };
+    const toggle = () => { rec.pinned = !el.classList.contains('is-flipped'); apply(rec); };
+    el.addEventListener('click', toggle);
+    el.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });
+    el.addEventListener('animationend', () => el.classList.remove('lift'));
+    return rec;
+  }
+  function apply(rec) {
+    const want = rec.pinned !== null ? rec.pinned : rec.auto;
+    const el = rec.el;
+    if (want === el.classList.contains('is-flipped')) return;
+    el.classList.toggle('is-flipped', want);
+    el.setAttribute('aria-pressed', want);
+    el.classList.remove('lift'); void el.offsetWidth; el.classList.add('lift');
+  }
+  function setAuto(rec, state) { if (state !== rec.auto) { rec.auto = state; apply(rec); } }
+
+  /* Desktop: the "Nuestra Visión: Siete Raíces" page (1920 × 2377) */
+  const desk = document.createElement('div');
+  desk.className = 'cda-r-desk';
+  desk.innerHTML = `<div class="cda-r-page"><img class="cda-r-bg" src="${IMG['siete-raices-bg']}" alt="" draggable="false"></div>`;
+  const page = desk.firstElementChild;
+  const deskCards = CARDS.map(c => {
+    const rec = makeCard(c);
+    rec.el.style.left = c.pos[0] + 'px';
+    rec.el.style.top = c.pos[1] + 'px';
+    rec.top = c.pos[1] - 90;          // the numbered tag above each card
+    page.appendChild(rec.el);
+    return rec;
+  });
+  // rv: how far down the roots have grown (0–1). flipped(i): which cards show their photo side.
+  function setRoots(rv, flipped) {
+    page.style.setProperty('--rv', rv.toFixed(4));
+    const y = rv * 2377;
+    deskCards.forEach((rec, i) => {
+      rec.el.classList.toggle('is-hidden', y < rec.top);
+      setAuto(rec, flipped(i));
+    });
+  }
+  // Loop: roots grow → cards flip 1→7 → hold → flip back → roots pull back
+  const RT = { grow: 4.5, wait: 1.2, step: .32, hold: 3.5, back: 1, retract: 1.6, rest: .6 };
+  function rootsLoop(t) {
+    const n = deskCards.length, flips = n * RT.step;
+    const total = RT.grow + RT.wait + flips + RT.hold + flips + RT.back + RT.retract + RT.rest;
+    t %= total;
+    if (t < RT.grow) return setRoots(easeInOut(t / RT.grow) * 1.04, () => false);
+    t -= RT.grow;
+    if (t < RT.wait) return setRoots(1.04, () => false);
+    t -= RT.wait;
+    if (t < flips) return setRoots(1.04, i => i < t / RT.step);
+    t -= flips;
+    if (t < RT.hold) return setRoots(1.04, () => true);
+    t -= RT.hold;
+    if (t < flips) return setRoots(1.04, i => i >= t / RT.step);
+    t -= flips;
+    if (t < RT.back) return setRoots(1.04, () => false);
+    t -= RT.back;
+    if (t < RT.retract) return setRoots(1.04 * (1 - easeInOut(t / RT.retract)), () => false);
+    setRoots(0, () => false);
+  }
+  // Scroll: roots grow over the first half, then the cards flip one by one
+  function rootsScroll() {
+    const r = desk.getBoundingClientRect();
+    const p = clamp((innerHeight * .75 - r.top) / (r.height - innerHeight * .1));
+    setRoots(clamp(p / .55) * 1.04, i => p >= .6 + i * .05);
+  }
+
+  /* Narrow screens: one root down the middle, one big card per row */
+  const mob = document.createElement('div');
+  mob.className = 'cda-r-mob';
+  mob.innerHTML = '<div class="cda-r-stem"></div><div class="cda-r-cap"></div>';
+  const mobItems = CARDS.map(c => {
+    const item = document.createElement('div');
+    item.className = 'cda-r-item is-hidden';
+    item.innerHTML = `<div class="cda-r-tag">${c.n}</div><div class="cda-r-slot"><div class="cda-r-scale"></div></div>`;
+    const rec = makeCard(c);
+    item.querySelector('.cda-r-scale').appendChild(rec.el);
+    mob.appendChild(item);
+    return { item, rec, slot: item.querySelector('.cda-r-slot') };
+  });
+  // The root grows with the reader; a card appears as it enters and turns to its photo once it reaches the middle
+  function mobScroll() {
+    const r = mob.getBoundingClientRect();
+    mob.style.setProperty('--grow', clamp((innerHeight * .85 - r.top) / r.height).toFixed(4));
+    mobItems.forEach(({ item, rec, slot }) => {
+      const s = slot.getBoundingClientRect();
+      item.classList.toggle('is-hidden', s.top > innerHeight * .92);
+      setAuto(rec, s.top + s.height / 2 < innerHeight * .5);
+    });
+  }
+
+  root.append(desk, mob);
+
+  let narrow = null;
+  function fit() {
+    const w = root.clientWidth;
+    narrow = w < 700;
+    root.classList.toggle('is-narrow', narrow);
+    page.style.setProperty('--s', w / 1920);
+    mobItems.forEach(({ slot }) => slot.style.setProperty('--k', slot.clientWidth / 320));
+    update();
+  }
+  function update() {
+    if (narrow) mobScroll();
+    else if (mode === 'scroll') rootsScroll();
+  }
+  new ResizeObserver(fit).observe(root);
+
+  let ticking = false;
+  const onScroll = () => {
+    if (!root.isConnected) return removeEventListener('scroll', onScroll, true);
+    if (!ticking) { ticking = true; requestAnimationFrame(() => { ticking = false; update(); }); }
+  };
+  addEventListener('scroll', onScroll, { passive: true, capture: true });
+
+  if (mode === 'loop') {
+    let t = 0, last = performance.now();
+    const tick = now => {
+      if (!root.isConnected) return;
+      const dt = Math.min((now - last) / 1000, .1);
+      last = now;
+      const r = desk.getBoundingClientRect();
+      if (!narrow && r.bottom > 0 && r.top < innerHeight) { t += dt; rootsLoop(t); }
+      requestAnimationFrame(tick);
+    };
+    setRoots(0, () => false);
+    requestAnimationFrame(tick);
+  }
+  fit();
+});
+})();
+</script>

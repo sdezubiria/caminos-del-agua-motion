@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="es-CO">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Caminos del Agua · Nueva ciudad en Ibagué pensada desde el agua</title>
+<meta name="description" content="Caminos del Agua es un proyecto urbano de 40 ha en Ibagué, sobre la vía al Aeropuerto Perales: vivienda, comercio, servicios y parques diseñados con el agua.">
+<link rel="canonical" href="@SITE@/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#E4EEF5">
+<meta name="geo.region" content="CO-TOL">
+<meta name="geo.placename" content="Ibagué">
+
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_CO">
+<meta property="og:site_name" content="Caminos del Agua">
+<meta property="og:url" content="@SITE@/">
+<meta property="og:title" content="Caminos del Agua · Una nueva ciudad en camino, pensada desde el agua">
+<meta property="og:description" content="40 ha en Ibagué con vivienda, comercio, servicios y una red de parques y quebradas que gestiona el agua de lluvia.">
+<meta property="og:image" content="@SITE@/img/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Valla de Caminos del Agua: niños jugando en un canal de agua y un camino amarillo que cruza el parque">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="alternate" type="text/plain" href="llms.txt" title="Resumen para modelos de lenguaje">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500&family=Josefin+Sans:ital,wght@0,300..700;1,300..700&display=swap">
+<link rel="stylesheet" href="css/site.css">
+<link rel="preload" as="image" href="img/walk-photo.webp" fetchpriority="high">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "@SITE@/#website",
+      "url": "@SITE@/",
+      "name": "Caminos del Agua",
+      "inLanguage": "es-CO",
+      "publisher": { "@id": "@SITE@/#organizacion" }
+    },
+    {
+      "@type": "Organization",
+      "@id": "@SITE@/#organizacion",
+      "name": "Caminos del Agua",
+      "url": "@SITE@/",
+      "logo": "@SITE@/favicon.svg",
+      "slogan": "Una nueva ciudad en camino, pensada desde el agua.",
+      "areaServed": { "@id": "@SITE@/#lugar" }
+    },
+    {
+      "@type": "Place",
+      "@id": "@SITE@/#lugar",
+      "name": "Caminos del Agua",
+      "description": "Pieza de ciudad de 40 hectáreas en Ibagué, sobre la vía al Aeropuerto Perales y cerca de las calles 103 y 117. Combina vivienda, comercio, servicios y espacio público alrededor de una diagonal de parques y plazas de agua.",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Vía al Aeropuerto Perales",
+        "addressLocality": "Ibagué",
+        "addressRegion": "Tolima",
+        "addressCountry": "CO"
+      },
+      "containedInPlace": { "@type": "City", "name": "Ibagué" },
+      "amenityFeature": [
+        { "@type": "LocationFeatureSpecification", "name": "Parque de agua", "value": true },
+        { "@type": "LocationFeatureSpecification", "name": "Quebrada", "value": true },
+        { "@type": "LocationFeatureSpecification", "name": "Comercio y usos mixtos", "value": true },
+        { "@type": "LocationFeatureSpecification", "name": "Equipamiento público", "value": true },
+        { "@type": "LocationFeatureSpecification", "name": "Restaurantes y hoteles", "value": true },
+        { "@type": "LocationFeatureSpecification", "name": "Vivienda familiar, conjuntos cerrados y vivienda VIP", "value": true }
+      ]
+    },
+    {
+      "@type": "WebPage",
+      "@id": "@SITE@/#pagina",
+      "url": "@SITE@/",
+      "name": "Caminos del Agua · Nueva ciudad en Ibagué pensada desde el agua",
+      "inLanguage": "es-CO",
+      "isPartOf": { "@id": "@SITE@/#website" },
+      "about": { "@id": "@SITE@/#lugar" },
+      "primaryImageOfPage": "@SITE@/img/og-image.jpg",
+      "contributor": [
+        { "@type": "Organization", "name": "Infinito Urbano", "description": "Gerencia del proyecto" },
+        { "@type": "Organization", "name": "LBE", "description": "Diseño" },
+        { "@type": "Organization", "name": "2 Latitudes", "description": "Diseño" },
+        { "@type": "Organization", "name": "SHP", "description": "Asesoría técnica en agua" }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "@SITE@/#preguntas",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "¿Dónde está Caminos del Agua?",
+          "acceptedAnswer": { "@type": "Answer", "text": "En Ibagué (Tolima, Colombia), sobre la vía al Aeropuerto Perales, cerca de las calles 103 y 117." }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Qué tamaño tiene el proyecto?",
+          "acceptedAnswer": { "@type": "Answer", "text": "40 hectáreas: una pieza de ciudad donde vivienda, comercio, servicios y espacios públicos se complementan, conectados por una red de parques y recorridos." }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Por qué el agua?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Colombia es el cuarto país con más agua del mundo. Caminos del Agua diseña con el agua en lugar de enterrarla: reciclaje, sistemas urbanos de drenaje sostenible (SUDS), recolección de lluvia y juegos de agua." }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cómo se vive en Caminos del Agua?",
+          "acceptedAnswer": { "@type": "Answer", "text": "En cuatro zonas unidas por una diagonal de parques y plazas de agua que va de lo más urbano a la naturaleza: 1) Eje comercial Av. Aeropuerto, 2) Peatonal de uso mixto, 3) Residencial junto al parque diagonal y 4) Residencial junto a la quebrada." }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Cuáles son las Siete Raíces del proyecto?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Escala humana, relaciones, ciudad para todos, identidad, infraestructura viva, economía y tranquilidad." }
+        },
+        {
+          "@type": "Question",
+          "name": "¿Quién está detrás de Caminos del Agua?",
+          "acceptedAnswer": { "@type": "Answer", "text": "La gerencia es de Infinito Urbano. El diseño cuenta con LBE y 2 Latitudes, y el equipo técnico cubre movilidad, vías y agua (SHP)." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body>
+<a class="skip" href="#contenido">Saltar al contenido</a>
+<div class="page">
+
+<!-- Final 49 · Inicio -->
+<section class="sec hero" id="inicio" style="--h:1080" aria-label="Inicio">
+  <header class="hdr">
+    <a class="a hdr-logo" href="#inicio" style="--x:52;--y:50;--w:155" aria-label="Caminos del Agua, inicio"><img src="img/svg/logo-mark.svg" alt="" width="155" height="62"></a>
+    <nav class="hdr-nav" aria-label="Principal">
+      <a class="a nav" href="#equipo" style="--x:1092;--y:59">Quiénes somos</a>
+      <a class="a nav" href="#ubicacion" style="--x:1309;--y:59">Ubicación</a>
+      <a class="a nav" href="#por-que-el-agua" style="--x:1485;--y:59">Filosofía</a>
+      <a class="a nav" href="#contacto" style="--x:1651;--y:59">Contacto</a>
+    </nav>
+    <button class="a burger" type="button" style="--x:1800;--y:50;--w:65;--h:50" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span><span class="sr">Menú</span></button>
+  </header>
+  <div class="a panel deco" style="--x:249;--y:153;--w:1584;--h:882"></div>
+  <div class="a panel-line deco" style="--x:1832;--y:153;--h:882"></div>
+  <h1 class="a hero-logo" style="--x:656;--y:244;--w:770">
+    <span class="sr">Caminos del Agua: una nueva ciudad en camino, pensada desde el agua, en Ibagué</span>
+    <!--@logo@-->
+  </h1>
+</section>
+
+<nav class="menu" id="menu" aria-label="Secciones" hidden>
+  <button class="menu-close" type="button" aria-label="Cerrar menú">×</button>
+  <ul>
+    <li><a href="#que-te-trae">¿Qué te trae por aquí?</a></li>
+    <li><a href="#ubicacion">¿Dónde estamos?</a></li>
+    <li><a href="#proyecto">40 ha</a></li>
+    <li><a href="#por-que-el-agua">¿Por qué el agua?</a></li>
+    <li><a href="#como-se-vive">¿Cómo se vive?</a></li>
+    <li><a href="#vision">Nuestra Visión: Siete Raíces</a></li>
+    <li><a href="#equipo">¿Quién está detrás?</a></li>
+    <li><a href="#contacto">Contáctenos</a></li>
+    <li><a href="#aliados">Nuestros aliados</a></li>
+  </ul>
+</nav>
+
+<main id="contenido">
+
+<!-- Final 50 · Paseo -->
+<section class="sec intro" style="--h:1080" aria-labelledby="intro-t">
+  <h2 class="sr" id="intro-t">Una nueva ciudad en camino, pensada desde el agua</h2>
+  <div class="pl ph" style="--x:-22;--y:-16;--w:1954;--h:1096;transform:scale(-1,1)">
+    <img class="pl" src="img/walk-photo.webp" width="1200" height="800" fetchpriority="high" decoding="async" style="--x:-15.83;--y:-12.71;--w:1954;--h:1302.82" alt="Personas caminando por un sendero junto a un parque con humedales, árboles y un puente de madera">
+  </div>
+  <div class="pl fade" style="--x:0;--y:0;--w:1920;--h:1080"></div>
+  <!--@pl:intro@-->
+</section>
+
+<!-- Final 51 · ¿Qué te trae por aquí? -->
+<section class="sec trae" id="que-te-trae" style="--h:1080" aria-labelledby="trae-t">
+  <!--@pl:trae@-->
+  <h2 class="a hl" id="trae-t" style="--x:135;--y:199;--w:606">¿Qué te trae por aquí?</h2>
+  <ul class="trae-opts">
+    <li><button class="a pill pill-azul" type="button" data-interes="Busco mi casa" style="--x:812;--y:310;--w:347;--h:79">Busco mi casa</button></li>
+    <li><button class="a pill pill-azul" type="button" data-interes="Quiero conocer el proyecto" style="--x:800;--y:566;--w:347;--h:81">Quiero conocer el proyecto</button></li>
+    <li><button class="a pill pill-azul" type="button" data-interes="Quiero ser aliado" style="--x:1305;--y:431;--w:347;--h:79">Quiero ser aliado</button></li>
+  </ul>
+  <a class="a cta cta-electrico" href="#contacto" style="--x:135;--y:567;--w:457;--h:75.1">Contáctanos <span aria-hidden="true">→</span></a>
+  <a class="a cta cta-rosa" href="#ubicacion" style="--x:135;--y:823;--w:457;--h:75.1">Explora el proyecto <span aria-hidden="true">→</span></a>
+</section>
+
+<!-- Final 53 · ¿Dónde estamos? -->
+<section class="sec donde" id="ubicacion" style="--h:1080" aria-labelledby="donde-t">
+  <div class="pl ph bg" style="--x:-408;--y:-68;--w:2791;--h:1160">
+    <img class="pl" src="img/aerial-photo.webp" width="2200" height="894" loading="lazy" decoding="async" style="--x:-262.63;--y:-90.25;--w:3434.33;--h:1393.86" alt="Vista aérea del valle de Ibagué con las montañas al fondo y la ubicación de Caminos del Agua junto a la vía al aeropuerto">
+  </div>
+  <!--@pl:donde@-->
+  <h2 class="a hl" id="donde-t" style="--x:230;--y:171;--w:606">¿Dónde <br>estamos?</h2>
+  <p class="a p30 lead" style="--x:230;--y:350;--w:500">Sobre la vía al Aeropuerto Perales, Caminos del Agua está estratégicamente ubicado. Cerca a vías principales como la 103 y la 117, la zona cuenta con paisajes inolvidables y naturaleza accesible.</p>
+  <ul class="map-labels" aria-label="Referencias del mapa">
+    <li class="a deco map-here" style="--x:942;--y:457;--w:289">Caminos del Agua</li>
+    <li class="a deco lbl" style="--x:1323;--y:519;--w:206">Aeropuerto <br>Perales</li>
+    <li class="a deco lbl lbl-up" style="--x:1116;--y:568;--w:60;--h:104"><span>Cll 117</span></li>
+    <li class="a deco lbl lbl-up" style="--x:1042;--y:568;--w:60;--h:104"><span>Cll 103</span></li>
+    <li class="a deco lbl lbl-tilt" style="--x:1054;--y:793;--w:210.77;--h:79.3"><span>Vía Aeropuerto</span></li>
+  </ul>
+</section>
+
+<!-- Final 52 · 40 ha -->
+<section class="sec ha" id="proyecto" style="--h:540" aria-labelledby="ha-t">
+  <!--@pl:ha@-->
+  <h2 class="a hl" id="ha-t" style="--x:231;--y:100;--w:685">40 ha</h2>
+  <div class="a p30 copy" style="--x:231;--y:221;--w:500">
+    <p>Proponemos una pieza de ciudad donde vivienda, comercio, servicios y espacios públicos se complementan.</p>
+    <p>Una red de parques y recorridos conecta las actividades del barrio con el paisaje.</p>
+  </div>
+</section>
+
+<!-- Final 55 · Usos -->
+<section class="sec usos" style="--h:1080" aria-labelledby="usos-t">
+  <h2 class="sr" id="usos-t">Usos del proyecto</h2>
+  <img class="pl ph" src="img/render-photo.webp" width="1792" height="1008" loading="lazy" decoding="async" style="--x:-298;--y:0;--w:2361.95;--h:1241.06" alt="Render aéreo de Caminos del Agua: manzanas de vivienda y comercio alrededor de un parque de agua, con la cordillera al fondo">
+  <div class="pl deco shade" style="--x:-17;--y:0;--w:1944;--h:1245"></div>
+  <!--@pl:usos@-->
+  <ul class="usos-list" aria-label="Usos">
+    <li class="a lbl" style="--x:630;--y:195;--w:128">Comercio</li>
+    <li class="a lbl" style="--x:317;--y:467;--w:128">Vivienda <br>familiar</li>
+    <li class="a lbl" style="--x:735;--y:358;--w:128">Usos mixtos</li>
+    <li class="a lbl" style="--x:1138;--y:270;--w:128">Conjuntos <br>cerrados</li>
+    <li class="a lbl lbl-agua" style="--x:949;--y:430;--w:251">Quebrada</li>
+    <li class="a lbl lbl-agua" style="--x:871;--y:652;--w:251">Parque <br>de agua</li>
+    <li class="a lbl" style="--x:1359;--y:203;--w:210">Equipamiento <br>público</li>
+    <li class="a lbl" style="--x:1247;--y:348;--w:210">Restaurantes/ <br>hoteles</li>
+    <li class="a lbl" style="--x:1569;--y:360;--w:210">Vivienda VIP</li>
+  </ul>
+</section>
+
+<!-- Final 54 · ¿Por qué el agua? -->
+<section class="sec porque" id="por-que-el-agua" style="--h:540" aria-labelledby="porque-t">
+  <!--@pl:porque@-->
+  <h2 class="a hl" id="porque-t" style="--x:835;--y:82;--w:911">¿Por qué el agua?</h2>
+  <div class="a p30 copy" style="--x:1210;--y:208;--w:529">
+    <p>Colombia es el cuarto país con más agua del mundo. Cada vez hay más necesidad de planificar con el agua.</p>
+    <p>Caminos del Agua nace de esta lógica, donde no nos separamos del agua y la enterramos, sino que aprendemos a diseñar con ella e integrarla desde el reciclaje, SUDS, lluvia, juegos, etc.</p>
+  </div>
+</section>
+
+<!-- Final 56 · Espacio público / Esponja & Retención -->
+<section class="sec agua" id="agua" style="--h:1250" aria-labelledby="agua-t">
+  <h2 class="sr" id="agua-t">Cómo gestiona el agua el proyecto</h2>
+  <article class="agua-a">
+    <div class="pl ph bg" style="--x:-12;--y:-19;--w:973;--h:1298">
+      <img class="pl" src="img/photo-left.webp" width="1200" height="1800" loading="lazy" decoding="async" style="--x:0;--y:-166.53;--w:973;--h:1459.6" alt="Niños jugando en un canal de agua lluvia que recorre una calle peatonal arborizada">
+    </div>
+    <h3 class="a hl" style="--x:131;--y:1000;--w:911">Espacio Público</h3>
+    <p class="a p30" style="--x:136;--y:1099;--w:640">Sistema de recolección y tratamiento de aguas lluvias, diseño integrado al agua.</p>
+  </article>
+  <article class="agua-b">
+    <img class="pl ph bg" src="img/photo-right.webp" width="800" height="1067" loading="lazy" decoding="async" style="--x:961;--y:-31;--w:965;--h:1287" alt="Quebrada con vegetación nativa en sus bordes que filtra y retiene el agua">
+    <h3 class="a hl" style="--x:1155;--y:797;--w:911">Esponja &amp; <br>Retención</h3>
+    <p class="a p30" style="--x:1155;--y:968;--w:529">Sistema de prevención de inundaciones, de cuidado y conservación del agua.</p>
+  </article>
+  <div class="pl deco shade" style="--x:1;--y:-4;--w:1920;--h:1257"></div>
+  <!--@pl:agua@-->
+  <ul class="agua-labels" aria-label="Procesos del agua">
+    <li class="a lbl" style="--x:173;--y:110;--w:300">Captación de <br>aguas lluvias</li>
+    <li class="a lbl" style="--x:173;--y:628;--w:300">Filtración en <br>áreas verdes</li>
+    <li class="a lbl" style="--x:721;--y:825;--w:220">Conducción <br>y tratamiento</li>
+    <li class="a lbl" style="--x:1028;--y:272;--w:300">Barrera contra <br>inundaciones</li>
+    <li class="a lbl" style="--x:1684;--y:414;--w:220">Filtración por <br>vegetación</li>
+    <li class="a lbl" style="--x:1327;--y:653;--w:300">Purificación y <br>flujo lento</li>
+    <li class="a lbl" style="--x:1646;--y:661;--w:260">Infiltración <br>al suelo: <br>esponja</li>
+  </ul>
+</section>
+
+<!-- Final 57 · ¿Cómo se vive? -->
+<section class="sec vive" id="como-se-vive" style="--h:3200" aria-labelledby="vive-t">
+  <div class="l0"><!--@pl:vive-lines@--></div>
+  <h2 class="a hl" id="vive-t" style="--x:1101;--y:429;--w:911">¿Cómo se vive?</h2>
+  <p class="a p25 vive-intro" style="--x:1101;--y:609;--w:630">A través de 4 zonas, dirigidas con una diagonal de sucesión de parques y plazas de agua, el proyecto propone gradualmente transicionar de lo más urbano a la naturaleza. Donde cada zona tiene una oportunidad de vivir la ciudad diferente, ofreciendo espacio para todos.</p>
+
+  <article class="zona" style="--bg:#F6EDA1">
+    <div class="a rect" style="--x:0;--y:441;--w:960;--h:946"></div>
+    <h3 class="zh"><span class="a zn" style="--x:52;--y:588">1</span> <span class="a zname" style="--x:119;--y:572;--w:330"><b>Eje Comercial</b><br><b>Av. Aeropuerto</b></span></h3>
+    <p class="a p25" style="--x:451;--y:566;--w:435">Zona comercial, punto de llegada y comienzo de la Diagonal del Agua. Es un frente urbano comercial, muy activo, conectado con el futuro CAN y la vía del aeropuerto.</p>
+    <div class="a ph zona-1" style="--x:-112;--y:749;--w:1072;--h:637.6">
+      <div class="pl" style="--x:-29.41;--y:16.07;--w:1241.73;--h:646.67">
+        <img class="pl" src="img/zona-1.webp" width="1600" height="1199" loading="lazy" decoding="async" style="--x:113.25;--y:-80.45;--w:1124.14;--h:842.54" alt="Eje comercial de la avenida Aeropuerto con locales en primer piso, fuente y árboles">
+      </div>
+    </div>
+  </article>
+
+  <article class="zona" style="--bg:#F6F1CD">
+    <div class="a rect" style="--x:960;--y:1073;--w:960;--h:887"></div>
+    <h3 class="zh"><span class="a zn" style="--x:1020;--y:1227">2</span> <span class="a zname" style="--x:1090;--y:1227;--w:300"><b>Peatonal</b><br><b>de uso mixto</b></span></h3>
+    <p class="a p25 zona-txt" style="--x:1403;--y:1205;--w:459">Eje vital peatonal entre edificios de uso mixtos como hoteles, restaurantes, cafés, bares, viviendas de apartamentos más pequeños que quieren estar dentro del ruido y la vitalidad.</p>
+    <div class="a ph" style="--x:973;--y:1387;--w:1006;--h:573">
+      <img class="pl" src="img/zona-2.webp" width="1600" height="1186" loading="lazy" decoding="async" style="--x:-0.2;--y:-68.99;--w:1091.31;--h:810.51" alt="Calle peatonal de uso mixto con terrazas de restaurantes y cafés bajo los árboles">
+    </div>
+  </article>
+
+  <article class="zona" style="--bg:#CFCFAA">
+    <div class="a rect" style="--x:-6;--y:1636;--w:960;--h:955"></div>
+    <h3 class="zh"><span class="a zn" style="--x:51;--y:1775">3</span> <span class="a zname zname-i" style="--x:145;--y:1754;--w:300">Residencial, <br>parque diagonal</span></h3>
+    <p class="a p25" style="--x:451;--y:1755;--w:440">Edificios y conjuntos de vivienda con acceso directo al parque en al menos dos esquinas. Una zona tranquila pero con vitalidad.</p>
+    <div class="a ph" style="--x:0;--y:1960;--w:973;--h:659;transform:scale(-1,1)">
+      <img class="pl" src="img/zona-3.webp" width="1600" height="1193" loading="lazy" decoding="async" style="--x:-65.77;--y:-48.83;--w:1045;--h:779.14" alt="Parque diagonal con senderos, agua y edificios de vivienda alrededor">
+    </div>
+  </article>
+
+  <article class="zona" style="--bg:#BECFAA">
+    <div class="a rect" style="--x:961;--y:2245;--w:960;--h:374"></div>
+    <h3 class="zh"><span class="a zn" style="--x:1042;--y:2380">4</span> <span class="a zname zname-i" style="--x:1102;--y:2371;--w:300">Residencial junto <br>a la quebrada</span></h3>
+    <p class="a p25" style="--x:1417;--y:2368;--w:463">Cerca de la naturaleza, hacia las montañas. Conjuntos cerrados, más silenciosos para las familias y quienes prefieren una zona con mayor tranquilidad.</p>
+    <div class="a ph" style="--x:963;--y:2619;--w:1027;--h:581">
+      <img class="pl" src="img/zona-4.webp" width="1448" height="1086" loading="lazy" decoding="async" style="--x:-0.31;--y:-62.52;--w:1027;--h:769.19" alt="Conjuntos residenciales junto a la quebrada, con vegetación y las montañas al fondo">
+    </div>
+  </article>
+
+  <div class="l1"><!--@pl:vive-lines-2@--></div>
+  <div class="l3"><!--@pl:vive-lines-3@-->
+<!--@pl:vive-lines-4@--></div>
+</section>
+
+<!-- Final 58 · Nuestra Visión: Siete Raíces (tarjetas animadas) -->
+<section class="vision" id="vision" aria-labelledby="vision-t">
+  <h2 class="sr" id="vision-t">Nuestra Visión: Siete Raíces</h2>
+  <div class="cda-raices" data-mode="scroll"></div>
+  <ol class="raices-list sr">
+    <li><h3>Escala humana</h3><p>Una ciudad diseñada desde el cuerpo: lo que se ve, se siente y se recorre.</p></li>
+    <li><h3>Relaciones</h3><p>Plazas, parques y quebrada para encontrarnos con los vecinos y con la naturaleza.</p></li>
+    <li><h3>Ciudad para todos</h3><p>Espacio para cada edad, hogar y especie: personas, flora, fauna y agua.</p></li>
+    <li><h3>Identidad</h3><p>Hecho con el paisaje de Ibagué: su agua, sus montañas y su flora nativa.</p></li>
+    <li><h3>Infraestructura viva</h3><p>Un sistema vivo que gestiona la lluvia, regula el clima y cuida el barrio para todos.</p></li>
+    <li><h3>Economía</h3><p>Un barrio activo de día y de noche, con negocios cercanos que le dan futuro.</p></li>
+    <li><h3>Tranquilidad</h3><p>Calles activas, andenes continuos, buena iluminación y con ojos en la calle, para caminar y estar con tranquilidad.</p></li>
+  </ol>
+</section>
+
+<!-- Final 59 · ¿Quién está detrás? -->
+<section class="sec equipo" id="equipo" style="--h:1080" aria-labelledby="equipo-t">
+  <!--@pl:equipo@-->
+  <h2 class="a hx equipo-t" id="equipo-t" style="--x:726;--y:73;--w:1100">¿Quién está detrás?</h2>
+  <div class="a pill pill-azul" style="--x:326;--y:89;--w:318;--h:81">Gerencia</div>
+
+  <div class="grp">
+    <h3 class="a pill pill-electrico" style="--x:326;--y:188;--w:318;--h:90">Infinito Urbano</h3>
+    <ul class="tiles">
+      <li class="a tile" style="--x:186;--y:318"><span class="nm" style="--ny:144">Juliana Árbelaez</span></li>
+      <li class="a tile" style="--x:454;--y:318"><span class="nm" style="--ny:144">Santiago Olarte</span></li>
+      <li class="a tile" style="--x:186;--y:544"><span class="nm" style="--ny:111">Diana Carolina Vergara</span></li>
+      <li class="a tile" style="--x:454;--y:544"><span class="nm" style="--ny:124">John <br>Edwar Morales</span></li>
+    </ul>
+  </div>
+
+  <div class="grp">
+    <h3 class="a pill pill-lima" style="--x:820;--y:299;--w:318;--h:81">Diseño</h3>
+    <ul class="tiles">
+      <li class="a tile" style="--x:636;--y:624"><span class="nm" style="--ny:141">Juanita Escobar Rossi</span></li>
+      <li class="a tile" style="--x:816;--y:624"><span class="nm" style="--ny:125">Luisa Brando <br>LBE</span></li>
+      <li class="a tile" style="--x:1067;--y:624"><span class="nm" style="--ny:109">Andrés Hernández <br><br>2 Latitudes</span></li>
+    </ul>
+  </div>
+
+  <div class="grp">
+    <h3 class="a pill pill-lima" style="--x:1381;--y:299;--w:318;--h:81">Técnicos</h3>
+    <ul class="tiles">
+      <li class="a tile" style="--x:1266;--y:395"><b class="rl" style="--ry:17">Movilidad</b><span class="nm" style="--ny:140">Humberto Gonzalez</span></li>
+      <li class="a tile" style="--x:1266;--y:606"><b class="rl" style="--ry:68">Movilidad</b><span class="nm" style="--ny:104">Juan Guillermo Zuluaga</span></li>
+      <li class="a tile" style="--x:1266;--y:818"><b class="rl" style="--ry:68">Vías</b><span class="nm" style="--ny:104">Fabian Tafur</span></li>
+      <li class="a tile" style="--x:1665;--y:470"><b class="rl" style="--ry:11">Agua</b><span class="nm" style="--ny:115">Andrés Martinez D <br>SHP</span></li>
+      <li class="a tile" style="--x:1665;--y:696"><b class="rl" style="--ry:23">Agua</b><span class="nm" style="--ny:111">Alejandra Acero <br>SHP</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- Final 60 · Valla -->
+<section class="sec valla" style="--h:1080" aria-label="Campaña">
+  <img class="pl ph" src="img/billboard.webp" width="1792" height="1008" loading="lazy" decoding="async" style="--x:0;--y:0;--w:1920;--h:1080" alt="Valla de Caminos del Agua con el lema «Una nueva ciudad en camino, pensada desde el agua»: un camino amarillo cruza un parque y niños juegan en un canal con fuentes">
+</section>
+
+<!-- Final 61 · Contáctenos -->
+<section class="sec contacto" id="contacto" style="--h:540" aria-labelledby="contacto-t">
+  <!--@pl:contacto@-->
+  <h2 class="a hx" id="contacto-t" style="--x:256;--y:172;--w:938">Contáctenos</h2>
+  <button class="a pill pill-azul pill-cta" type="button" data-interes="" style="--x:1399;--y:259;--w:318;--h:91">Formulario</button>
+</section>
+
+<!-- Final 62 · Nuestros aliados -->
+<section class="sec aliados" id="aliados" style="--h:873" aria-labelledby="aliados-t">
+  <!--@pl:aliados@-->
+  <h2 class="a hx" id="aliados-t" style="--x:252;--y:87;--w:938">Nuestros aliados</h2>
+  <!-- Aliados por confirmar: los nombres son los marcadores de la plantilla -->
+  <ul class="tiles">
+    <li class="a tile" style="--x:345;--y:352"><span class="nm" style="--ny:141">John <br>Doe</span></li>
+    <li class="a tile" style="--x:547;--y:352"><span class="nm" style="--ny:141">John <br>Doe</span></li>
+    <li class="a tile" style="--x:750;--y:352"><span class="nm" style="--ny:141">John <br>Doe</span></li>
+    <li class="a tile" style="--x:953;--y:352"><span class="nm" style="--ny:141">John <br>Doe</span></li>
+    <li class="a tile" style="--x:1156;--y:352"><span class="nm" style="--ny:141">John <br>Doe</span></li>
+    <li class="a tile" style="--x:1483;--y:436"></li>
+  </ul>
+  <button class="a pill pill-azul pill-cta" type="button" data-interes="Quiero ser aliado" style="--x:1332;--y:695;--w:451;--h:91">¡Únete a nuestro proyecto!</button>
+</section>
+
+</main>
+
+<!-- Final 63 · Pie de página -->
+<footer class="sec ftr" style="--h:291">
+  <a class="a ftr-logo" href="#inicio" style="--x:32;--y:180;--w:106.92" aria-label="Caminos del Agua, inicio"><img src="img/svg/footer-b4752.svg" alt="" width="107" height="68"></a>
+  <!--@pl:footer@-->
+  <p class="a nav" style="--x:226;--y:224">© Caminos del Agua 2026</p>
+  <nav aria-label="Pie de página">
+    <a class="a nav" href="#equipo" style="--x:1178;--y:224">Quiénes somos</a>
+    <a class="a nav" href="#ubicacion" style="--x:1427;--y:224">Ubicación</a>
+    <a class="a nav" href="#por-que-el-agua" style="--x:1607;--y:224">Filosofía</a>
+    <a class="a nav" href="#contacto" style="--x:1775.66;--y:224">Contacto</a>
+  </nav>
+</footer>
+
+</div>
+
+<dialog class="form-dlg" id="formulario" aria-labelledby="form-t">
+  <form method="dialog" class="form">
+    <h2 id="form-t">Escríbenos</h2>
+    <p class="form-note">Prototipo: este formulario todavía no envía datos.</p>
+    <label>Nombre <input name="nombre" autocomplete="name" required></label>
+    <label>Correo <input name="correo" type="email" autocomplete="email" required></label>
+    <label>Teléfono <input name="telefono" type="tel" autocomplete="tel"></label>
+    <label>¿Qué te trae por aquí?
+      <select name="interes">
+        <option value="">Elige una opción</option>
+        <option>Busco mi casa</option>
+        <option>Quiero conocer el proyecto</option>
+        <option>Quiero ser aliado</option>
+      </select>
+    </label>
+    <label>Mensaje <textarea name="mensaje" rows="4"></textarea></label>
+    <div class="form-actions">
+      <button class="pill pill-azul" value="enviar">Enviar</button>
+      <button class="form-close" value="cerrar" formnovalidate>Cerrar</button>
+    </div>
+    <p class="form-ok" role="status" hidden>Gracias. En la versión final este mensaje llegará al equipo de Caminos del Agua.</p>
+  </form>
+</dialog>
+
+<script src="js/site.js" defer></script>
+<script src="js/siete-raices.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+# Caminos del Agua: all crawlers welcome, including AI assistants
+User-agent: *
+Allow: /
+
+Sitemap: https://www.caminosdelagua.co/sitemap.xml
