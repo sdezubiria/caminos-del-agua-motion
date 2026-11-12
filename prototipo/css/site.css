@@ -1,7 +1,8 @@
 /* Caminos del Agua · prototipo
    Desktop: every section is its Figma frame (1920 px wide), scaled to the page width. Elements carry their Figma
    position as --x --y --w --h (px on the 1920 frame); --u is one Figma pixel.
-   Under 900 px the same markup reflows into one column and the line art (.deco) is hidden. */
+   Under 900 px the same markup reflows into one column and the line art (.deco) is hidden.
+   The river (.river) is one ink line from the g of the logo to the footer; see build.py and js/site.js. */
 
 @property --x { syntax: '*'; inherits: false; }
 @property --y { syntax: '*'; inherits: false; }
@@ -29,7 +30,10 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--azul); outline-
 .skip:focus { top: 16px; }
 
 /* ---------- Frame scaling ---------- */
-.page { container-type: inline-size; --u: calc(100cqw / 1920); overflow-x: clip; }
+.page { container-type: inline-size; --u: calc(100cqw / 1920); overflow-x: clip;
+  /* --rl: length of river drawn (js/site.js sets it on scroll; without JS the river is drawn in full) */
+  --rl: 999999; --tx: 0; --ty: -100; --tv: 0; --mp: 1; }
+.js .page { --rl: 0; --mp: 0; }
 .sec { position: relative; overflow: clip; isolation: isolate; height: calc(var(--h) * var(--u)); }
 .a, .pl { position: absolute; margin: 0; left: calc(var(--x) * var(--u)); top: calc(var(--y) * var(--u));
   width: calc(var(--w) * var(--u)); height: calc(var(--h) * var(--u)); }
@@ -38,8 +42,8 @@ a:focus-visible, button:focus-visible { outline: 3px solid var(--azul); outline-
 img.ph, .ph.bg > img { object-fit: cover; }
 
 /* ---------- Type ---------- */
-.hx { font: 600 calc(100 * var(--u)) / .9 var(--josefin); letter-spacing: -.05em; color: var(--azul); }
-.hl { font: 600 calc(90 * var(--u)) / .889 var(--josefin); letter-spacing: -.05em; }
+.hl { margin: 0; font: 600 calc(90 * var(--u)) / .889 var(--josefin); letter-spacing: -.05em; }
+.stat { margin: 0; font: 600 calc(250 * var(--u)) / .8 var(--josefin); letter-spacing: -.06em; white-space: nowrap; }
 .p30 { font: 400 calc(30 * var(--u)) / .9 var(--grotesk); }
 .p30 p { margin: 0 0 .9em; }
 .p25 { font: 300 calc(25 * var(--u)) / 1.08 var(--grotesk); color: var(--musgo); }
@@ -48,23 +52,35 @@ img.ph, .ph.bg > img { object-fit: cover; }
 .nav:hover { text-decoration: underline; text-underline-offset: .2em; }
 
 /* ---------- Pills and buttons ---------- */
-.pill { display: flex; align-items: center; justify-content: center; text-align: center; border-radius: calc(36 * var(--u));
+.pill { display: flex; align-items: center; justify-content: center; text-align: center; margin: 0; border-radius: 999px;
   padding: 0 calc(24 * var(--u)); font: 600 calc(35 * var(--u)) / .857 var(--josefin); letter-spacing: -.05em; color: #fff;
   transition: filter .2s, transform .2s; }
 button.pill:hover, a.pill:hover, .cta:hover { filter: brightness(1.08); transform: translateY(-2px); }
 .pill-azul { background: var(--azul); color: var(--crema); }
-.pill-electrico { background: var(--electrico); color: var(--crema); border-radius: calc(40 * var(--u)); }
+.pill-electrico { background: var(--electrico); color: var(--crema); }
 .pill-lima { background: var(--lima); color: var(--azul); letter-spacing: -.03em; }
-.cta { display: flex; align-items: center; justify-content: center; padding: 0 calc(80 * var(--u)) 0 calc(24 * var(--u)); border-radius: calc(37.55 * var(--u)); text-decoration: none;
+.cta { display: flex; align-items: center; justify-content: center; padding: 0 calc(80 * var(--u)) 0 calc(24 * var(--u)); border-radius: 999px; text-decoration: none;
   font: 500 calc(35 * var(--u)) / 1 var(--grotesk); color: #fff; transition: filter .2s, transform .2s; }
 .cta span { position: absolute; right: calc(53 * var(--u)); top: 50%; translate: 0 -50%; rotate: 90deg; color: var(--flecha); font: 700 calc(40 * var(--u)) / 1 var(--josefin); }
 .cta-electrico { background: var(--electrico); }
 .cta-rosa { background: var(--rosa); }
 
+/* ---------- El río ---------- */
+/* Every section holds the pieces of river that cross it (build.py). A piece starts at length --a of the river and
+   is --l long; side branches draw --k times faster. The drop (.rv-tip) rides the end of the line. */
+.river { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.river path { --k: 1; fill: none; stroke: var(--tinta); stroke-width: 26;
+  stroke-dasharray: calc(var(--l) * 1px) calc(var(--l) * 1px + 100px);
+  stroke-dashoffset: calc(var(--l) * 1px - clamp(0px, (var(--rl) - var(--a)) * var(--k) * 1px, var(--l) * 1px)); }
+.river .rv-case { stroke: var(--niebla); stroke-width: 36; }
+.river .rv-end { fill: var(--tinta); stroke: none; opacity: clamp(0, var(--rl) - var(--rt) + 1.5, 1); transition: opacity .5s; }
+.rv-tip { fill: var(--tinta); opacity: var(--tv); transform: translate(calc(var(--tx) * 1px), calc(var(--ty) * 1px)); }
+.rv-tip.rv-case { fill: var(--niebla); stroke: none; }
+.river-ref { position: absolute; left: 0; top: 0; visibility: hidden; pointer-events: none; }
+
 /* ---------- Inicio ---------- */
 .hero { background: var(--niebla); }
 .panel { background: var(--panel); }
-.panel-line { width: 2px; background: var(--tinta); }
 .hdr-logo img { display: block; width: 100%; height: auto; }
 .burger span:not(.sr) { position: absolute; left: 0; width: calc(64.5 * var(--u)); height: max(2px, calc(5 * var(--u))); background: var(--tinta); }
 .burger span:nth-child(1) { top: calc(6.5 * var(--u)); }
@@ -97,48 +113,45 @@ button.pill:hover, a.pill:hover, .cta:hover { filter: brightness(1.08); transfor
 .donde { background: #34452b; }
 .donde .hl, .donde .lead { color: #fff; }
 .donde .lead { line-height: .933; }
+.donde .scrim { background: linear-gradient(to right, rgba(9, 29, 21, .5), rgba(9, 29, 21, .2) 40%, rgba(9, 29, 21, 0) 55%); }
 .map-here { font: 400 calc(35 * var(--u)) / .857 var(--josefin); letter-spacing: -.05em; color: #fff; }
 .lbl-up span, .lbl-tilt span { position: absolute; left: 50%; top: 50%; translate: -50% -50%; height: calc(60 * var(--u)); }
 .lbl-up span { width: calc(104 * var(--u)); rotate: -90deg; }
 .lbl-tilt span { width: calc(206 * var(--u)); rotate: 5.45deg; }
 
 .ha { background: var(--niebla); }
-.ha .hl, .ha .copy { color: var(--pino); }
+.ha .stat, .ha .copy { color: var(--pino); }
 
 .usos { background: #c9c3b4; }
 .usos .shade { background: linear-gradient(to bottom, rgba(158, 207, 235, .14) 11.347%, rgba(28, 23, 23, .14) 93.421%); }
 .lbl-agua { color: var(--cielo); }
 
 .porque { background: var(--niebla); }
-.porque .hl, .porque .copy { color: var(--azul); text-align: right; }
+.porque .hl, .porque .copy { color: var(--azul); }
 
 .agua { background: #233322; }
-.agua .shade { background: rgba(9, 29, 21, .3); }
+.agua .shade { background: linear-gradient(rgba(9, 29, 21, .25), rgba(9, 29, 21, .35) 60%, rgba(9, 29, 21, .55)); }
 .agua h3, .agua article p { z-index: 1; color: #fff; }
 
 .vive { background: var(--niebla); }
 .vive .hl { color: var(--bosque); }
-.vive .rect { background: var(--bg); z-index: 0; }
-.vive .l0 > .pl { z-index: 0; }
-.vive .l1 > .pl, .vive .hl, .vive .p25, .vive .zh .a { z-index: 1; }
-.vive .ph { z-index: 2; }
-.vive .l3 > .pl { z-index: 3; }
+.vive .rect { background: var(--bg); }
+.vive .ph img { object-fit: cover; }
 .zh { margin: 0; }
 .zn { font: 600 calc(90 * var(--u)) / .333 var(--josefin); letter-spacing: -.05em; color: var(--bosque); }
 .zname { font: italic 400 calc(35 * var(--u)) / .857 var(--josefin); letter-spacing: -.05em; color: var(--bosque); }
 .zname b { font-weight: 600; }
-.zona-txt { color: var(--bosque); }
-.zona-1 { -webkit-mask: url(../img/svg/vive-6ed8e.svg) 0 0 / 100% 100% no-repeat; mask: url(../img/svg/vive-6ed8e.svg) 0 0 / 100% 100% no-repeat; }
+.zona .p25 { color: var(--bosque); }
 
-.vision { background: var(--cielo); }
+.vision { position: relative; background: var(--cielo); }
 .raices-list h3, .raices-list p { margin: 0; }
 
 .equipo { background: var(--niebla); }
-.equipo-t { text-align: right; }
-.tile { width: calc(150 * var(--u)); height: calc(200 * var(--u)); background: var(--tierra); color: var(--crema);
+.equipo .hl, .contacto .hl, .aliados .hl { color: var(--azul); }
+.tile { display: flex; flex-direction: column; justify-content: flex-end; width: calc(150 * var(--u)); height: calc(200 * var(--u));
+  padding: calc(14 * var(--u)) calc(8 * var(--u)) calc(14 * var(--u)) calc(12 * var(--u)); background: var(--tierra); color: var(--crema);
   font: 400 calc(22 * var(--u)) / 1.136 var(--josefin); letter-spacing: -.05em; }
-.tile .nm, .tile .rl { position: absolute; left: calc(12 * var(--u)); right: calc(4 * var(--u)); top: calc(var(--ny) * var(--u)); }
-.tile .rl { top: calc(var(--ry) * var(--u)); font-weight: 700; }
+.tile .rl { margin-bottom: auto; font-weight: 700; }
 
 .valla { background: #8a8378; }
 .contacto { background: var(--niebla); }
@@ -171,7 +184,11 @@ button.pill:hover, a.pill:hover, .cta:hover { filter: brightness(1.08); transfor
   .sec { height: auto; padding: 72px 20px; }
   .a, .pl { position: relative; left: auto; top: auto; width: auto; height: auto; }
   .deco { display: none !important; }
-  .hx { font-size: clamp(44px, 12vw, 64px); }
+  /* The river becomes a thin line down the left edge that draws as you scroll */
+  main { position: relative; }
+  main::after { content: ""; position: absolute; left: 7px; top: 0; bottom: 0; z-index: 5; width: 4px; border-radius: 2px;
+    background: var(--tinta); transform-origin: 50% 0; transform: scaleY(var(--mp)); pointer-events: none; }
+  .stat { font-size: clamp(88px, 28vw, 140px); }
   .hl { font-size: clamp(40px, 11vw, 58px); }
   .p30 { font-size: 18px; line-height: 1.32; }
   .p25 { font-size: 17px; line-height: 1.38; }
@@ -218,7 +235,6 @@ button.pill:hover, a.pill:hover, .cta:hover { filter: brightness(1.08); transfor
   .usos-list .lbl-agua { background: var(--cielo); }
   .usos-list br, .agua-labels br { display: none; }
 
-  .porque .hl, .porque .copy { text-align: left; }
   .porque .copy { margin-top: 20px; }
 
   .agua { padding: 0; }
@@ -238,16 +254,12 @@ button.pill:hover, a.pill:hover, .cta:hover { filter: brightness(1.08); transfor
   .zn { font-size: 64px; line-height: 1; }
   .zname { font-size: 24px; line-height: 1; }
   .zona .ph { margin: 24px -20px 0; }
-  .zona-1 { -webkit-mask: none; mask: none; }
 
-  .equipo-t { text-align: left; }
-  .equipo > .pill { display: inline-flex; margin-top: 28px; }
-  .grp { margin-top: 32px; }
+  .grp { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 32px; }
   .grp .pill { display: inline-flex; }
+  .grp .tiles { flex-basis: 100%; margin-top: 6px; }
   .tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; margin-top: 16px; }
   .tile { display: flex; flex-direction: column; justify-content: space-between; gap: 12px; min-height: 180px; padding: 12px; font-size: 17px; }
-  .tile .nm, .tile .rl { position: static; }
-  .tile .nm { margin-top: auto; }
 
   .valla { padding: 0; }
   .valla img.ph { margin: 0; width: 100%; aspect-ratio: 16 / 9; }

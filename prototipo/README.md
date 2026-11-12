@@ -6,12 +6,21 @@ One-page HTML prototype of the site, built from the Figma file *Caminos del Agua
 
 - `index.html`: the page. It's generated, so don't edit it by hand.
 - `index.src.html`: the page source with the text, sections and SEO tags. Edit this one.
-- `build.py`: writes `index.html` and `js/siete-raices.js`. Run `python3 build.py` after any change.
+- `build.py`: writes `index.html` and `js/siete-raices.js`. Run `python3 build.py` after any change. It also builds the river (see below).
 - `css/site.css`: styles. On desktop each section is its 1920 px Figma frame, scaled to the window. Under 900 px it becomes one column.
-- `js/site.js`: section menu and contact form.
+- `js/site.js`: section menu, contact form and the river drawing on scroll.
 - `js/siete-raices.js`: the Siete Raíces cards, built from `../cargo/siete-raices.src.html` and `../assets/cards-data.js`.
 - `img/`: photos as WebP, Figma line art in `img/svg/`, `og-image.jpg` for link previews. `img/raw/` keeps the original PNG exports.
 - `llms.txt`, `robots.txt`, `sitemap.xml`: for search engines and AI assistants.
+
+## The river
+
+One ink line runs from the g of the logo to the underline of the footer logo, and draws as you scroll.
+
+- `build.py` defines it as orthogonal polylines with rounded corners (radius 80) in page coordinates: on desktop the page is one 1920-wide frame, and each section starts at the sum of the heights above it (`SECTIONS`). Side branches (the pills in "¿Qué te trae por aquí?", the team groups, the form, the allies) leave the line tangentially.
+- Each section gets the pieces of line that cross it in an `<svg class="river">` placed above its photos and below its text and pills. Over photos the line gets a light edge (`ON_PHOTO`).
+- `js/site.js` sets `--rl` (length drawn) from the scroll position. Under `prefers-reduced-motion` the line is drawn in full. Under 900 px a thin line down the left edge draws instead.
+- If you change a section's height or move a pill, change `SECTIONS` or the route in `build.py` too. The build checks that each section's `--h` matches.
 
 ## Before going live
 

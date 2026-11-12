@@ -3,7 +3,7 @@
 Each section is laid out on the 1920 px Figma frame (file "Caminos del Agua", frames Final 49 to Final 63).
 `pl()` places one Figma vector or image at its frame coordinates; CSS scales the frame with the page width.
 On narrow screens the line art (class "deco") is hidden and the sections reflow (see css/site.css)."""
-import hashlib, json, pathlib, re
+import hashlib, json, math, pathlib, re
 
 here = pathlib.Path(__file__).resolve().parent
 root = here.parent
@@ -50,27 +50,16 @@ def hline(src, x, y, length, inset='-13px 0', rot=None):
     return pl(src, x, y, length, 0, inset, rot)
 
 
-# The lime line that runs down the left of several sections (Figma "Ellipse 1167")
-def lime(x_left, top):
-    return pl('green-bar.svg', x_left - 13, top, 149.999, 2876)
-
-
 S = {}
-
-S['intro'] = [
-    pl('river-line.svg', 977, 52, 319, 1704, '0 -4.08%'),
-    pl('river-dot.svg', 964, 39, 26, 26),
-]
 
 S['trae'] = [
     pl('icon-aliado.svg', 1414, 264, 128.164, 136, '0 -5.05% -3.68% -5.05%'),
-    pl('trae-lines.svg', 559, -1137, 748.671, 1998, '0 0 -0.65% 0'),
-    pl('icon-casas.svg', 878, 187, 215, 96, '0 0 -5.21% 0'),
-    pl('icon-lupa.svg', 906, 462, 135.169, 78.179, '0 0 -5.32% -0.24%'),
+    pl('icon-casas.svg', 872, 187, 215, 96, '0 0 -5.21% 0'),
+    pl('icon-lupa.svg', 912, 462, 135.169, 78.179, '0 0 -5.32% -0.24%'),
 ]
 
 d = 'donde-'
-S['donde'] = [lime(93, -0.44)] + [
+S['donde'] = [
     pl(d + '7b1a4.svg', 1048.5, 770.24, 74, 18.258),
     vline(d + '54039.svg', 1094.65, 526.24, 252, '-2px 0 0 0'),
     vline(d + '31129.svg', 1048.65, 699.24, 92, '-2px 0 0 0'),
@@ -89,8 +78,6 @@ S['donde'] = [lime(93, -0.44)] + [
     pl(d + 'd7071.svg', 1009.5, 826.5, 805, 266.5, '-0.37% 0 -0.35% 0'),
 ]
 
-S['ha'] = [lime(93, -2006.44)]
-
 u = 'usos-'
 S['usos'] = [
     vline(u + '8c29e.svg', 698, 232, 529, '-2px -0.76% -8px -0.76%'),
@@ -108,21 +95,13 @@ S['usos'] = [
     pl(u + 'e0da7.svg', 1468, 471.16, 453, 39.344, '-2.52% -0.24% -2.71% -0.29%'),
     *[pl(u + '56b36.svg', x, y, 14, 14) for x, y in [(416, 495), (690, 226), (721, 401), (1202, 311), (1254, 398), (1409, 257), (1598, 413)]],
     pl(u + 'a6fca.svg', 1, 490.5, 474.5, 46.5, '-3.04% -0.3% -2.15% -0.24%'),
-    lime(101, -2538),
-]
-
-S['porque'] = [
-    pl('water-curve.svg', 673, -2444, 149.999, 2876),
-    pl('water-curve-end.svg', 822.9, 419, 136.7, 137.1, '0 0 -9.52% -9.49%', 'rotate(-90deg) scale(-1,1)'),
 ]
 
 
 def arrows():
-    """Arrows over the two water photos, from the Figma frame Final 56 (notes in s7-arrows.txt format)."""
+    """Arrows over the two water photos, from the Figma frame Final 56. The centre divider and its two stubs
+    are now part of the river, so they are left out here."""
     rows = [
-        ('b20d0', 960, 964, 0, 618, 0, 618, '0 -13px', ''),
-        ('1b375', 765, 1056, 101, 0, 0, 101, '0 -13px', 'rotate(90deg)'),
-        ('3d8a2', 1061, 874, 59, 0, 0, 59, '0 -13px', 'rotate(90deg)'),
         *[('25069', x, y, 0, 205, 0, 205, '-1.22% -18.41px', '') for x, y in [(152.5, 110), (340, 267), (533, 110), (747, 267)]],
         *[('12af0', x, y, 0, 72, 0, 72, '-3.47% -18.41px', '') for x, y in [(139, 658), (326, 716), (411, 622), (523, 663)]],
         ('79f5a', 225, 860, 172.5, 97.476, 172.5, 97.476, '-2.05% -6.33% -2.05% -1.16%', ''),
@@ -152,77 +131,213 @@ def arrows():
     return [pl(f'arrow-{k}.svg', x, y, w, h, ins, tf or None, (iw, ih)) for k, x, y, w, h, iw, ih, ins, tf in rows]
 
 
-S['agua'] = [
-    pl('divider-a.svg', 948, -679, 113, 1566.06),
-    pl('divider-b.svg', 865.9, -413, 94.1, 1461.6, '0 0 -0.88% -13.83%', 'scale(-1,1)'),
-] + arrows()
-
-# ¿Cómo se vive? Figma "Final 64" sits 213 px down inside "Final 57"
-V = 213
-v = 'vive-'
-band =lambda src, x, top, tf, w=1014: pl(v + src, x, top + V, w, 132, '0 0 -1.28% -9.85%', tf, (132, w))
-S['vive-lines'] = [
-    pl(v + 'ad93b.svg', 844, 2027 + V, 257.5, 136.62, '0', 'rotate(-180deg) scale(-1,1)'),
-]
-S['vive-lines-2'] = [
-    pl(v + '73613.svg', 213, 2390 + V, 615, 0, '0 -13px', 'rotate(90deg)', (0, 615)),
-    pl(v + '99f88.svg', 831.9, 1418 + V, 257.5, 136.62, '0', 'rotate(180deg)'),
-    pl(v + 'ad93b.svg', 844, 850 + V, 257.5, 136.62, '0', 'rotate(-180deg) scale(-1,1)'),
-    pl(v + '99f88.svg', 812.9, 216 + V, 257.5, 136.62, '0', 'rotate(180deg)'),
-    pl(v + '17ba7.svg', 828.1, 1575 + V, 131.9, 814.4, '0 0 -1.6% -9.85%', 'scale(-1,1)'),
-]
-S['vive-lines-3'] = [
-    band('6db94.svg', 954, 860, 'rotate(90deg)', 1002),
-    band('c65df.svg', -54, 1423, 'rotate(-90deg) scale(-1,1)'),
-]
-S['vive-lines-4'] = [
-    band('c65df.svg', -54, 228, 'rotate(-90deg) scale(-1,1)'),
-    band('6db94.svg', 960, 2032, 'rotate(90deg)'),
-    band('4e7af.svg', -54, 2356, 'rotate(-90deg)'),
-    pl(v + '4f413.svg', 960, V, 0, 2356, '0 -13px'),
-    pl('river-black.svg', 105, 2488 + V, 319, 1065, '0 -4.08%', 'scale(-1,1)'),
-]
-
-e = 'equipo-'
-corner = lambda src, x, y, tf, s=126: pl(e + src, x, y, s, s, '0 0 -10.32% -10.32%', tf)
-S['equipo'] = [
-    hline(e + '3b459.svg', 760, 771, 78.5),
-    vline(e + 'ae12f.svg', 1540, 361, 456),
-    corner('da9d0.svg', 1540, 468, 'rotate(90deg) scale(-1,1)'),
-    corner('da9d0.svg', 1540, 618, 'rotate(90deg) scale(-1,1)'),
-    corner('a3e9a.svg', 1414.1, 816, 'scale(-1,1)'),
-    corner('4308e.svg', 1417, 233, 'rotate(-89.21deg) scale(-1,1)', 127.73),
-    corner('4308e.svg', 889.9, 233, 'rotate(-89.21deg) scale(-1,1)', 127.73),
-    pl(e + '20f4d.svg', 145.9, 107, 126.1, 126.1, '0 0 -10.32% -10.32%'),
-    hline(e + 'dd966.svg', 272, 233, 1147, '-13px 0', 'rotate(180deg)'),
-    vline(e + '2069f.svg', 146, -30, 137, rot='rotate(90deg)'),
-    pl('tree-left.svg', 268, 212, 252, 511, '0 0 -2.54% 0'),
-    corner('da9d0.svg', 1016.1, 607, 'rotate(90deg) scale(-1,1)'),
-    corner('32a61.svg', 889.9, 664, 'rotate(-90deg)'),
-    corner('4b630.svg', 1414, 430, 'rotate(-90deg)'),
-    vline(e + '54cd3.svg', 1016, 373, 302),
-]
-
-S['contacto'] = [
-    pl('contacto-20f4d.svg', 130, 179, 126, 126, '0 0 -10.32% -10.32%'),
-    hline('contacto-ddee5.svg', 256, 305, 1178, '-13px 0', 'rotate(180deg)'),
-    vline('contacto-dd320.svg', 130, 0, 179, rot='rotate(90deg)'),
-    vline('contacto-715c2.svg', 130, 180, 399, rot='rotate(90deg)'),
-]
-
-a = 'aliados-'
-S['aliados'] = [
-    pl(a + '20f4d.svg', 130, 98, 126, 126, '0 0 -10.32% -10.32%'),
-    hline(a + 'ddee5.svg', 256, 224, 1178, '-13px 0', 'rotate(180deg)'),
-    vline(a + '9a835.svg', 1558, 351, 389),
-    vline(a + 'dd320.svg', 130, -81, 179, rot='rotate(90deg)'),
-    *[pl(a + '4308e.svg', x, 224, 127.73, 127.73, '0 0 -10.32% -10.32%', 'rotate(-89.21deg) scale(-1,1)')
-      for x in (1431.9, 1103, 899.9, 697, 494, 292)],
-]
+S['agua'] = arrows()
 
 S['footer'] = [
     pl('footer-dde77.svg', 139, 244, 58, 0, '-4px 0'),
 ]
+
+
+# ---------- El río: one line from the g of the logo to the footer ----------
+# The whole desktop page is one coordinate system 1920 wide: a section starts at the sum of the heights above it.
+# The line is built from orthogonal polylines with rounded corners (radius R, as the Figma curves), so an S-bend
+# is two corners 2R apart. Each section gets the pieces of line that cross it, in an <svg class="river"> whose
+# viewBox is that slice of the page. CSS draws every piece from --rl, the length of river drawn so far (js/site.js).
+SECTIONS = [('hero', 1080), ('intro', 1080), ('trae', 1080), ('donde', 1080), ('ha', 540), ('usos', 1080),
+            ('porque', 540), ('agua', 1250), ('vive', 2880), ('vision', 2377), ('equipo', 1080), ('valla', 1080),
+            ('contacto', 420), ('aliados', 800), ('footer', 291)]
+TOP, y0 = {}, 0
+for key, h in SECTIONS:
+    TOP[key] = y0
+    y0 += h
+R = 80
+RAIL = 131      # the left rail: the lime roots trunk in siete-raices-bg.svg is centred here
+MID = 960       # the centre line through "¿Por qué el agua?", the water photos and "¿Cómo se vive?"
+ON_PHOTO = {'intro', 'donde', 'usos', 'agua', 'valla'}
+BRANCH_K = 2.5  # side branches draw this many times faster than the river, so they finish while still in view
+
+
+def P(sec, x, y):
+    """A point given in section coordinates, as a page point."""
+    return (x, TOP[sec] + y)
+
+
+class Line:
+    """A path of straight segments and circular arcs, with the length at each segment."""
+    def __init__(self, x, y):
+        self.x, self.y, self.segs, self.len = x, y, [], 0.0
+
+    def _add(self, kind, end, length, bbox, extra=None):
+        self.segs.append(dict(kind=kind, a=(self.x, self.y), b=end, at=self.len, len=length, bbox=bbox, extra=extra))
+        self.len += length
+        self.x, self.y = end
+
+    def line(self, x, y):
+        if abs(x - self.x) + abs(y - self.y) < 1e-6:
+            return self
+        bbox = (min(self.x, x), min(self.y, y), max(self.x, x), max(self.y, y))
+        self._add('L', (x, y), math.hypot(x - self.x, y - self.y), bbox)
+        return self
+
+    def arc(self, r, sweep, x, y, angle, cx, cy):
+        """Arc of radius r around (cx, cy) turning `angle` radians to (x, y). sweep=1 turns clockwise on screen."""
+        bbox = (cx - r, cy - r, cx + r, cy + r) if angle > math.pi / 2 + 1e-6 else \
+            (min(self.x, x), min(self.y, y), max(self.x, x), max(self.y, y))
+        self._add('A', (x, y), r * angle, bbox, (r, int(angle > math.pi), sweep))
+        return self
+
+    def to(self, *pts, r=R):
+        """Orthogonal polyline from the current point through pts, with a corner of radius r at every inner point."""
+        pts = [(self.x, self.y)] + [tuple(map(float, p)) for p in pts]
+        unit = lambda a, b: ((b[0] - a[0]) / math.dist(a, b), (b[1] - a[1]) / math.dist(a, b))
+        for i in range(1, len(pts)):
+            a, b = pts[i - 1], pts[i]
+            ux, uy = unit(a, b)
+            cut_a = r if i > 1 else 0
+            cut_b = r if i < len(pts) - 1 else 0
+            assert math.dist(a, b) >= cut_a + cut_b - 0.01, ('segment too short for its corners', a, b)
+            self.line(b[0] - ux * cut_b, b[1] - uy * cut_b)
+            if cut_b:
+                vx, vy = unit(b, pts[i + 1])
+                assert abs(ux * vx + uy * vy) < 1e-6, ('corners must be square', a, b, pts[i + 1])
+                cross = ux * vy - uy * vx
+                ex, ey = b[0] + vx * r, b[1] + vy * r
+                self.arc(r, 1 if cross > 0 else 0, ex, ey, math.pi / 2, b[0] - ux * r + vx * r, b[1] - uy * r + vy * r)
+        return self
+
+    def length_at(self, p):
+        """Length along the line to a point that lies on one of its straight segments."""
+        for s in self.segs:
+            if s['kind'] != 'L':
+                continue
+            (ax, ay), (bx, by) = s['a'], s['b']
+            if abs(math.dist(s['a'], p) + math.dist(p, s['b']) - s['len']) < 0.01:
+                return s['at'] + math.dist(s['a'], p)
+        raise ValueError(f'{p} is not on a straight part of the line')
+
+    def d(self, segs):
+        out = [f'M{num(segs[0]["a"][0])} {num(segs[0]["a"][1])}']
+        for s in segs:
+            x, y = map(num, s['b'])
+            if s['kind'] == 'L':
+                out.append(f'L{x} {y}')
+            else:
+                r, large, sweep = s['extra']
+                out.append(f'A{num(r)} {num(r)} 0 {large} {sweep} {x} {y}')
+        return ''.join(out)
+
+
+class Branch(Line):
+    """A side line that leaves its parent tangentially at `start` and draws BRANCH_K times faster."""
+    def __init__(self, parent, start, k=BRANCH_K):
+        super().__init__(*start)
+        if isinstance(parent, Branch):
+            self.from_main = parent.from_main + parent.length_at(start) / parent.k
+        else:
+            self.from_main = parent.length_at(start)
+        self.k = k
+
+
+# The g of the logo: viewBox 170 85 475 425 drawn 770 wide at (656, 244). Its river ends at logo point (309, 482),
+# heading up-left; the line starts there, inside the logo's stroke, and curls left and down, under the logo.
+LS = 770 / 475
+gx, gy = 656 + (309 - 170) * LS, 244 + (482 - 85) * LS
+tx, ty = -15 / math.hypot(15, 18), -18 / math.hypot(15, 18)       # tangent of the g's tail
+CURL = 40
+ccx, ccy = gx + ty * CURL, gy - tx * CURL                          # centre of a left turn
+turn = (math.atan2(ty, tx) - math.pi / 2) % (2 * math.pi)          # from the tail's heading round to straight down
+G_X = ccx - CURL
+
+river = Line(gx, gy).arc(CURL, 0, G_X, ccy, turn, ccx, ccy)
+FOOT_X = 337                         # where the river comes down into the footer
+A, B, C = G_X, G_X + 209, 1228       # intro S-bends, ending on the trunk of "¿Qué te trae por aquí?"
+ib = lambda y: P('intro', 0, y)[1]
+river.to(
+    (A, ib(132)), (B, ib(132)), (B, ib(292)), (A, ib(292)), (A, ib(452)), (B, ib(452)), (B, ib(292)), (C, ib(292)),
+    P('trae', C, 860.5), P('trae', RAIL, 860.5),                    # trunk, then left behind "Explora el proyecto"
+    P('porque', RAIL, 80), P('porque', MID, 80),                    # down the rail, across "¿Por qué el agua?"
+    P('vive', MID, 2780), P('vive', RAIL, 2780),                    # down the centre of the water and the four zones
+    P('aliados', RAIL, 720), P('aliados', FOOT_X, 720),             # the rail, past the roots, the team and the allies
+    P('footer', FOOT_X, 244), P('footer', 257, 244),                # into the underline of the footer logo
+)
+TOTAL = river.len
+
+branches = []
+
+
+def branch(parent, start, *pts, k=BRANCH_K):
+    b = Branch(parent, start, k).to(*pts)
+    branches.append(b)
+    return b
+
+
+# ¿Qué te trae por aquí?: the trunk feeds the three pills; "Quiero conocer" also feeds "Contáctanos"
+branch(river, P('trae', C, 269.5), P('trae', C, 349.5), P('trae', 1123, 349.5))
+branch(river, P('trae', C, 390.5), P('trae', C, 470.5), P('trae', 1335, 470.5))
+branch(river, P('trae', C, 526.5), P('trae', C, 606.5), P('trae', 657, 606.5))
+
+# ¿Quién está detrás?: a line from the rail through the three group pills, one stem per group between its tiles
+EQ_BUS, EQ_GX, EQ_W = 270, (230, 786.5, 1343), 347
+stems = [gx + EQ_W / 2 for gx in EQ_GX]
+stem_end = (771, 670, 890)
+bus = branch(river, P('equipo', RAIL, EQ_BUS - R), P('equipo', RAIL, EQ_BUS), P('equipo', stems[2], EQ_BUS),
+             P('equipo', stems[2], stem_end[2]))
+for sx, end in zip(stems[:2], stem_end[:2]):
+    branch(bus, P('equipo', sx - R, EQ_BUS), P('equipo', sx, EQ_BUS), P('equipo', sx, end))
+
+# Contáctenos: a branch to the form
+CT_BUS = 270
+branch(river, P('contacto', RAIL, CT_BUS - R), P('contacto', RAIL, CT_BUS), P('contacto', 1373, CT_BUS))
+
+# Nuestros aliados: a line along the six tiles, the last stem runs on to "¡Únete a nuestro proyecto!"
+AL_BUS, AL_TILES = 224, [230 + i * 262 + 75 for i in range(6)]
+al = branch(river, P('aliados', RAIL, AL_BUS - R), P('aliados', RAIL, AL_BUS), P('aliados', AL_TILES[-1], AL_BUS),
+            P('aliados', AL_TILES[-1], 690))
+for cx in AL_TILES[:-1]:
+    branch(al, P('aliados', cx - R, AL_BUS), P('aliados', cx, AL_BUS), P('aliados', cx, 452))
+
+# The footer logo's underline is thinner (8 px): the river narrows into it once it arrives (class rv-end)
+FOOT_Y = P('footer', 0, 244)[1]
+
+
+def river_svg(sec):
+    """The pieces of river that cross a section, as an inline SVG over that slice of the page."""
+    top, h = TOP[sec], dict(SECTIONS)[sec]
+    lo, hi = top - 30, top + h + 30
+    hits = lambda s: s['bbox'][1] <= hi and s['bbox'][3] >= lo
+    paths = []
+
+    def pieces(line, at0, k):
+        run = []
+        for s in line.segs + [None]:
+            if s and hits(s):
+                run.append(s)
+                continue
+            if run:
+                length = sum(x['len'] for x in run)
+                style = f'--a:{num(at0 + run[0]["at"] / k)};--l:{num(length)}' + (f';--k:{k}' if k != 1 else '')
+                paths.append(f'<path d="{line.d(run)}" pathLength="{num(length)}" style="{style}"/>')
+                run = []
+
+    pieces(river, 0, 1)
+    for b in branches:
+        pieces(b, b.from_main, b.k)
+    if sec in ON_PHOTO:
+        # Over photos the line gets a light edge, drawn with it, so it reads on dark ground too
+        paths[:0] = [p.replace('<path ', '<path class="rv-case" ') for p in paths]
+    if sec == 'footer':
+        x0, y = 257, FOOT_Y
+        paths.append(f'<path class="rv-end" d="M{x0} {num(y - 13)}C{x0 - 30} {num(y - 13)} {x0 - 30} {num(y - 4)} 196 {num(y - 4)}'
+                     f'V{num(y + 4)}C{x0 - 30} {num(y + 4)} {x0 - 30} {num(y + 13)} {x0} {num(y + 13)}Z"/>')
+    tip = ('<circle class="rv-tip rv-case" r="21"/>' if sec in ON_PHOTO else '') + '<circle class="rv-tip" r="17"/>'
+    return (f'<svg class="river deco" viewBox="0 {top} 1920 {h}" preserveAspectRatio="none" aria-hidden="true" focusable="false">'
+            + ''.join(paths) + tip + '</svg>')
+
+
+def river_ref():
+    """The whole river as one hidden path: js/site.js measures it to map the scroll position to a length."""
+    return (f'<svg class="river-ref" width="0" height="0" aria-hidden="true" focusable="false">'
+            f'<path d="{river.d(river.segs)}"/></svg>')
 
 
 def logo_svg():
@@ -246,6 +361,11 @@ html = (here / 'index.src.html').read_text()
 for key, parts in S.items():
     html = html.replace(f'<!--@pl:{key}@-->', '\n'.join(parts))
 html = html.replace('<!--@logo@-->', logo_svg()).replace('@SITE@', SITE)
+for key, h in SECTIONS:
+    html = html.replace(f'<!--@river:{key}@-->', river_svg(key))
+    if key != 'vision':   # the Siete Raíces cards keep their own 1920:2377 frame
+        assert re.search(rf'data-river="{key}"[^>]*--h:{h}"', html), f'section {key} should be {h} tall'
+html = html.replace('<!--@river-ref@-->', river_ref()).replace('@RIVER_TOTAL@', num(TOTAL))
 (here / 'js/siete-raices.js').write_text(cards_js())
 # Version the CSS and JS links by content, so a new build is never served from a stale cache
 for asset in ('css/site.css', 'js/site.js', 'js/siete-raices.js'):

@@ -29,6 +29,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;500&family=Josefin+Sans:ital,wght@0,300..700;1,300..700&display=swap">
 <link rel="stylesheet" href="css/site.css">
+<script>document.documentElement.classList.add('js')</script>
 <link rel="preload" as="image" href="img/walk-photo.webp" fetchpriority="high">
 
 <script type="application/ld+json">
@@ -132,10 +133,10 @@
 </head>
 <body>
 <a class="skip" href="#contenido">Saltar al contenido</a>
-<div class="page">
+<div class="page" style="--rt:@RIVER_TOTAL@">
 
 <!-- Final 49 · Inicio -->
-<section class="sec hero" id="inicio" style="--h:1080" aria-label="Inicio">
+<section class="sec hero" id="inicio" data-river="hero" style="--h:1080" aria-label="Inicio">
   <header class="hdr">
     <a class="a hdr-logo" href="#inicio" style="--x:52;--y:50;--w:155" aria-label="Caminos del Agua, inicio"><img src="img/svg/logo-mark.svg" alt="" width="155" height="62"></a>
     <nav class="hdr-nav" aria-label="Principal">
@@ -147,7 +148,7 @@
     <button class="a burger" type="button" style="--x:1800;--y:50;--w:65;--h:50" aria-expanded="false" aria-controls="menu"><span></span><span></span><span></span><span class="sr">Menú</span></button>
   </header>
   <div class="a panel deco" style="--x:249;--y:153;--w:1584;--h:882"></div>
-  <div class="a panel-line deco" style="--x:1832;--y:153;--h:882"></div>
+  <!--@river:hero@-->
   <h1 class="a hero-logo" style="--x:656;--y:244;--w:770">
     <span class="sr">Caminos del Agua: una nueva ciudad en camino, pensada desde el agua, en Ibagué</span>
     <!--@logo@-->
@@ -172,34 +173,37 @@
 <main id="contenido">
 
 <!-- Final 50 · Paseo -->
-<section class="sec intro" style="--h:1080" aria-labelledby="intro-t">
+<section class="sec intro" data-river="intro" style="--h:1080" aria-labelledby="intro-t">
   <h2 class="sr" id="intro-t">Una nueva ciudad en camino, pensada desde el agua</h2>
   <div class="pl ph" style="--x:-22;--y:-16;--w:1954;--h:1096;transform:scale(-1,1)">
     <img class="pl" src="img/walk-photo.webp" width="1200" height="800" fetchpriority="high" decoding="async" style="--x:-15.83;--y:-12.71;--w:1954;--h:1302.82" alt="Personas caminando por un sendero junto a un parque con humedales, árboles y un puente de madera">
   </div>
   <div class="pl fade" style="--x:0;--y:0;--w:1920;--h:1080"></div>
-  <!--@pl:intro@-->
+  <!--@river:intro@-->
 </section>
 
 <!-- Final 51 · ¿Qué te trae por aquí? -->
-<section class="sec trae" id="que-te-trae" style="--h:1080" aria-labelledby="trae-t">
+<section class="sec trae" id="que-te-trae" data-river="trae" style="--h:1080" aria-labelledby="trae-t">
   <!--@pl:trae@-->
-  <h2 class="a hl" id="trae-t" style="--x:135;--y:199;--w:606">¿Qué te trae por aquí?</h2>
+  <!--@river:trae@-->
+  <h2 class="a hl" id="trae-t" style="--x:230;--y:199;--w:560">¿Qué te trae por aquí?</h2>
   <ul class="trae-opts">
-    <li><button class="a pill pill-azul" type="button" data-interes="Busco mi casa" style="--x:812;--y:310;--w:347;--h:79">Busco mi casa</button></li>
-    <li><button class="a pill pill-azul" type="button" data-interes="Quiero conocer el proyecto" style="--x:800;--y:566;--w:347;--h:81">Quiero conocer el proyecto</button></li>
-    <li><button class="a pill pill-azul" type="button" data-interes="Quiero ser aliado" style="--x:1305;--y:431;--w:347;--h:79">Quiero ser aliado</button></li>
+    <li><button class="a pill pill-azul" type="button" data-interes="Busco mi casa" style="--x:806;--y:309;--w:347;--h:81">Busco mi casa</button></li>
+    <li><button class="a pill pill-azul" type="button" data-interes="Quiero conocer el proyecto" style="--x:806;--y:566;--w:347;--h:81">Quiero conocer el proyecto</button></li>
+    <li><button class="a pill pill-azul" type="button" data-interes="Quiero ser aliado" style="--x:1305;--y:430;--w:347;--h:81">Quiero ser aliado</button></li>
   </ul>
-  <a class="a cta cta-electrico" href="#contacto" style="--x:135;--y:567;--w:457;--h:75.1">Contáctanos <span aria-hidden="true">→</span></a>
-  <a class="a cta cta-rosa" href="#ubicacion" style="--x:135;--y:823;--w:457;--h:75.1">Explora el proyecto <span aria-hidden="true">→</span></a>
+  <a class="a cta cta-electrico" href="#contacto" style="--x:230;--y:566;--w:457;--h:81">Contáctanos <span aria-hidden="true">→</span></a>
+  <a class="a cta cta-rosa" href="#ubicacion" style="--x:230;--y:820;--w:457;--h:81">Explora el proyecto <span aria-hidden="true">→</span></a>
 </section>
 
 <!-- Final 53 · ¿Dónde estamos? -->
-<section class="sec donde" id="ubicacion" style="--h:1080" aria-labelledby="donde-t">
+<section class="sec donde" id="ubicacion" data-river="donde" style="--h:1080" aria-labelledby="donde-t">
   <div class="pl ph bg" style="--x:-408;--y:-68;--w:2791;--h:1160">
     <img class="pl" src="img/aerial-photo.webp" width="2200" height="894" loading="lazy" decoding="async" style="--x:-262.63;--y:-90.25;--w:3434.33;--h:1393.86" alt="Vista aérea del valle de Ibagué con las montañas al fondo y la ubicación de Caminos del Agua junto a la vía al aeropuerto">
   </div>
+  <div class="pl deco scrim" style="--x:0;--y:0;--w:1920;--h:1080"></div>
   <!--@pl:donde@-->
+  <!--@river:donde@-->
   <h2 class="a hl" id="donde-t" style="--x:230;--y:171;--w:606">¿Dónde <br>estamos?</h2>
   <p class="a p30 lead" style="--x:230;--y:350;--w:500">Sobre la vía al Aeropuerto Perales, Caminos del Agua está estratégicamente ubicado. Cerca a vías principales como la 103 y la 117, la zona cuenta con paisajes inolvidables y naturaleza accesible.</p>
   <ul class="map-labels" aria-label="Referencias del mapa">
@@ -212,21 +216,22 @@
 </section>
 
 <!-- Final 52 · 40 ha -->
-<section class="sec ha" id="proyecto" style="--h:540" aria-labelledby="ha-t">
-  <!--@pl:ha@-->
-  <h2 class="a hl" id="ha-t" style="--x:231;--y:100;--w:685">40 ha</h2>
-  <div class="a p30 copy" style="--x:231;--y:221;--w:500">
+<section class="sec ha" id="proyecto" data-river="ha" style="--h:540" aria-labelledby="ha-t">
+  <!--@river:ha@-->
+  <h2 class="a stat" id="ha-t" style="--x:222;--y:183;--w:760">40 ha</h2>
+  <div class="a p30 copy" style="--x:1040;--y:171;--w:640">
     <p>Proponemos una pieza de ciudad donde vivienda, comercio, servicios y espacios públicos se complementan.</p>
     <p>Una red de parques y recorridos conecta las actividades del barrio con el paisaje.</p>
   </div>
 </section>
 
 <!-- Final 55 · Usos -->
-<section class="sec usos" style="--h:1080" aria-labelledby="usos-t">
+<section class="sec usos" data-river="usos" style="--h:1080" aria-labelledby="usos-t">
   <h2 class="sr" id="usos-t">Usos del proyecto</h2>
   <img class="pl ph" src="img/render-photo.webp" width="1792" height="1008" loading="lazy" decoding="async" style="--x:-298;--y:0;--w:2361.95;--h:1241.06" alt="Render aéreo de Caminos del Agua: manzanas de vivienda y comercio alrededor de un parque de agua, con la cordillera al fondo">
   <div class="pl deco shade" style="--x:-17;--y:0;--w:1944;--h:1245"></div>
   <!--@pl:usos@-->
+  <!--@river:usos@-->
   <ul class="usos-list" aria-label="Usos">
     <li class="a lbl" style="--x:630;--y:195;--w:128">Comercio</li>
     <li class="a lbl" style="--x:317;--y:467;--w:128">Vivienda <br>familiar</li>
@@ -241,36 +246,39 @@
 </section>
 
 <!-- Final 54 · ¿Por qué el agua? -->
-<section class="sec porque" id="por-que-el-agua" style="--h:540" aria-labelledby="porque-t">
-  <!--@pl:porque@-->
-  <h2 class="a hl" id="porque-t" style="--x:835;--y:82;--w:911">¿Por qué el agua?</h2>
-  <div class="a p30 copy" style="--x:1210;--y:208;--w:529">
+<section class="sec porque" id="por-que-el-agua" data-river="porque" style="--h:540" aria-labelledby="porque-t">
+  <!--@river:porque@-->
+  <h2 class="a hl" id="porque-t" style="--x:230;--y:190;--w:600">¿Por qué <br>el agua?</h2>
+  <div class="a p30 copy" style="--x:1040;--y:198;--w:640">
     <p>Colombia es el cuarto país con más agua del mundo. Cada vez hay más necesidad de planificar con el agua.</p>
     <p>Caminos del Agua nace de esta lógica, donde no nos separamos del agua y la enterramos, sino que aprendemos a diseñar con ella e integrarla desde el reciclaje, SUDS, lluvia, juegos, etc.</p>
   </div>
 </section>
 
 <!-- Final 56 · Espacio público / Esponja & Retención -->
-<section class="sec agua" id="agua" style="--h:1250" aria-labelledby="agua-t">
+<section class="sec agua" id="agua" data-river="agua" style="--h:1250" aria-labelledby="agua-t">
   <h2 class="sr" id="agua-t">Cómo gestiona el agua el proyecto</h2>
   <article class="agua-a">
-    <div class="pl ph bg" style="--x:-12;--y:-19;--w:973;--h:1298">
-      <img class="pl" src="img/photo-left.webp" width="1200" height="1800" loading="lazy" decoding="async" style="--x:0;--y:-166.53;--w:973;--h:1459.6" alt="Niños jugando en un canal de agua lluvia que recorre una calle peatonal arborizada">
+    <div class="pl ph bg" style="--x:0;--y:0;--w:961;--h:1250">
+      <img class="pl" src="img/photo-left.webp" width="1200" height="1800" loading="lazy" decoding="async" style="--x:-12;--y:-185.53;--w:973;--h:1459.6" alt="Niños jugando en un canal de agua lluvia que recorre una calle peatonal arborizada">
     </div>
-    <h3 class="a hl" style="--x:131;--y:1000;--w:911">Espacio Público</h3>
-    <p class="a p30" style="--x:136;--y:1099;--w:640">Sistema de recolección y tratamiento de aguas lluvias, diseño integrado al agua.</p>
+    <h3 class="a hl" style="--x:230;--y:1000;--w:700">Espacio Público</h3>
+    <p class="a p30" style="--x:230;--y:1099;--w:520">Sistema de recolección y tratamiento de aguas lluvias, diseño integrado al agua.</p>
   </article>
   <article class="agua-b">
-    <img class="pl ph bg" src="img/photo-right.webp" width="800" height="1067" loading="lazy" decoding="async" style="--x:961;--y:-31;--w:965;--h:1287" alt="Quebrada con vegetación nativa en sus bordes que filtra y retiene el agua">
-    <h3 class="a hl" style="--x:1155;--y:797;--w:911">Esponja &amp; <br>Retención</h3>
-    <p class="a p30" style="--x:1155;--y:968;--w:529">Sistema de prevención de inundaciones, de cuidado y conservación del agua.</p>
+    <div class="pl ph bg" style="--x:960;--y:0;--w:960;--h:1250">
+      <img class="pl" src="img/photo-right.webp" width="800" height="1067" loading="lazy" decoding="async" style="--x:1;--y:-31;--w:965;--h:1287" alt="Quebrada con vegetación nativa en sus bordes que filtra y retiene el agua">
+    </div>
+    <h3 class="a hl" style="--x:1040;--y:797;--w:700">Esponja &amp; <br>Retención</h3>
+    <p class="a p30" style="--x:1040;--y:968;--w:529">Sistema de prevención de inundaciones, de cuidado y conservación del agua.</p>
   </article>
-  <div class="pl deco shade" style="--x:1;--y:-4;--w:1920;--h:1257"></div>
+  <div class="pl deco shade" style="--x:0;--y:0;--w:1920;--h:1250"></div>
   <!--@pl:agua@-->
+  <!--@river:agua@-->
   <ul class="agua-labels" aria-label="Procesos del agua">
     <li class="a lbl" style="--x:173;--y:110;--w:300">Captación de <br>aguas lluvias</li>
     <li class="a lbl" style="--x:173;--y:628;--w:300">Filtración en <br>áreas verdes</li>
-    <li class="a lbl" style="--x:721;--y:825;--w:220">Conducción <br>y tratamiento</li>
+    <li class="a lbl" style="--x:721;--y:825;--w:200">Conducción <br>y tratamiento</li>
     <li class="a lbl" style="--x:1028;--y:272;--w:300">Barrera contra <br>inundaciones</li>
     <li class="a lbl" style="--x:1684;--y:414;--w:220">Filtración por <br>vegetación</li>
     <li class="a lbl" style="--x:1327;--y:653;--w:300">Purificación y <br>flujo lento</li>
@@ -278,59 +286,54 @@
   </ul>
 </section>
 
-<!-- Final 57 · ¿Cómo se vive? -->
-<section class="sec vive" id="como-se-vive" style="--h:3200" aria-labelledby="vive-t">
-  <div class="l0"><!--@pl:vive-lines@--></div>
-  <h2 class="a hl" id="vive-t" style="--x:1101;--y:429;--w:911">¿Cómo se vive?</h2>
-  <p class="a p25 vive-intro" style="--x:1101;--y:609;--w:630">A través de 4 zonas, dirigidas con una diagonal de sucesión de parques y plazas de agua, el proyecto propone gradualmente transicionar de lo más urbano a la naturaleza. Donde cada zona tiene una oportunidad de vivir la ciudad diferente, ofreciendo espacio para todos.</p>
+<!-- Final 57 · ¿Cómo se vive? Four rows split by the river: a coloured panel and a photo, alternating sides -->
+<section class="sec vive" id="como-se-vive" data-river="vive" style="--h:2880" aria-labelledby="vive-t">
+  <h2 class="a hl" id="vive-t" style="--x:230;--y:150;--w:640">¿Cómo se vive?</h2>
+  <p class="a p25 vive-intro" style="--x:1040;--y:150;--w:640">A través de 4 zonas, dirigidas con una diagonal de sucesión de parques y plazas de agua, el proyecto propone gradualmente transicionar de lo más urbano a la naturaleza. Donde cada zona tiene una oportunidad de vivir la ciudad diferente, ofreciendo espacio para todos.</p>
 
   <article class="zona" style="--bg:#F6EDA1">
-    <div class="a rect" style="--x:0;--y:441;--w:960;--h:946"></div>
-    <h3 class="zh"><span class="a zn" style="--x:52;--y:588">1</span> <span class="a zname" style="--x:119;--y:572;--w:330"><b>Eje Comercial</b><br><b>Av. Aeropuerto</b></span></h3>
-    <p class="a p25" style="--x:451;--y:566;--w:435">Zona comercial, punto de llegada y comienzo de la Diagonal del Agua. Es un frente urbano comercial, muy activo, conectado con el futuro CAN y la vía del aeropuerto.</p>
-    <div class="a ph zona-1" style="--x:-112;--y:749;--w:1072;--h:637.6">
-      <div class="pl" style="--x:-29.41;--y:16.07;--w:1241.73;--h:646.67">
-        <img class="pl" src="img/zona-1.webp" width="1600" height="1199" loading="lazy" decoding="async" style="--x:113.25;--y:-80.45;--w:1124.14;--h:842.54" alt="Eje comercial de la avenida Aeropuerto con locales en primer piso, fuente y árboles">
-      </div>
+    <div class="a rect" style="--x:0;--y:440;--w:961;--h:560"></div>
+    <h3 class="zh"><span class="a zn" style="--x:230;--y:616">1</span> <span class="a zname" style="--x:300;--y:600;--w:400"><b>Eje Comercial</b><br><b>Av. Aeropuerto</b></span></h3>
+    <p class="a p25" style="--x:230;--y:720;--w:560">Zona comercial, punto de llegada y comienzo de la Diagonal del Agua. Es un frente urbano comercial, muy activo, conectado con el futuro CAN y la vía del aeropuerto.</p>
+    <div class="a ph" style="--x:960;--y:440;--w:960;--h:560">
+      <img class="pl" src="img/zona-1.webp" width="1600" height="1199" loading="lazy" decoding="async" style="--x:0;--y:-80;--w:960;--h:720" alt="Eje comercial de la avenida Aeropuerto con locales en primer piso, fuente y árboles">
     </div>
   </article>
 
   <article class="zona" style="--bg:#F6F1CD">
-    <div class="a rect" style="--x:960;--y:1073;--w:960;--h:887"></div>
-    <h3 class="zh"><span class="a zn" style="--x:1020;--y:1227">2</span> <span class="a zname" style="--x:1090;--y:1227;--w:300"><b>Peatonal</b><br><b>de uso mixto</b></span></h3>
-    <p class="a p25 zona-txt" style="--x:1403;--y:1205;--w:459">Eje vital peatonal entre edificios de uso mixtos como hoteles, restaurantes, cafés, bares, viviendas de apartamentos más pequeños que quieren estar dentro del ruido y la vitalidad.</p>
-    <div class="a ph" style="--x:973;--y:1387;--w:1006;--h:573">
-      <img class="pl" src="img/zona-2.webp" width="1600" height="1186" loading="lazy" decoding="async" style="--x:-0.2;--y:-68.99;--w:1091.31;--h:810.51" alt="Calle peatonal de uso mixto con terrazas de restaurantes y cafés bajo los árboles">
+    <div class="a rect" style="--x:960;--y:1000;--w:960;--h:560"></div>
+    <h3 class="zh"><span class="a zn" style="--x:1040;--y:1176">2</span> <span class="a zname" style="--x:1110;--y:1160;--w:400"><b>Peatonal</b><br><b>de uso mixto</b></span></h3>
+    <p class="a p25" style="--x:1040;--y:1280;--w:560">Eje vital peatonal entre edificios de uso mixtos como hoteles, restaurantes, cafés, bares, viviendas de apartamentos más pequeños que quieren estar dentro del ruido y la vitalidad.</p>
+    <div class="a ph" style="--x:0;--y:1000;--w:961;--h:560">
+      <img class="pl" src="img/zona-2.webp" width="1600" height="1186" loading="lazy" decoding="async" style="--x:0;--y:-76;--w:960;--h:712" alt="Calle peatonal de uso mixto con terrazas de restaurantes y cafés bajo los árboles">
     </div>
   </article>
 
   <article class="zona" style="--bg:#CFCFAA">
-    <div class="a rect" style="--x:-6;--y:1636;--w:960;--h:955"></div>
-    <h3 class="zh"><span class="a zn" style="--x:51;--y:1775">3</span> <span class="a zname zname-i" style="--x:145;--y:1754;--w:300">Residencial, <br>parque diagonal</span></h3>
-    <p class="a p25" style="--x:451;--y:1755;--w:440">Edificios y conjuntos de vivienda con acceso directo al parque en al menos dos esquinas. Una zona tranquila pero con vitalidad.</p>
-    <div class="a ph" style="--x:0;--y:1960;--w:973;--h:659;transform:scale(-1,1)">
-      <img class="pl" src="img/zona-3.webp" width="1600" height="1193" loading="lazy" decoding="async" style="--x:-65.77;--y:-48.83;--w:1045;--h:779.14" alt="Parque diagonal con senderos, agua y edificios de vivienda alrededor">
+    <div class="a rect" style="--x:0;--y:1560;--w:961;--h:560"></div>
+    <h3 class="zh"><span class="a zn" style="--x:230;--y:1736">3</span> <span class="a zname" style="--x:300;--y:1720;--w:400">Residencial, <br>parque diagonal</span></h3>
+    <p class="a p25" style="--x:230;--y:1840;--w:560">Edificios y conjuntos de vivienda con acceso directo al parque en al menos dos esquinas. Una zona tranquila pero con vitalidad.</p>
+    <div class="a ph" style="--x:960;--y:1560;--w:960;--h:560;transform:scale(-1,1)">
+      <img class="pl" src="img/zona-3.webp" width="1600" height="1193" loading="lazy" decoding="async" style="--x:0;--y:-78;--w:960;--h:716" alt="Parque diagonal con senderos, agua y edificios de vivienda alrededor">
     </div>
   </article>
 
   <article class="zona" style="--bg:#BECFAA">
-    <div class="a rect" style="--x:961;--y:2245;--w:960;--h:374"></div>
-    <h3 class="zh"><span class="a zn" style="--x:1042;--y:2380">4</span> <span class="a zname zname-i" style="--x:1102;--y:2371;--w:300">Residencial junto <br>a la quebrada</span></h3>
-    <p class="a p25" style="--x:1417;--y:2368;--w:463">Cerca de la naturaleza, hacia las montañas. Conjuntos cerrados, más silenciosos para las familias y quienes prefieren una zona con mayor tranquilidad.</p>
-    <div class="a ph" style="--x:963;--y:2619;--w:1027;--h:581">
-      <img class="pl" src="img/zona-4.webp" width="1448" height="1086" loading="lazy" decoding="async" style="--x:-0.31;--y:-62.52;--w:1027;--h:769.19" alt="Conjuntos residenciales junto a la quebrada, con vegetación y las montañas al fondo">
+    <div class="a rect" style="--x:960;--y:2120;--w:960;--h:560"></div>
+    <h3 class="zh"><span class="a zn" style="--x:1040;--y:2296">4</span> <span class="a zname" style="--x:1110;--y:2280;--w:400">Residencial junto <br>a la quebrada</span></h3>
+    <p class="a p25" style="--x:1040;--y:2400;--w:560">Cerca de la naturaleza, hacia las montañas. Conjuntos cerrados, más silenciosos para las familias y quienes prefieren una zona con mayor tranquilidad.</p>
+    <div class="a ph" style="--x:0;--y:2120;--w:961;--h:560">
+      <img class="pl" src="img/zona-4.webp" width="1448" height="1086" loading="lazy" decoding="async" style="--x:0;--y:-80;--w:960;--h:720" alt="Conjuntos residenciales junto a la quebrada, con vegetación y las montañas al fondo">
     </div>
   </article>
-
-  <div class="l1"><!--@pl:vive-lines-2@--></div>
-  <div class="l3"><!--@pl:vive-lines-3@-->
-<!--@pl:vive-lines-4@--></div>
+  <!--@river:vive@-->
 </section>
 
 <!-- Final 58 · Nuestra Visión: Siete Raíces (tarjetas animadas) -->
-<section class="vision" id="vision" aria-labelledby="vision-t">
+<section class="vision" id="vision" data-river="vision" aria-labelledby="vision-t">
   <h2 class="sr" id="vision-t">Nuestra Visión: Siete Raíces</h2>
   <div class="cda-raices" data-mode="scroll"></div>
+  <!--@river:vision@-->
   <ol class="raices-list sr">
     <li><h3>Escala humana</h3><p>Una ciudad diseñada desde el cuerpo: lo que se ve, se siente y se recorre.</p></li>
     <li><h3>Relaciones</h3><p>Plazas, parques y quebrada para encontrarnos con los vecinos y con la naturaleza.</p></li>
@@ -342,78 +345,80 @@
   </ol>
 </section>
 
-<!-- Final 59 · ¿Quién está detrás? -->
-<section class="sec equipo" id="equipo" style="--h:1080" aria-labelledby="equipo-t">
-  <!--@pl:equipo@-->
-  <h2 class="a hx equipo-t" id="equipo-t" style="--x:726;--y:73;--w:1100">¿Quién está detrás?</h2>
-  <div class="a pill pill-azul" style="--x:326;--y:89;--w:318;--h:81">Gerencia</div>
+<!-- Final 59 · ¿Quién está detrás? Three groups on one line from the river, each with its tiles either side of a stem -->
+<section class="sec equipo" id="equipo" data-river="equipo" style="--h:1080" aria-labelledby="equipo-t">
+  <!--@river:equipo@-->
+  <h2 class="a hl equipo-t" id="equipo-t" style="--x:230;--y:90;--w:1100">¿Quién está detrás?</h2>
 
   <div class="grp">
-    <h3 class="a pill pill-electrico" style="--x:326;--y:188;--w:318;--h:90">Infinito Urbano</h3>
+    <h3 class="a pill pill-lima" style="--x:230;--y:229.5;--w:347;--h:81">Gerencia</h3>
+    <p class="a pill pill-electrico" style="--x:230;--y:350;--w:347;--h:81">Infinito Urbano</p>
     <ul class="tiles">
-      <li class="a tile" style="--x:186;--y:318"><span class="nm" style="--ny:144">Juliana Árbelaez</span></li>
-      <li class="a tile" style="--x:454;--y:318"><span class="nm" style="--ny:144">Santiago Olarte</span></li>
-      <li class="a tile" style="--x:186;--y:544"><span class="nm" style="--ny:111">Diana Carolina Vergara</span></li>
-      <li class="a tile" style="--x:454;--y:544"><span class="nm" style="--ny:124">John <br>Edwar Morales</span></li>
+      <li class="a tile" style="--x:230;--y:451"><span class="nm">Juliana Árbelaez</span></li>
+      <li class="a tile" style="--x:427;--y:451"><span class="nm">Santiago Olarte</span></li>
+      <li class="a tile" style="--x:230;--y:671"><span class="nm">Diana Carolina Vergara</span></li>
+      <li class="a tile" style="--x:427;--y:671"><span class="nm">John <br>Edwar Morales</span></li>
     </ul>
   </div>
 
   <div class="grp">
-    <h3 class="a pill pill-lima" style="--x:820;--y:299;--w:318;--h:81">Diseño</h3>
+    <h3 class="a pill pill-lima" style="--x:786.5;--y:229.5;--w:347;--h:81">Diseño</h3>
     <ul class="tiles">
-      <li class="a tile" style="--x:636;--y:624"><span class="nm" style="--ny:141">Juanita Escobar Rossi</span></li>
-      <li class="a tile" style="--x:816;--y:624"><span class="nm" style="--ny:125">Luisa Brando <br>LBE</span></li>
-      <li class="a tile" style="--x:1067;--y:624"><span class="nm" style="--ny:109">Andrés Hernández <br><br>2 Latitudes</span></li>
+      <li class="a tile" style="--x:786.5;--y:350"><span class="nm">Juanita Escobar Rossi</span></li>
+      <li class="a tile" style="--x:786.5;--y:570"><span class="nm">Luisa Brando <br>LBE</span></li>
+      <li class="a tile" style="--x:983.5;--y:350"><span class="nm">Andrés Hernández <br>2 Latitudes</span></li>
     </ul>
   </div>
 
   <div class="grp">
-    <h3 class="a pill pill-lima" style="--x:1381;--y:299;--w:318;--h:81">Técnicos</h3>
+    <h3 class="a pill pill-lima" style="--x:1343;--y:229.5;--w:347;--h:81">Técnicos</h3>
     <ul class="tiles">
-      <li class="a tile" style="--x:1266;--y:395"><b class="rl" style="--ry:17">Movilidad</b><span class="nm" style="--ny:140">Humberto Gonzalez</span></li>
-      <li class="a tile" style="--x:1266;--y:606"><b class="rl" style="--ry:68">Movilidad</b><span class="nm" style="--ny:104">Juan Guillermo Zuluaga</span></li>
-      <li class="a tile" style="--x:1266;--y:818"><b class="rl" style="--ry:68">Vías</b><span class="nm" style="--ny:104">Fabian Tafur</span></li>
-      <li class="a tile" style="--x:1665;--y:470"><b class="rl" style="--ry:11">Agua</b><span class="nm" style="--ny:115">Andrés Martinez D <br>SHP</span></li>
-      <li class="a tile" style="--x:1665;--y:696"><b class="rl" style="--ry:23">Agua</b><span class="nm" style="--ny:111">Alejandra Acero <br>SHP</span></li>
+      <li class="a tile" style="--x:1343;--y:350"><b class="rl">Movilidad</b><span class="nm">Humberto Gonzalez</span></li>
+      <li class="a tile" style="--x:1343;--y:570"><b class="rl">Movilidad</b><span class="nm">Juan Guillermo Zuluaga</span></li>
+      <li class="a tile" style="--x:1343;--y:790"><b class="rl">Vías</b><span class="nm">Fabian Tafur</span></li>
+      <li class="a tile" style="--x:1540;--y:350"><b class="rl">Agua</b><span class="nm">Andrés Martinez D <br>SHP</span></li>
+      <li class="a tile" style="--x:1540;--y:570"><b class="rl">Agua</b><span class="nm">Alejandra Acero <br>SHP</span></li>
     </ul>
   </div>
 </section>
 
 <!-- Final 60 · Valla -->
-<section class="sec valla" style="--h:1080" aria-label="Campaña">
+<section class="sec valla" data-river="valla" style="--h:1080" aria-label="Campaña">
   <img class="pl ph" src="img/billboard.webp" width="1792" height="1008" loading="lazy" decoding="async" style="--x:0;--y:0;--w:1920;--h:1080" alt="Valla de Caminos del Agua con el lema «Una nueva ciudad en camino, pensada desde el agua»: un camino amarillo cruza un parque y niños juegan en un canal con fuentes">
+  <!--@river:valla@-->
 </section>
 
 <!-- Final 61 · Contáctenos -->
-<section class="sec contacto" id="contacto" style="--h:540" aria-labelledby="contacto-t">
-  <!--@pl:contacto@-->
-  <h2 class="a hx" id="contacto-t" style="--x:256;--y:172;--w:938">Contáctenos</h2>
-  <button class="a pill pill-azul pill-cta" type="button" data-interes="" style="--x:1399;--y:259;--w:318;--h:91">Formulario</button>
+<section class="sec contacto" id="contacto" data-river="contacto" style="--h:420" aria-labelledby="contacto-t">
+  <!--@river:contacto@-->
+  <h2 class="a hl" id="contacto-t" style="--x:230;--y:130;--w:938">Contáctenos</h2>
+  <button class="a pill pill-azul pill-cta" type="button" data-interes="" style="--x:1343;--y:229.5;--w:347;--h:81">Formulario</button>
 </section>
 
 <!-- Final 62 · Nuestros aliados -->
-<section class="sec aliados" id="aliados" style="--h:873" aria-labelledby="aliados-t">
-  <!--@pl:aliados@-->
-  <h2 class="a hx" id="aliados-t" style="--x:252;--y:87;--w:938">Nuestros aliados</h2>
+<section class="sec aliados" id="aliados" data-river="aliados" style="--h:800" aria-labelledby="aliados-t">
+  <!--@river:aliados@-->
+  <h2 class="a hl" id="aliados-t" style="--x:230;--y:84;--w:938">Nuestros aliados</h2>
   <!-- Aliados por confirmar: los nombres son los marcadores de la plantilla -->
   <ul class="tiles">
-    <li class="a tile" style="--x:345;--y:352"><span class="nm" style="--ny:141">John <br>Doe</span></li>
-    <li class="a tile" style="--x:547;--y:352"><span class="nm" style="--ny:141">John <br>Doe</span></li>
-    <li class="a tile" style="--x:750;--y:352"><span class="nm" style="--ny:141">John <br>Doe</span></li>
-    <li class="a tile" style="--x:953;--y:352"><span class="nm" style="--ny:141">John <br>Doe</span></li>
-    <li class="a tile" style="--x:1156;--y:352"><span class="nm" style="--ny:141">John <br>Doe</span></li>
-    <li class="a tile" style="--x:1483;--y:436"></li>
+    <li class="a tile" style="--x:230;--y:352"><span class="nm">John <br>Doe</span></li>
+    <li class="a tile" style="--x:492;--y:352"><span class="nm">John <br>Doe</span></li>
+    <li class="a tile" style="--x:754;--y:352"><span class="nm">John <br>Doe</span></li>
+    <li class="a tile" style="--x:1016;--y:352"><span class="nm">John <br>Doe</span></li>
+    <li class="a tile" style="--x:1278;--y:352"><span class="nm">John <br>Doe</span></li>
+    <li class="a tile" style="--x:1540;--y:352"></li>
   </ul>
-  <button class="a pill pill-azul pill-cta" type="button" data-interes="Quiero ser aliado" style="--x:1332;--y:695;--w:451;--h:91">¡Únete a nuestro proyecto!</button>
+  <button class="a pill pill-azul pill-cta" type="button" data-interes="Quiero ser aliado" style="--x:1239;--y:640;--w:451;--h:81">¡Únete a nuestro proyecto!</button>
 </section>
 
 </main>
 
 <!-- Final 63 · Pie de página -->
-<footer class="sec ftr" style="--h:291">
+<footer class="sec ftr" data-river="footer" style="--h:291">
   <a class="a ftr-logo" href="#inicio" style="--x:32;--y:180;--w:106.92" aria-label="Caminos del Agua, inicio"><img src="img/svg/footer-b4752.svg" alt="" width="107" height="68"></a>
   <!--@pl:footer@-->
-  <p class="a nav" style="--x:226;--y:224">© Caminos del Agua 2026</p>
+  <!--@river:footer@-->
+  <p class="a nav" style="--x:400;--y:224">© Caminos del Agua 2026</p>
   <nav aria-label="Pie de página">
     <a class="a nav" href="#equipo" style="--x:1178;--y:224">Quiénes somos</a>
     <a class="a nav" href="#ubicacion" style="--x:1427;--y:224">Ubicación</a>
@@ -421,7 +426,7 @@
     <a class="a nav" href="#contacto" style="--x:1775.66;--y:224">Contacto</a>
   </nav>
 </footer>
-
+<!--@river-ref@-->
 </div>
 
 <dialog class="form-dlg" id="formulario" aria-labelledby="form-t">
