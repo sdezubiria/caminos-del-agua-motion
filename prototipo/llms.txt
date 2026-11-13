@@ -8,7 +8,6 @@
 - Área: 40 ha.
 - Usos: comercio, usos mixtos, vivienda familiar, conjuntos cerrados, vivienda VIP, restaurantes y hoteles, equipamiento público, parque de agua y quebrada.
 - Lema: "Una nueva ciudad en camino, pensada desde el agua."
-- Gerencia: Infinito Urbano.
 
 ## ¿Por qué el agua?
 
@@ -36,12 +35,6 @@ Una diagonal de parques y plazas de agua lleva de lo más urbano a la naturaleza
 6. Economía: un barrio activo de día y de noche, con negocios cercanos.
 7. Tranquilidad: calles activas, andenes continuos, buena iluminación y ojos en la calle.
 
-## Equipo
-
-- Gerencia: Infinito Urbano.
-- Diseño: Juanita Escobar Rossi, Luisa Brando (LBE), Andrés Hernández (2 Latitudes).
-- Técnicos: movilidad, vías y agua (SHP).
-
 ## Páginas
 
-- [Inicio](/): presentación del proyecto, ubicación, zonas, visión, equipo y contacto.
+- [Inicio](/): presentación del proyecto, ubicación, zonas, visión y contacto.

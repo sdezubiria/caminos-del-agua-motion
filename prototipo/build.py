@@ -143,9 +143,14 @@ S['footer'] = [
 # The line is built from orthogonal polylines with rounded corners (radius R, as the Figma curves), so an S-bend
 # is two corners 2R apart. Each section gets the pieces of line that cross it, in an <svg class="river"> whose
 # viewBox is that slice of the page. CSS draws every piece from --rl, the length of river drawn so far (js/site.js).
-SECTIONS = [('hero', 1080), ('intro', 1080), ('trae', 1080), ('donde', 1080), ('ha', 540), ('usos', 1080),
-            ('porque', 540), ('agua', 1250), ('vive', 2680), ('vision', 2377), ('equipo', 1080), ('valla', 1080),
-            ('contacto', 420), ('aliados', 800), ('footer', 291)]
+ALL_SECTIONS = [('hero', 1080), ('intro', 1080), ('trae', 1080), ('donde', 1080), ('ha', 540), ('usos', 1080),
+                ('porque', 540), ('agua', 1250), ('vive', 2680), ('vision', 2377), ('equipo', 1080), ('valla', 1080),
+                ('contacto', 420), ('aliados', 800), ('footer', 291)]
+# Sections left out of the page for now (no content from the client yet). Remove a key to bring its section back:
+# the build then puts back the section, its menu and footer links, its river branches, and, for the team, its FAQ
+# entry and contributors in the JSON-LD and its lines in llms.txt.
+HIDE = {'equipo', 'aliados'}
+SECTIONS = [s for s in ALL_SECTIONS if s[0] not in HIDE]
 TOP, y0 = {}, 0
 for key, h in SECTIONS:
     TOP[key] = y0
@@ -314,24 +319,26 @@ branch(river, P('trae', C, 390.5), P('trae', C, 470.5), P('trae', 1335, 470.5))
 branch(river, P('trae', C, 526.5), P('trae', C, 606.5), P('trae', 657, 606.5))
 
 # ¿Quién está detrás?: a line from the rail through the three group pills, one stem per group between its tiles
-EQ_BUS, EQ_GX, EQ_W = 270, (230, 786.5, 1343), 347
-stems = [gx + EQ_W / 2 for gx in EQ_GX]
-stem_end = (771, 670, 890)
-bus = branch(river, P('equipo', RAIL, EQ_BUS - R), P('equipo', RAIL, EQ_BUS), P('equipo', stems[2], EQ_BUS),
-             P('equipo', stems[2], stem_end[2]))
-for sx, end in zip(stems[:2], stem_end[:2]):
-    branch(bus, P('equipo', sx - R, EQ_BUS), P('equipo', sx, EQ_BUS), P('equipo', sx, end))
+if 'equipo' not in HIDE:
+    EQ_BUS, EQ_GX, EQ_W = 270, (230, 786.5, 1343), 347
+    stems = [gx + EQ_W / 2 for gx in EQ_GX]
+    stem_end = (771, 670, 890)
+    bus = branch(river, P('equipo', RAIL, EQ_BUS - R), P('equipo', RAIL, EQ_BUS), P('equipo', stems[2], EQ_BUS),
+                 P('equipo', stems[2], stem_end[2]))
+    for sx, end in zip(stems[:2], stem_end[:2]):
+        branch(bus, P('equipo', sx - R, EQ_BUS), P('equipo', sx, EQ_BUS), P('equipo', sx, end))
 
 # Contáctenos: a branch to the form
 CT_BUS = 270
 branch(river, P('contacto', RAIL, CT_BUS - R), P('contacto', RAIL, CT_BUS), P('contacto', 1373, CT_BUS))
 
 # Nuestros aliados: a line along the six tiles, the last stem runs on to "¡Únete a nuestro proyecto!"
-AL_BUS, AL_TILES = 224, [230 + i * 262 + 75 for i in range(6)]
-al = branch(river, P('aliados', RAIL, AL_BUS - R), P('aliados', RAIL, AL_BUS), P('aliados', AL_TILES[-1], AL_BUS),
-            P('aliados', AL_TILES[-1], 690))
-for cx in AL_TILES[:-1]:
-    branch(al, P('aliados', cx - R, AL_BUS), P('aliados', cx, AL_BUS), P('aliados', cx, 452))
+if 'aliados' not in HIDE:
+    AL_BUS, AL_TILES = 224, [230 + i * 262 + 75 for i in range(6)]
+    al = branch(river, P('aliados', RAIL, AL_BUS - R), P('aliados', RAIL, AL_BUS), P('aliados', AL_TILES[-1], AL_BUS),
+                P('aliados', AL_TILES[-1], 690))
+    for cx in AL_TILES[:-1]:
+        branch(al, P('aliados', cx - R, AL_BUS), P('aliados', cx, AL_BUS), P('aliados', cx, 452))
 
 
 
@@ -427,6 +434,38 @@ for key, parts in S.items():
 html = html.replace('<!--@logo@-->', logo_svg()).replace('@SITE@', SITE)
 
 
+def hide_sections(html):
+    """Leave the HIDE sections out: the section, the links to it, and (for the team) what the JSON-LD says about it."""
+    for key in HIDE:
+        html, n = re.subn(rf'<!--[^\n]*-->\n<section class="sec {key}" id="{key}".*?</section>\n\n', '', html, flags=re.S)
+        assert n == 1, f'section {key} not found'
+        html = re.sub(rf'\s*<li><a href="#{key}">[^<]*</a></li>', '', html)
+        html = re.sub(rf'\s*<a class="a nav" href="#{key}"[^>]*>[^<]*</a>', '', html)
+    if 'equipo' in HIDE:
+        # Google asks that FAQ answers be visible on the page; the team is not, so its question and credits go too
+        m = re.search(r'(<script type="application/ld\+json">\n)(.*?)(\n</script>)', html, re.S)
+        ld = json.loads(m.group(2))
+        for node in ld['@graph']:
+            node.pop('contributor', None)
+            if node['@type'] == 'FAQPage':
+                node['mainEntity'] = [q for q in node['mainEntity'] if 'Quién está detrás' not in q['name']]
+        html = html[:m.start(2)] + json.dumps(ld, ensure_ascii=False, indent=2) + html[m.end(2):]
+    return html
+
+
+def llms_txt():
+    """llms.txt from llms.src.txt, without the team while its section is hidden."""
+    txt = (here / 'llms.src.txt').read_text()
+    if 'equipo' in HIDE:
+        txt = re.sub(r'\n## Equipo\n.*?\n(?=## )', '\n', txt, flags=re.S)
+        txt = txt.replace('- Gerencia: Infinito Urbano.\n', '').replace('visión, equipo y contacto', 'visión y contacto')
+    return txt
+
+
+html = hide_sections(html)
+(here / 'llms.txt').write_text(llms_txt())
+
+
 def add_srcset(html):
     """Photos that have a lighter img/<name>-800.webp version get srcset and sizes, so phones download that one.
     sizes: full width under 900 px; on desktop, the image's width on the 1920 frame (--w) as a share of the window."""
@@ -452,7 +491,7 @@ for key, h in SECTIONS:
     html = html.replace(f'<!--@river:{key}@-->', river_svg(key))
     if key != 'vision':   # the Siete Raíces cards keep their own 1920:2377 frame
         assert re.search(rf'data-river="{key}"[^>]*--h:{h}"', html), f'section {key} should be {h} tall'
-html = html.replace('@RIVER_COLORS@', json.dumps(COLORS).replace('"', '&quot;'))
+html = html.replace('@RIVER_COLORS@', json.dumps({k: c for k, c in COLORS.items() if k not in HIDE}).replace('"', '&quot;'))
 html = html.replace('<!--@river-ref@-->', river_ref()).replace('@RIVER_TOTAL@', num(TOTAL)).replace('@RIVER_W@', num(STROKE))
 (here / 'js/siete-raices.js').write_text(cards_js())
 # Version the CSS and JS links by content, so a new build is never served from a stale cache
