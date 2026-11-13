@@ -456,7 +456,7 @@ html = html.replace('@RIVER_COLORS@', json.dumps(COLORS).replace('"', '&quot;'))
 html = html.replace('<!--@river-ref@-->', river_ref()).replace('@RIVER_TOTAL@', num(TOTAL)).replace('@RIVER_W@', num(STROKE))
 (here / 'js/siete-raices.js').write_text(cards_js())
 # Version the CSS and JS links by content, so a new build is never served from a stale cache
-for asset in ('css/site.css', 'js/site.js', 'js/siete-raices.js'):
+for asset in ('css/site.css', 'js/site.js', 'js/siete-raices.js', 'favicon.svg'):
     v = hashlib.sha1((here / asset).read_bytes()).hexdigest()[:8]
     html = html.replace(f'"{asset}"', f'"{asset}?v={v}"')
 left = re.findall(r'<!--@[^>]*@-->', html)
