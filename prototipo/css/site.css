@@ -155,6 +155,12 @@ button.pill:hover, a.pill:hover, .cta:hover { filter: brightness(1.08); transfor
 
 .valla { background: #8a8378; }
 .contacto { background: var(--niebla); }
+.datos { display: flex; gap: calc(120 * var(--u)); margin: 0; }
+.datos div { display: grid; gap: calc(10 * var(--u)); }
+.datos dt { font: 400 calc(20 * var(--u)) / 1 var(--josefin); text-transform: uppercase; letter-spacing: .02em; color: var(--azul); }
+.datos dd { margin: 0; font: 400 calc(32 * var(--u)) / 1.1 var(--grotesk); letter-spacing: -.02em; }
+.datos a { color: var(--noche); text-decoration: none; }
+.datos a:hover { text-decoration: underline; text-underline-offset: .2em; }
 .aliados { background: var(--lima); }
 .ftr { background: var(--niebla); }
 .ftr-logo img { display: block; width: 100%; height: auto; }
@@ -266,6 +272,9 @@ button.pill:hover, a.pill:hover, .cta:hover { filter: brightness(1.08); transfor
   .valla img.ph { margin: 0; width: 100%; aspect-ratio: 16 / 9; }
 
   .contacto .pill, .aliados .pill-cta { display: inline-flex; margin-top: 28px; }
+  .datos { flex-direction: column; gap: 20px; margin-top: 28px; }
+  .datos dt { font-size: 13px; }
+  .datos dd { font-size: 19px; overflow-wrap: anywhere; }
   .aliados .tiles { margin-top: 28px; }
 
   .ftr { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px; padding: 40px 20px; }

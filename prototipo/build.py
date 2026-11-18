@@ -145,7 +145,7 @@ S['footer'] = [
 # viewBox is that slice of the page. CSS draws every piece from --rl, the length of river drawn so far (js/site.js).
 ALL_SECTIONS = [('hero', 1080), ('intro', 1080), ('trae', 1080), ('donde', 1080), ('ha', 540), ('usos', 1080),
                 ('porque', 540), ('agua', 1250), ('vive', 2680), ('vision', 2377), ('equipo', 1080), ('valla', 1080),
-                ('contacto', 420), ('aliados', 800), ('footer', 291)]
+                ('contacto', 540), ('aliados', 800), ('footer', 291)]
 # Sections left out of the page for now (no content from the client yet). Remove a key to bring its section back:
 # the build then puts back the section, its menu and footer links, its river branches, and, for the team, its FAQ
 # entry and contributors in the JSON-LD and its lines in llms.txt.
@@ -276,13 +276,15 @@ class Branch(Line):
         self.k = k
 
 
-# The g of the logo: viewBox 170 85 475 425 drawn 770 wide at (656, 244). The river channel in the g (mask
+# The g of the logo: viewBox 170 85 475 425 drawn 770 wide at (LOGO_X, 244), centred on the 1920 frame
+# (Figma had it at 656, centred on the hero panel rather than the page). The river channel in the g (mask
 # cdaMaskRio in cargo/logo-corriente.html) ends in a straight cut from (320.44, 472.48) to (306.15, 481.75).
 # The line starts flush on that cut, as wide as the channel and square to it, then curls left and down.
 LS = 770 / 475
 CUT = ((320.44, 472.48), (306.15, 481.75))
 cut_w = math.dist(*CUT)                                            # 17.03 logo units: the channel width
-gx = 656 + ((CUT[0][0] + CUT[1][0]) / 2 - 170) * LS
+LOGO_X = (1920 - 770) / 2                                          # 575
+gx = LOGO_X + ((CUT[0][0] + CUT[1][0]) / 2 - 170) * LS
 gy = 244 + ((CUT[0][1] + CUT[1][1]) / 2 - 85) * LS
 tx, ty = (CUT[0][1] - CUT[1][1]) / cut_w, (CUT[1][0] - CUT[0][0]) / cut_w   # square to the cut, out of the g
 assert tx < 0 and ty < 0
