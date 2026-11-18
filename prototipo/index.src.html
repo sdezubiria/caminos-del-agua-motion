@@ -186,18 +186,20 @@
 
 <!-- Final 50 · Paseo -->
 <section class="sec intro" data-river="intro" style="--h:1080" aria-labelledby="intro-t">
-  <h2 class="sr" id="intro-t">Una nueva ciudad en camino, pensada desde el agua</h2>
+  <h2 class="intro-t" id="intro-t">Una nueva ciudad en camino, pensada desde el agua.</h2>
   <div class="pl ph" style="--x:-22;--y:-16;--w:1954;--h:1096;transform:scale(-1,1)">
     <img class="pl" src="img/walk-photo.webp" width="1200" height="800" fetchpriority="high" decoding="async" style="--x:-15.83;--y:-12.71;--w:1954;--h:1302.82" alt="Personas caminando por un sendero junto a un parque con humedales, árboles y un puente de madera">
   </div>
   <div class="pl fade" style="--x:0;--y:0;--w:1920;--h:1080"></div>
   <!--@river:intro@-->
+  <!--@mriver:intro@-->
 </section>
 
 <!-- Final 51 · ¿Qué te trae por aquí? -->
 <section class="sec trae" id="que-te-trae" data-river="trae" style="--h:1080" aria-labelledby="trae-t">
   <!--@pl:trae@-->
   <!--@river:trae@-->
+  <!--@mriver:trae@-->
   <h2 class="a hl" id="trae-t" style="--x:230;--y:199;--w:560">¿Qué te trae por aquí?</h2>
   <ul class="trae-opts">
     <li><button class="a pill pill-azul" type="button" data-interes="Busco mi casa" style="--x:806;--y:309;--w:347;--h:81">Busco mi casa</button></li>
@@ -210,14 +212,13 @@
 
 <!-- Final 53 · ¿Dónde estamos? -->
 <section class="sec donde" id="ubicacion" data-river="donde" style="--h:1080" aria-labelledby="donde-t">
+  <div class="donde-map frame">
   <div class="pl ph bg" style="--x:-408;--y:-68;--w:2791;--h:1160">
     <img class="pl" src="img/aerial-photo.webp" width="2200" height="894" loading="lazy" decoding="async" style="--x:-262.63;--y:-90.25;--w:3434.33;--h:1393.86" alt="Vista aérea del valle de Ibagué con las montañas al fondo y la ubicación de Caminos del Agua junto a la vía al aeropuerto">
   </div>
   <div class="pl deco scrim" style="--x:0;--y:0;--w:1920;--h:1080"></div>
   <!--@pl:donde@-->
   <!--@river:donde@-->
-  <h2 class="a hl" id="donde-t" style="--x:230;--y:171;--w:606">¿Dónde <br>estamos?</h2>
-  <p class="a p30 lead" style="--x:230;--y:350;--w:500">Sobre la vía al Aeropuerto Perales, Caminos del Agua está estratégicamente ubicado. Cerca a vías principales como la 103 y la 117, la zona cuenta con paisajes inolvidables y naturaleza accesible.</p>
   <ul class="map-labels" aria-label="Referencias del mapa">
     <li class="a deco map-here" style="--x:942;--y:457;--w:289">Caminos del Agua</li>
     <li class="a deco lbl" style="--x:1323;--y:519;--w:206">Aeropuerto <br>Perales</li>
@@ -225,11 +226,16 @@
     <li class="a deco lbl lbl-up" style="--x:1042;--y:568;--w:60;--h:104"><span>Cll 103</span></li>
     <li class="a deco lbl lbl-tilt" style="--x:1054;--y:793;--w:210.77;--h:79.3"><span>Vía Aeropuerto</span></li>
   </ul>
+  </div>
+  <!--@mriver:donde@-->
+  <h2 class="a hl" id="donde-t" style="--x:230;--y:171;--w:606">¿Dónde <br>estamos?</h2>
+  <p class="a p30 lead" style="--x:230;--y:350;--w:500">Sobre la vía al Aeropuerto Perales, Caminos del Agua está estratégicamente ubicado. Cerca a vías principales como la 103 y la 117, la zona cuenta con paisajes inolvidables y naturaleza accesible.</p>
 </section>
 
 <!-- Final 52 · 40 ha -->
 <section class="sec ha" id="proyecto" data-river="ha" style="--h:540" aria-labelledby="ha-t">
   <!--@river:ha@-->
+  <!--@mriver:ha@-->
   <h2 class="a stat" id="ha-t" style="--x:222;--y:183;--w:760">40 ha</h2>
   <div class="a p30 copy" style="--x:1040;--y:171;--w:640">
     <p>Proponemos una pieza de ciudad donde vivienda, comercio, servicios y espacios públicos se complementan.</p>
@@ -240,6 +246,8 @@
 <!-- Final 55 · Usos -->
 <section class="sec usos" data-river="usos" style="--h:1080" aria-labelledby="usos-t">
   <h2 class="sr" id="usos-t">Usos del proyecto</h2>
+  <div class="hs" aria-label="Render del proyecto: desliza para ver todos los usos">
+  <div class="hs-in frame">
   <img class="pl ph" src="img/render-photo.webp" width="1792" height="1008" loading="lazy" decoding="async" style="--x:-298;--y:0;--w:2361.95;--h:1241.06" alt="Render aéreo de Caminos del Agua: manzanas de vivienda y comercio alrededor de un parque de agua, con la cordillera al fondo">
   <div class="pl deco shade" style="--x:-17;--y:0;--w:1944;--h:1245"></div>
   <!--@pl:usos@-->
@@ -255,11 +263,16 @@
     <li class="a lbl" style="--x:1247;--y:348;--w:210">Restaurantes/ <br>hoteles</li>
     <li class="a lbl" style="--x:1569;--y:360;--w:210">Vivienda VIP</li>
   </ul>
+  </div>
+  </div>
+  <div class="hs-bar m-only" aria-hidden="true"><span></span></div>
+  <!--@mriver:usos@-->
 </section>
 
 <!-- Final 54 · ¿Por qué el agua? -->
 <section class="sec porque" id="por-que-el-agua" data-river="porque" style="--h:540" aria-labelledby="porque-t">
   <!--@river:porque@-->
+  <!--@mriver:porque@-->
   <h2 class="a hl" id="porque-t" style="--x:230;--y:190;--w:600">¿Por qué <br>el agua?</h2>
   <div class="a p30 copy" style="--x:1040;--y:198;--w:640">
     <p>Colombia es el cuarto país con más agua del mundo. Cada vez hay más necesidad de planificar con el agua.</p>
@@ -267,15 +280,25 @@
   </div>
 </section>
 
-<!-- Final 56 · Espacio público / Esponja & Retención -->
+<!-- Final 56 · Espacio público / Esponja & Retención. On phones the two photos are Figma frames 26 and 27, side by side
+     in a sideways scroller: each keeps its labels, arrows and stretch of river -->
 <section class="sec agua" id="agua" data-river="agua" style="--h:1250" aria-labelledby="agua-t">
   <h2 class="sr" id="agua-t">Cómo gestiona el agua el proyecto</h2>
+  <div class="hs" aria-label="Cómo gestiona el agua el proyecto: desliza para ver los dos sistemas">
+  <div class="hs-in">
   <article class="agua-a">
     <div class="pl ph bg" style="--x:0;--y:0;--w:961;--h:1250">
       <img class="pl" src="img/photo-left.webp" width="1200" height="1800" loading="lazy" decoding="async" style="--x:-12;--y:-185.53;--w:973;--h:1459.6" alt="Niños jugando en un canal de agua lluvia que recorre una calle peatonal arborizada">
     </div>
     <h3 class="a hl" style="--x:230;--y:1000;--w:700">Espacio Público</h3>
     <p class="a p30" style="--x:230;--y:1099;--w:520">Sistema de recolección y tratamiento de aguas lluvias, diseño integrado al agua.</p>
+    <ul class="agua-labels" aria-label="Procesos del agua en el espacio público">
+      <li class="a lbl ma-c" style="--x:173;--y:110;--w:300;--mx:81;--my:131;--mw:165">Captación de <br>aguas lluvias</li>
+      <li class="a lbl ma-c" style="--x:173;--y:628;--w:300;--mx:79;--my:314;--mw:170">Filtración en <br>áreas verdes</li>
+      <li class="a lbl ma-r" style="--x:721;--y:825;--w:200;--mx:208;--my:441;--mw:177">Conducción <br>y tratamiento</li>
+    </ul>
+    <!--@marrows:a@-->
+    <!--@mriver:agua-a@-->
   </article>
   <article class="agua-b">
     <div class="pl ph bg" style="--x:960;--y:0;--w:960;--h:1250">
@@ -283,62 +306,66 @@
     </div>
     <h3 class="a hl" style="--x:1040;--y:797;--w:700">Esponja &amp; <br>Retención</h3>
     <p class="a p30" style="--x:1040;--y:968;--w:529">Sistema de prevención de inundaciones, de cuidado y conservación del agua.</p>
+    <ul class="agua-labels" aria-label="Procesos del agua en la quebrada">
+      <li class="a lbl" style="--x:1028;--y:272;--w:300;--mx:54;--my:70;--mw:206">Barrera contra <br>inundaciones</li>
+      <li class="a lbl ma-r" style="--x:1684;--y:414;--w:220;--mx:201;--my:221;--mw:180">Filtración por <br>vegetación</li>
+      <li class="a lbl" style="--x:1327;--y:653;--w:300;--mx:54;--my:324;--mw:200">Purificación y <br>flujo lento</li>
+      <li class="a lbl ma-r" style="--x:1646;--y:661;--w:260;--mx:212;--my:426;--mw:169">Infiltración <br>al suelo: <br>esponja</li>
+    </ul>
+    <!--@marrows:b@-->
+    <!--@mriver:agua-b@-->
   </article>
   <div class="pl deco shade" style="--x:0;--y:0;--w:1920;--h:1250"></div>
   <!--@pl:agua@-->
   <!--@river:agua@-->
-  <ul class="agua-labels" aria-label="Procesos del agua">
-    <li class="a lbl" style="--x:173;--y:110;--w:300">Captación de <br>aguas lluvias</li>
-    <li class="a lbl" style="--x:173;--y:628;--w:300">Filtración en <br>áreas verdes</li>
-    <li class="a lbl" style="--x:721;--y:825;--w:200">Conducción <br>y tratamiento</li>
-    <li class="a lbl" style="--x:1028;--y:272;--w:300">Barrera contra <br>inundaciones</li>
-    <li class="a lbl" style="--x:1684;--y:414;--w:220">Filtración por <br>vegetación</li>
-    <li class="a lbl" style="--x:1327;--y:653;--w:300">Purificación y <br>flujo lento</li>
-    <li class="a lbl" style="--x:1646;--y:661;--w:260">Infiltración <br>al suelo: <br>esponja</li>
-  </ul>
+  </div>
+  </div>
+  <div class="hs-bar m-only" aria-hidden="true"><span></span></div>
 </section>
 
-<!-- Final 57 · ¿Cómo se vive? Four rows split by the river: a coloured panel and a photo, alternating sides -->
-<section class="sec vive" id="como-se-vive" data-river="vive" style="--h:2680" aria-labelledby="vive-t">
-  <h2 class="a hl" id="vive-t" style="--x:230;--y:150;--w:640">¿Cómo se vive?</h2>
-  <p class="a p25 vive-intro" style="--x:1040;--y:150;--w:640">A través de 4 zonas, dirigidas con una diagonal de sucesión de parques y plazas de agua, el proyecto propone gradualmente transicionar de lo más urbano a la naturaleza. Donde cada zona tiene una oportunidad de vivir la ciudad diferente, ofreciendo espacio para todos.</p>
+<!-- Final 64 (in Final 57) · ¿Cómo se vive? Four cards, a panel over a photo, staggered either side of the river.
+     A stroke leaves the river along the top of each card (build.py); the corners it turns round are rounded. -->
+<section class="sec vive" id="como-se-vive" data-river="vive" style="--h:2960" aria-labelledby="vive-t">
+  <h2 class="a hl" id="vive-t" style="--x:1099;--y:203;--w:700">¿Cómo se vive?</h2>
+  <p class="a p25 vive-intro" style="--x:1099;--y:395;--w:640">A través de 4 zonas, dirigidas con una diagonal de sucesión de parques y plazas de agua, el proyecto propone gradualmente transicionar de lo más urbano a la naturaleza. Donde cada zona tiene una oportunidad de vivir la ciudad diferente, ofreciendo espacio para todos.</p>
 
-  <article class="zona" style="--bg:#F6EDA1">
-    <div class="a rect" style="--x:0;--y:440;--w:961;--h:560"></div>
-    <h3 class="zh"><span class="a zn" style="--x:230;--y:616">1</span> <span class="a zname" style="--x:300;--y:600;--w:400"><b>Eje Comercial</b><br><b>Av. Aeropuerto</b></span></h3>
-    <p class="a p25" style="--x:230;--y:720;--w:560">Zona comercial, punto de llegada y comienzo de la Diagonal del Agua. Es un frente urbano comercial, muy activo, conectado con el futuro CAN y la vía del aeropuerto.</p>
-    <div class="a ph" style="--x:960;--y:440;--w:960;--h:560">
-      <img class="pl" src="img/zona-1.webp" width="1600" height="1199" loading="lazy" decoding="async" style="--x:0;--y:-80;--w:960;--h:720" alt="Eje comercial de la avenida Aeropuerto con locales en primer piso, fuente y árboles">
+  <article class="zona zona-l" style="--bg:#F6EDA1">
+    <div class="a rect" style="--x:0;--y:230;--w:946;--h:310"></div>
+    <h3 class="zh"><span class="a zn" style="--x:64;--y:346">1</span> <span class="a zname" style="--x:130;--y:330;--w:300"><b>Eje Comercial</b><br><b>Av. Aeropuerto</b></span></h3>
+    <p class="a p25" style="--x:448;--y:330;--w:440">Zona comercial, punto de llegada y comienzo de la Diagonal del Agua. Es un frente urbano comercial, muy activo, conectado con el futuro CAN y la vía del aeropuerto.</p>
+    <div class="a ph" style="--x:0;--y:540;--w:946;--h:620">
+      <img class="pl" src="img/zona-1.webp" width="1600" height="1199" loading="lazy" decoding="async" style="--x:0;--y:0;--w:946;--h:620" alt="Eje comercial de la avenida Aeropuerto con locales en primer piso, fuente y árboles">
     </div>
   </article>
 
-  <article class="zona" style="--bg:#F6F1CD">
-    <div class="a rect" style="--x:960;--y:1000;--w:960;--h:560"></div>
-    <h3 class="zh"><span class="a zn" style="--x:1040;--y:1176">2</span> <span class="a zname" style="--x:1110;--y:1160;--w:400"><b>Peatonal</b><br><b>de uso mixto</b></span></h3>
-    <p class="a p25" style="--x:1040;--y:1280;--w:560">Eje vital peatonal entre edificios de uso mixtos como hoteles, restaurantes, cafés, bares, viviendas de apartamentos más pequeños que quieren estar dentro del ruido y la vitalidad.</p>
-    <div class="a ph" style="--x:0;--y:1000;--w:961;--h:560">
-      <img class="pl" src="img/zona-2.webp" width="1600" height="1186" loading="lazy" decoding="async" style="--x:0;--y:-76;--w:960;--h:712" alt="Calle peatonal de uso mixto con terrazas de restaurantes y cafés bajo los árboles">
+  <article class="zona zona-r" style="--bg:#F6F1CD">
+    <div class="a rect" style="--x:974;--y:830;--w:946;--h:310"></div>
+    <h3 class="zh"><span class="a zn" style="--x:1038;--y:946">2</span> <span class="a zname" style="--x:1104;--y:930;--w:300"><b>Peatonal</b><br><b>de uso mixto</b></span></h3>
+    <p class="a p25" style="--x:1422;--y:930;--w:440">Eje vital peatonal entre edificios de uso mixtos como hoteles, restaurantes, cafés, bares, viviendas de apartamentos más pequeños que quieren estar dentro del ruido y la vitalidad.</p>
+    <div class="a ph" style="--x:974;--y:1140;--w:946;--h:620">
+      <img class="pl" src="img/zona-2.webp" width="1600" height="1186" loading="lazy" decoding="async" style="--x:0;--y:0;--w:946;--h:620" alt="Calle peatonal de uso mixto con terrazas de restaurantes y cafés bajo los árboles">
     </div>
   </article>
 
-  <article class="zona" style="--bg:#CFCFAA">
-    <div class="a rect" style="--x:0;--y:1560;--w:961;--h:560"></div>
-    <h3 class="zh"><span class="a zn" style="--x:230;--y:1736">3</span> <span class="a zname" style="--x:300;--y:1720;--w:400">Residencial, <br>parque diagonal</span></h3>
-    <p class="a p25" style="--x:230;--y:1840;--w:560">Edificios y conjuntos de vivienda con acceso directo al parque en al menos dos esquinas. Una zona tranquila pero con vitalidad.</p>
-    <div class="a ph" style="--x:960;--y:1560;--w:960;--h:560;transform:scale(-1,1)">
-      <img class="pl" src="img/zona-3.webp" width="1600" height="1193" loading="lazy" decoding="async" style="--x:0;--y:-78;--w:960;--h:716" alt="Parque diagonal con senderos, agua y edificios de vivienda alrededor">
+  <article class="zona zona-l" style="--bg:#CFCFAA">
+    <div class="a rect" style="--x:0;--y:1430;--w:946;--h:310"></div>
+    <h3 class="zh"><span class="a zn" style="--x:64;--y:1546">3</span> <span class="a zname" style="--x:130;--y:1530;--w:300">Residencial, <br>parque diagonal</span></h3>
+    <p class="a p25" style="--x:448;--y:1530;--w:440">Edificios y conjuntos de vivienda con acceso directo al parque en al menos dos esquinas. Una zona tranquila pero con vitalidad.</p>
+    <div class="a ph ph-turn" style="--x:0;--y:1740;--w:946;--h:620">
+      <img class="pl" src="img/zona-3.webp" width="1600" height="1193" loading="lazy" decoding="async" style="--x:0;--y:0;--w:946;--h:620;transform:scale(-1,1)" alt="Parque diagonal con senderos, agua y edificios de vivienda alrededor">
     </div>
   </article>
 
-  <article class="zona" style="--bg:#BECFAA">
-    <div class="a rect" style="--x:960;--y:2120;--w:960;--h:560"></div>
-    <h3 class="zh"><span class="a zn" style="--x:1040;--y:2296">4</span> <span class="a zname" style="--x:1110;--y:2280;--w:400">Residencial junto <br>a la quebrada</span></h3>
-    <p class="a p25" style="--x:1040;--y:2400;--w:560">Cerca de la naturaleza, hacia las montañas. Conjuntos cerrados, más silenciosos para las familias y quienes prefieren una zona con mayor tranquilidad.</p>
-    <div class="a ph" style="--x:0;--y:2120;--w:961;--h:560">
-      <img class="pl" src="img/zona-4.webp" width="1448" height="1086" loading="lazy" decoding="async" style="--x:0;--y:-80;--w:960;--h:720" alt="Conjuntos residenciales junto a la quebrada, con vegetación y las montañas al fondo">
+  <article class="zona zona-r" style="--bg:#BECFAA">
+    <div class="a rect" style="--x:974;--y:2030;--w:946;--h:310"></div>
+    <h3 class="zh"><span class="a zn" style="--x:1038;--y:2146">4</span> <span class="a zname" style="--x:1104;--y:2130;--w:300">Residencial junto <br>a la quebrada</span></h3>
+    <p class="a p25" style="--x:1422;--y:2130;--w:440">Cerca de la naturaleza, hacia las montañas. Conjuntos cerrados, más silenciosos para las familias y quienes prefieren una zona con mayor tranquilidad.</p>
+    <div class="a ph" style="--x:974;--y:2340;--w:946;--h:620">
+      <img class="pl" src="img/zona-4.webp" width="1448" height="1086" loading="lazy" decoding="async" style="--x:0;--y:0;--w:946;--h:620" alt="Conjuntos residenciales junto a la quebrada, con vegetación y las montañas al fondo">
     </div>
   </article>
   <!--@river:vive@-->
+  <!--@mriver:vive@-->
 </section>
 
 <!-- Final 58 · Nuestra Visión: Siete Raíces (tarjetas animadas) -->
@@ -435,6 +462,7 @@
   <!--@pl:footer@-->
   <!--@river:footer@-->
   <p class="a nav" style="--x:470;--y:224">© Caminos del Agua 2026</p>
+  <a class="a nav priv-link" href="#privacidad" style="--x:770;--y:224">Política de privacidad</a>
   <nav aria-label="Pie de página">
     <a class="a nav" href="#equipo" style="--x:1178;--y:224">Quiénes somos</a>
     <a class="a nav" href="#ubicacion" style="--x:1427;--y:224">Ubicación</a>
@@ -461,12 +489,76 @@
       </select>
     </label>
     <label>Mensaje <textarea name="mensaje" rows="4"></textarea></label>
+    <label class="form-consent"><input type="checkbox" name="autorizo" required> <span>Autorizo a Infinito Urbano S.A.S. a tratar mis datos personales para responder mi solicitud y contarme sobre Caminos del Agua, según la <a class="priv-link" href="#privacidad">Política de privacidad</a>.</span></label>
     <div class="form-actions">
       <button class="pill pill-azul" value="enviar">Enviar</button>
       <button class="form-close" value="cerrar" formnovalidate>Cerrar</button>
     </div>
     <p class="form-ok" role="status" hidden>Gracias. En la versión final este mensaje llegará al equipo de Caminos del Agua.</p>
   </form>
+</dialog>
+
+<!-- Política de privacidad (Ley 1581 de 2012), from the consent box in the form and the footer -->
+<dialog class="form-dlg priv-dlg" id="privacidad" aria-labelledby="priv-t">
+  <div class="priv">
+    <h2 id="priv-t">Política de privacidad y tratamiento de datos personales</h2>
+    <p>Esta política explica cómo tratamos los datos personales que nos envías a través de este sitio, en cumplimiento de la Ley 1581 de 2012, el Decreto 1377 de 2013 (compilado en el Decreto 1074 de 2015) y los artículos 15 y 20 de la Constitución Política de Colombia.</p>
+
+    <h3>1. Responsable del tratamiento</h3>
+    <ul>
+      <li><b>Razón social:</b> Infinito Urbano S.A.S.</li>
+      <li><b>NIT:</b> 901.287.719-7</li>
+      <li><b>Domicilio:</b> Ibagué (Tolima), Hacienda Santa Rita, Vía Picaleña</li>
+      <li><b>Correo:</b> <a href="mailto:eliana.caicedo@infinitourbano.com">eliana.caicedo@infinitourbano.com</a></li>
+      <li><b>Teléfono:</b> <a href="tel:+573133366867">313 336 6867</a></li>
+      <li><b>Representante legal:</b> Santiago Olarte Buenaventura</li>
+      <li><b>Responsable de atender consultas y reclamos:</b> Eliana del Pilar Caicedo Barbosa, Asistente Administrativo</li>
+    </ul>
+
+    <h3>2. Qué datos recogemos</h3>
+    <p>Los que escribes en el formulario de contacto: nombre, correo electrónico, teléfono (opcional), el motivo de tu interés y tu mensaje. No pedimos datos sensibles ni datos de niñas, niños o adolescentes.</p>
+
+    <h3>3. Para qué los usamos</h3>
+    <ul>
+      <li>Responder tu solicitud y hacerle seguimiento.</li>
+      <li>Enviarte información sobre el proyecto Caminos del Agua: avances, lanzamientos, inmuebles disponibles y eventos.</li>
+      <li>Contactarte con fines comerciales relacionados con el proyecto, por correo, teléfono o mensajería.</li>
+      <li>Gestionar propuestas de alianza.</li>
+      <li>Elaborar estadísticas internas sobre el interés en el proyecto.</li>
+    </ul>
+    <p>No vendemos ni cedemos tus datos. Solo los usamos para estas finalidades.</p>
+
+    <h3>4. Autorización</h3>
+    <p>Al marcar la casilla de autorización y enviar el formulario nos das tu autorización previa, expresa e informada para tratar tus datos según esta política. Puedes revocarla en cualquier momento escribiendo al correo indicado arriba.</p>
+
+    <h3>5. Tus derechos</h3>
+    <p>Como titular de los datos tienes derecho a:</p>
+    <ul>
+      <li>Conocer, actualizar y rectificar tus datos.</li>
+      <li>Pedir prueba de la autorización que nos diste.</li>
+      <li>Saber, si lo pides, qué uso les hemos dado.</li>
+      <li>Revocar la autorización o pedir que suprimamos tus datos, cuando no exista un deber legal o contractual de conservarlos.</li>
+      <li>Acceder a ellos de forma gratuita.</li>
+      <li>Presentar quejas ante la Superintendencia de Industria y Comercio por infracciones a la ley, después de haber agotado el trámite de consulta o reclamo con nosotros.</li>
+    </ul>
+
+    <h3>6. Cómo ejercerlos</h3>
+    <p>Escribe a <a href="mailto:eliana.caicedo@infinitourbano.com">eliana.caicedo@infinitourbano.com</a> o llama al 313 336 6867, con tu nombre, tu documento de identidad, tu solicitud y un dato de contacto para responderte.</p>
+    <ul>
+      <li><b>Consultas:</b> respondemos en un máximo de diez (10) días hábiles. Si no es posible, te diremos por qué y responderemos en los cinco (5) días hábiles siguientes.</li>
+      <li><b>Reclamos</b> (corrección, actualización, supresión o incumplimiento): respondemos en un máximo de quince (15) días hábiles, prorrogables por ocho (8) días hábiles más si te avisamos el motivo. Si el reclamo está incompleto, te pediremos completarlo dentro de los cinco (5) días siguientes; si pasan dos (2) meses sin respuesta, entenderemos que desististe.</li>
+    </ul>
+
+    <h3>7. Quién más recibe tus datos</h3>
+    <p>Este sitio está alojado en Cargo, un proveedor con servidores en Estados Unidos. Cuando envías el formulario, Cargo nos reenvía tu mensaje por correo electrónico. Cargo y nuestro proveedor de correo actúan como encargados del tratamiento y solo procesan los datos para prestarnos ese servicio.</p>
+
+    <h3>8. Seguridad y conservación</h3>
+    <p>Tomamos medidas técnicas, humanas y administrativas razonables para proteger tus datos contra pérdida, consulta, uso o acceso no autorizado. Los conservamos mientras sean necesarios para las finalidades descritas o mientras exista una obligación legal de hacerlo, y después los suprimimos.</p>
+
+    <h3>9. Vigencia y cambios</h3>
+    <p>Esta política rige desde su publicación en este sitio, en noviembre de 2026. Si la cambiamos, publicaremos aquí la nueva versión antes de aplicarla.</p>
+    <form method="dialog" class="priv-actions"><button class="pill pill-azul" value="cerrar">Cerrar</button></form>
+  </div>
 </dialog>
 
 <script src="js/site.js" defer></script>

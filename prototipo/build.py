@@ -144,7 +144,7 @@ S['footer'] = [
 # is two corners 2R apart. Each section gets the pieces of line that cross it, in an <svg class="river"> whose
 # viewBox is that slice of the page. CSS draws every piece from --rl, the length of river drawn so far (js/site.js).
 ALL_SECTIONS = [('hero', 1080), ('intro', 1080), ('trae', 1080), ('donde', 1080), ('ha', 540), ('usos', 1080),
-                ('porque', 540), ('agua', 1250), ('vive', 2680), ('vision', 2377), ('equipo', 1080), ('valla', 1080),
+                ('porque', 540), ('agua', 1250), ('vive', 2960), ('vision', 2377), ('equipo', 1080), ('valla', 1080),
                 ('contacto', 540), ('aliados', 800), ('footer', 291)]
 # Sections left out of the page for now (no content from the client yet). Remove a key to bring its section back:
 # the build then puts back the section, its menu and footer links, its river branches, and, for the team, its FAQ
@@ -162,14 +162,14 @@ MID = 960       # the centre line through "¿Por qué el agua?", the water photo
 # into the next one over BLEND page px either side of the boundary. It starts in ink, as the logo.
 COLORS = {
     'hero': '#2A2222',      # tinta, as the logo
-    'intro': '#5571D1',     # azul
+    'intro': '#2A2222',     # tinta, as the loops in the phone frame 12 that the client chose for this photo
     'trae': '#5571D1',      # azul, as the pills it feeds
     'donde': '#DBF174',     # lima, on the dark aerial photo
     'ha': '#2D4545',        # pino, as "40 ha"
     'usos': '#DBF174',      # lima, on the render
     'porque': '#5571D1',    # azul, as the heading
     'agua': '#9ECFEB',      # cielo, between the two water photos
-    'vive': '#3A5930',      # bosque, as the zone text
+    'vive': '#9ECFEB',      # cielo, as the strokes around the zone cards in Figma (Final 64)
     'vision': '#2E3E76',    # noche, as "Nuestra Visión"
     'equipo': '#5571D1',    # azul
     'valla': '#5571D1',
@@ -178,7 +178,9 @@ COLORS = {
     'footer': '#5571D1',
 }
 BLEND = 160
-ON_PHOTO = {'intro', 'valla'}   # a dark line over a photo gets a light edge
+# Sections where the line gets a light edge over photos. Empty since 18 Nov: the client asked for the line
+# without the white edge over the render (GoodComments #12). Add a key back to bring the edge back there.
+ON_PHOTO = set()
 BRANCH_K = 2.5  # side branches draw this many times faster than the river, so they finish while still in view
 
 
@@ -294,16 +296,29 @@ ccx, ccy = gx + ty * CURL, gy - tx * CURL                          # centre of a
 turn = (math.atan2(ty, tx) - math.pi / 2) % (2 * math.pi)          # from the tail's heading round to straight down
 G_X = ccx - CURL
 
+# ¿Cómo se vive? (Figma Final 64): four cards, panel over photo, staggered left and right of the centre line.
+# A stroke leaves the centre line along the top of each card, and the line turns left under card 3.
+# The card corners that meet a stroke are rounded to its inner edge (R minus half the stroke).
+VIVE_TOP, VIVE_PANEL, VIVE_PHOTO = (230, 830, 1430, 2030), 310, 620
+VIVE_TURN = VIVE_TOP[2] + VIVE_PANEL + VIVE_PHOTO + 14
 river = Line(gx, gy).arc(CURL, 0, G_X, ccy, turn, ccx, ccy)
-A, B, C = G_X, G_X + 209, 1228       # intro S-bends, ending on the trunk of "¿Qué te trae por aquí?"
+# Over the walk photo the line makes the two loops of the phone frame (Figma "iPhone 16 & 17 Pro - 12"), at a radius
+# of LOOP_R: from the g, a loop to the left, back right, round under itself and out to the left, then down and
+# across to the trunk of "¿Qué te trae por aquí?" (C).
+LOOP_R = 110
+X2, C = G_X, 1228
+X1, X0 = X2 - 2 * LOOP_R, X2 - 4 * LOOP_R
 ib = lambda y: P('intro', 0, y)[1]
+L1, L2, L3 = 40, 40 + 2 * LOOP_R, 40 + 4 * LOOP_R
+river.to((X2, ib(L1)), (X1, ib(L1)), (X1, ib(L2)), (X2, ib(L2)), (X2, ib(L3)), (X1, ib(L3)), (X1, ib(L2)), (X0, ib(L2)),
+         (X0, ib(L3 + 40)), r=LOOP_R)
 river.to(
-    (A, ib(132)), (B, ib(132)), (B, ib(292)), (A, ib(292)), (A, ib(452)), (B, ib(452)), (B, ib(292)), (C, ib(292)),
+    (X0, ib(700)), (C, ib(700)),
     P('trae', C, 860.5), P('trae', RAIL, 860.5),                    # trunk, then left behind "Explora el proyecto"
     P('porque', RAIL, 80), P('porque', MID, 80),                    # down the rail, across "¿Por qué el agua?"
-    P('vision', MID, 80), P('vision', RAIL, 80),                    # down the centre of the water and the four zones
-    P('footer', RAIL, 291 + 40),                                    # the rail, past the roots, the team and the allies,
-)                                                                   # and off the bottom of the page
+    P('vive', MID, VIVE_TURN), P('vive', RAIL, VIVE_TURN),          # down the centre of the water and the zones, then
+    P('footer', RAIL, 291 + 40),                                    # left under zone 3 and down the rail, past the roots,
+)                                                                   # the team and the allies, and off the bottom
 TOTAL = river.len
 
 branches = []
@@ -319,6 +334,11 @@ def branch(parent, start, *pts, k=BRANCH_K):
 branch(river, P('trae', C, 269.5), P('trae', C, 349.5), P('trae', 1123, 349.5))
 branch(river, P('trae', C, 390.5), P('trae', C, 470.5), P('trae', 1335, 470.5))
 branch(river, P('trae', C, 526.5), P('trae', C, 606.5), P('trae', 657, 606.5))
+
+# ¿Cómo se vive?: the strokes along the top of the four cards, out to the page edge
+for i, top in enumerate(VIVE_TOP):
+    edge = -40 if i % 2 == 0 else 1960
+    branch(river, P('vive', MID, top - 14 - R), P('vive', MID, top - 14), P('vive', edge, top - 14), k=4)
 
 # ¿Quién está detrás?: a line from the rail through the three group pills, one stem per group between its tiles
 if 'equipo' not in HIDE:
@@ -374,6 +394,94 @@ def river_svg(sec):
         paths.insert(0, f'<rect x="117" y="{top}" width="28" height="{R * 2}" fill="#9ECFEB"/>')
     return (f'<svg class="river deco" viewBox="0 {top} 1920 {h}" preserveAspectRatio="none" aria-hidden="true" focusable="false">'
             + ''.join(paths) + '</svg>')
+
+
+# ---------- El río en el teléfono (Figma frames "iPhone 16 & 17 Pro" 11 to 27, 402 px wide) ----------
+# Under 900 px the line follows the phone frames instead of the desktop route. Each piece is an SVG in phone
+# units (402 wide, scaled to the screen width) or, along text that reflows, a straight run (.mr-run, CSS).
+# js/site.js draws each piece from its own position on screen (--p, 0 to 1). The radius is 85, as in Figma;
+# the loop over the walk photo uses the tighter 41.5 of frame 12.
+MR = 85
+TINTA, LIMA, CIELO = '#2A2222', '#DBF174', '#9ECFEB'
+
+
+def m_line(*pts, r=MR):
+    return Line(*pts[0]).to(*pts[1:], r=r)
+
+
+def m_svg(lines, color, h=874, cls=''):
+    paths = ''.join(f'<path d="{l if isinstance(l, str) else l.d(l.segs)}" pathLength="1"/>' for l in lines)
+    return (f'<svg class="mr m-only{" " + cls if cls else ""}" viewBox="0 0 402 {h}" style="--mh:{h};--mc:{color}" '
+            f'aria-hidden="true" focusable="false">{paths}</svg>')
+
+
+def m_run(x, color, top=0, bottom=0):
+    return f'<div class="mr mr-run m-only" style="--mx:{x};--mt:{top};--mb:{bottom};--mc:{color}" aria-hidden="true"></div>'
+
+
+# Frame 12: from the top, two S-loops, then down the left edge (x 33) into "¿Qué te trae por aquí?"
+LOOP = ('M200 0A41.5 41.5 0 0 1 158.5 41.5A41.5 41.5 0 0 0 117 83A41.5 41.5 0 0 0 158.5 124.5'
+        'A41.5 41.5 0 0 1 200 166A41.5 41.5 0 0 1 158.5 207.5A41.5 41.5 0 0 1 117 166'
+        'A42 42 0 0 0 75 124A42 42 0 0 0 33 166L33 874')
+MOBILE = {
+    'intro': m_svg([LOOP], TINTA),
+    # Frame 13: the trunk feeds the three pills; a second line comes in from the right edge, feeds the two
+    # buttons and leaves under "Explora el proyecto" for the left edge
+    'trae': m_svg([
+        m_line((33, 0), (33, 602), (130, 602)),
+        m_line((33, 229), (33, 314), (130, 314)),
+        m_line((33, 373), (33, 458), (130, 458)),
+        m_line((454, 437), (369, 437), (369, 794), (33, 794), (33, 900)),
+        m_line((369, 631), (369, 716), (284, 716)),
+    ], TINTA),
+    'donde': m_run(33, LIMA),
+    'ha': m_run(33, LIMA),
+    # Frame 16: down the left edge over the render, then an S-bend to the middle
+    'usos': m_svg([m_line((33, 0), (33, 789), (202, 789), (202, 874), r=84.5)], LIMA),
+    # Frame 17: from the middle to the right edge, then down it
+    'porque': m_svg([m_line((202, 0), (202, 85), (372, 85), (372, 170), r=85)], CIELO, 170) + m_run(372, CIELO, top=170),
+    # Frames 26 and 27, one per photo, side by side
+    'agua-a': m_svg([m_line((372, 0), (372, 85), (33, 85), (33, 874))], CIELO),
+    'agua-b': m_svg([m_line((33, 0), (33, 789), (372, 789), (372, 874))], CIELO),
+    # Frame 19: down the left edge, then an S-bend into the stem of the Siete Raíces cards in the middle
+    'vive': m_run(33, CIELO, bottom=170) + m_svg([m_line((33, 0), (33, 85), (201, 85), (201, 170), r=84)], CIELO, 170, 'mr-end'),
+}
+
+
+def m_arrows(dashed, curved):
+    """The white arrows over a water photo on phones (Figma frames 26 and 27), in phone units. dashed: (x, y, length),
+    straight down. curved: (x, y, w, h, kind) in the box Figma gives: 'over' rises from the left and drops on the right,
+    'dl' and 'dr' run down to the left or right."""
+    def head(ex, ey, cx, cy, size=7):
+        a = math.atan2(ey - cy, ex - cx)
+        pts = [(ex + size * math.cos(a + math.pi + t), ey + size * math.sin(a + math.pi + t)) for t in (-.55, .55)]
+        return f'M{num(pts[0][0])} {num(pts[0][1])}L{num(ex)} {num(ey)}L{num(pts[1][0])} {num(pts[1][1])}'
+    out = []
+    for x, y, h in dashed:
+        out.append(f'<path class="dash" d="M{num(x)} {num(y)}V{num(y + h)}"/><path d="{head(x, y + h, x, y)}"/>')
+    for x, y, w, h, kind in curved:
+        if kind == 'over':
+            sx, sy, cx, cy, ex, ey = x, y + h * .75, x + w * .55, y - h * .45, x + w, y + h
+        elif kind == 'dl':
+            sx, sy, cx, cy, ex, ey = x + w, y, x + w * .2, y + h * .2, x, y + h
+        else:
+            sx, sy, cx, cy, ex, ey = x, y, x + w * .8, y + h * .2, x + w, y + h
+        out.append(f'<path d="M{num(sx)} {num(sy)}Q{num(cx)} {num(cy)} {num(ex)} {num(ey)}"/><path d="{head(ex, ey, cx, cy)}"/>')
+    return ('<svg class="m-arrows m-only" viewBox="0 0 402 874" aria-hidden="true" focusable="false">'
+            + ''.join(out) + '</svg>')
+
+
+M_ARROWS = {
+    'a': m_arrows([(64, 146, 100), (171, 184, 100), (277, 146, 100), (379, 184, 100),
+                   (68, 349, 51), (134, 369, 51), (193, 369, 51), (262, 349, 51)],
+                  [(124, 558, 80, 46, 'over'), (241, 503, 30, 22, 'dr'), (188, 525, 60, 35, 'dr'), (325, 506, 55, 31, 'dl'),
+                   (282.7, 537, 40, 73, 'dl'), (222.5, 608, 41, 73, 'dl'), (185.4, 681, 30, 47, 'dl')]),
+    'b': m_arrows([(276, 281, 47), (374, 510, 47), (324, 352, 47), (370, 281, 47), (339, 153, 47), (68, 153, 47),
+                   (162, 153, 47), (110, 251, 47)],
+                  [(79, 233, 88, 48, 'over'), (62, 402, 88, 48, 'over'), (167, 383.5, 44.7, 44.4, 'dr'),
+                   (216, 472.5, 38, 39.7, 'dr'), (243, 545, 70.8, 50.8, 'dr'), (247.5, 280.5, 41.5, 35.6, 'dl'),
+                   (290.6, 176.9, 29.6, 28.6, 'dl')]),
+}
 
 
 def scroll_map(lag=.35, step=4, tol=.5):
@@ -489,6 +597,10 @@ html = add_srcset(html)
 m = re.search(r'src="img/walk-photo\.webp" srcset="([^"]+)" sizes="([^"]+)"', html)
 html = html.replace('href="img/walk-photo.webp" fetchpriority="high"><!--@srcset-preload@-->',
                     f'href="img/walk-photo.webp" imagesrcset="{m.group(1)}" imagesizes="{m.group(2)}" fetchpriority="high">')
+for key, svg in M_ARROWS.items():
+    html = html.replace(f'<!--@marrows:{key}@-->', svg)
+for key, piece in MOBILE.items():
+    html = html.replace(f'<!--@mriver:{key}@-->', piece)
 for key, h in SECTIONS:
     html = html.replace(f'<!--@river:{key}@-->', river_svg(key))
     if key != 'vision':   # the Siete Raíces cards keep their own 1920:2377 frame

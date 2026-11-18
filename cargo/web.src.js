@@ -28,6 +28,7 @@ addEventListener('click', e => {
   if (!el || !web.contains(el)) return;
   e.preventDefault();
   e.stopPropagation();
+  if (el.matches('dialog')) { if (!el.open) el.showModal(); return; }   // #privacidad
   // stopPropagation keeps the click from the menu's own listener, so close the menu here
   if (menu.contains(a) && !menu.hidden) setMenu(false);
   el.scrollIntoView({ behavior: still.matches ? 'auto' : 'smooth', block: 'start' });
@@ -75,6 +76,7 @@ form.addEventListener('submit', async e => {
   const correo = f.correo.value.trim();
   if (!nombre) { say('Escribe tu nombre.', true); f.nombre.focus(); return; }
   if (!EMAIL_RE.test(correo)) { say('Escribe un correo válido.', true); f.correo.focus(); return; }
+  if (!f.autorizo.checked) { say('Para enviar, autoriza el tratamiento de tus datos.', true); f.autorizo.focus(); return; }
   const message = [
     'Mensaje desde el formulario de Caminos del Agua',
     '',
@@ -84,7 +86,9 @@ form.addEventListener('submit', async e => {
     '¿Qué te trae por aquí?: ' + (f.interes.value || '—'),
     '',
     'Mensaje:',
-    f.mensaje.value.trim() || '—'
+    f.mensaje.value.trim() || '—',
+    '',
+    'Autorizó el tratamiento de sus datos según la Política de privacidad (Ley 1581 de 2012): sí'
   ].join('\n');
   enviar.disabled = true;
   enviar.textContent = 'Enviando…';
@@ -103,6 +107,9 @@ form.addEventListener('submit', async e => {
   }
 });
 dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
+// Política de privacidad (opened by the in-page link listener above)
+const priv = web.querySelector('#privacidad');
+priv.addEventListener('click', e => { if (e.target === priv) priv.close(); });
 
 // Siete Raíces: the prototype's script, with its relative image paths pointed at jsDelivr
 fetch(BASE + 'js/siete-raices.js').then(r => r.text()).then(code => {
@@ -112,9 +119,8 @@ fetch(BASE + 'js/siete-raices.js').then(r => r.text()).then(code => {
 });
 
 /* The river, as in site.js: --rl is the length drawn so far, from the (length, scroll target) pairs in
-   #river-map. On phones a thin line down the left edge draws instead (--mp, 0 to 1). */
+   #river-map. On phones the pieces that follow the phone frames (.mr) each draw from their place on screen (--p). */
 const page = web.querySelector('.cda-page');
-const main = web.querySelector('#contenido');
 const total = parseFloat(page.style.getPropertyValue('--rt'));
 const narrow = matchMedia('(max-width: 899px)');
 const AT = .62;
@@ -129,31 +135,32 @@ function lengthAt(t) {
   return L[lo] + (L[hi] - L[lo]) * (t - Y[lo]) / ((Y[hi] - Y[lo]) || 1);
 }
 function setVars(vars) { for (const k in vars) page.style.setProperty(k, vars[k]); }
-// The colours come in a JSON script tag: Cargo's published HTML cuts attributes that hold escaped quotes
-const COLORS = JSON.parse(web.querySelector('#river-colors').textContent);
-function mobileColors() {
-  const top = main.getBoundingClientRect().top, h = main.offsetHeight, stops = [];
-  let prev = null;
-  main.querySelectorAll('[data-river]').forEach(sec => {
-    const c = COLORS[sec.dataset.river], y = sec.getBoundingClientRect().top - top;
-    if (prev) stops.push(`${prev} ${Math.max(0, y - 60).toFixed(0)}px`, `${c} ${(y + 60).toFixed(0)}px`);
-    else stops.push(`${c} 0px`);
-    prev = c;
+const pieces = page.querySelectorAll('.mr');
+function mobileRiver(y, all) {
+  pieces.forEach(el => {
+    const r = el.getBoundingClientRect();
+    if (r.height) el.style.setProperty('--p', all ? 1 : clamp((y - r.top) / r.height).toFixed(3));
   });
-  page.style.setProperty('--mline', `linear-gradient(${stops.join(', ')}, ${prev} ${h}px)`);
 }
-let mobileH = 0;
+// Sideways scrollers on phones (render, water): the bar under each shows how far along you are
+web.querySelectorAll('.hs').forEach(hs => {
+  const bar = hs.parentElement.querySelector('.hs-bar');
+  if (!bar) return;
+  const set = () => {
+    const max = hs.scrollWidth - hs.clientWidth;
+    bar.style.setProperty('--hw', hs.scrollWidth ? (hs.clientWidth / hs.scrollWidth).toFixed(3) : 1);
+    bar.style.setProperty('--hp', max > 0 ? (hs.scrollLeft / max).toFixed(3) : 0);
+  };
+  hs.addEventListener('scroll', set, { passive: true });
+  addEventListener('resize', set);
+  set();
+});
 let ticking = false;
 function update() {
   ticking = false;
   const rest = document.documentElement.scrollHeight - innerHeight - scrollY;
   const at = AT + (1 - AT) * clamp(1 - rest / innerHeight);
-  if (narrow.matches) {
-    const r = main.getBoundingClientRect();
-    if (r.height !== mobileH) { mobileH = r.height; mobileColors(); }
-    setVars({ '--mp': still.matches || rest < 2 ? 1 : clamp((innerHeight * at - r.top) / r.height).toFixed(4) });
-    return;
-  }
+  if (narrow.matches) return mobileRiver(innerHeight * at, still.matches || rest < 2);
   if (still.matches) return setVars({ '--rl': total });
   const u = page.clientWidth / 1920;
   const rl = rest < 2 ? total : lengthAt((innerHeight * at - page.getBoundingClientRect().top) / u);

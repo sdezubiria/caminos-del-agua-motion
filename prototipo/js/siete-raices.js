@@ -13,11 +13,15 @@ const CSS = `
 .cda-r-bg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; user-select: none; pointer-events: none;
   -webkit-mask-image: linear-gradient(to bottom, #000 calc(var(--rv) * 100% - 4%), transparent calc(var(--rv) * 100%));
           mask-image: linear-gradient(to bottom, #000 calc(var(--rv) * 100% - 4%), transparent calc(var(--rv) * 100%)); }
-.cda-r-mob { display: none; position: relative; padding: 14svh 0 10svh; }
+.cda-r-mob { display: none; position: relative; padding: calc(5svh + 190px) 0 10svh; }
 .cda-raices.is-narrow .cda-r-desk { display: none; }
 .cda-raices.is-narrow .cda-r-mob { display: block; }
 .cda-r-stem { position: absolute; left: 50%; top: 0; bottom: 0; width: 10px; margin-left: -5px; background: var(--lima); border-radius: 0 0 5px 5px; transform-origin: 50% 0; transform: scaleY(var(--grow, 0)); }
-.cda-r-cap { position: absolute; left: 50%; top: 6svh; width: 96px; height: 30px; margin-left: -48px; border-radius: 15px; background: var(--lima); }
+/* Narrow screens: "Nuestra Visión:" on the left of the root, "Siete Raíces" in the pill on it (as on desktop) */
+.cda-r-title { position: absolute; left: 24px; top: 5svh; max-width: calc(50% - 34px); margin: 0; color: var(--noche);
+  font-size: min(36px, 9vw); font-weight: 600; line-height: .95; letter-spacing: -.04em; }
+.cda-r-cap { position: absolute; left: 50%; top: calc(5svh + 104px); height: 44px; padding: 4px 22px 0; translate: -50% 0; border-radius: 22px; background: var(--lima);
+  display: grid; place-items: center; box-sizing: border-box; color: #3A5930; font-size: 18px; font-weight: 600; letter-spacing: -.02em; white-space: nowrap; }
 .cda-r-item { position: relative; display: flex; flex-direction: column; align-items: center; margin: 0 auto 9svh; transition: opacity .7s var(--ease-out), translate .7s var(--ease-out); }
 .cda-r-item.is-hidden { opacity: 0; translate: 0 48px; }
 .cda-r-tag { width: 40px; height: 40px; margin-bottom: 14px; border-radius: 8px; background: var(--lima); color: var(--noche); display: grid; place-items: center; font-size: 24px; font-weight: 600; line-height: 1; padding-top: 4px; box-sizing: border-box; }
@@ -242,7 +246,7 @@ document.querySelectorAll('div.cda-raices').forEach(host => {
   /* Narrow screens: one root down the middle, one big card per row */
   const mob = document.createElement('div');
   mob.className = 'cda-r-mob';
-  mob.innerHTML = '<div class="cda-r-stem"></div><div class="cda-r-cap"></div>';
+  mob.innerHTML = '<div class="cda-r-stem"></div><p class="cda-r-title" aria-hidden="true">Nuestra Visión:</p><div class="cda-r-cap" aria-hidden="true">Siete Raíces</div>';
   const mobItems = CARDS.map(c => {
     const item = document.createElement('div');
     item.className = 'cda-r-item is-hidden';

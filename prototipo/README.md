@@ -20,8 +20,21 @@ One-page HTML prototype of the site, built from the Figma file *Caminos del Agua
 One line runs from the g of the logo down to the bottom of the page, and draws as you scroll, with round caps. It starts in ink, as the logo, and takes a palette colour in each section (`COLORS` in `build.py`), blending into the next colour across each section boundary.
 
 - `build.py` defines it as orthogonal polylines with rounded corners (radius 80) in page coordinates: on desktop the page is one 1920-wide frame, and each section starts at the sum of the heights above it (`SECTIONS`). Side branches (the pills in "¿Qué te trae por aquí?", the team groups, the form, the allies) leave the line tangentially.
-- Each section gets the pieces of line that cross it in an `<svg class="river">` placed above its photos and below its text and pills. Over photos the line gets a light edge (`ON_PHOTO`).
-- `js/site.js` sets `--rl` (length drawn) from the scroll position. Under `prefers-reduced-motion` the line is drawn in full. Under 900 px a thin line down the left edge draws instead.
+- Each section gets the pieces of line that cross it in an `<svg class="river">` placed above its photos and below its text and pills. `ON_PHOTO` can give the line a light edge over photos; it is empty since the client asked to drop the white edge (Nov 18).
+- `js/site.js` sets `--rl` (length drawn) from the scroll position. Under `prefers-reduced-motion` the line is drawn in full.
+- Over the walk photo the line makes the two loops of the phone frame 12 (`LOOP_R`), and in "¿Cómo se vive?" strokes leave it along the top of each card (Figma Final 64).
+
+## Phones (under 900 px)
+
+The phone layout follows the Figma frames "iPhone 16 & 17 Pro" 11 to 27 (402 px wide; `--m` is one of their pixels).
+
+- Inicio, the walk photo, "¿Qué te trae por aquí?", "¿Dónde estamos?", the render and the two water photos are fixed 402 × 874 frames scaled to the screen width. The other sections reflow.
+- The render and the two water photos scroll sideways, with a bar under them (`.hs`, `.hs-bar`).
+- The river is drawn per piece in phone units: `MOBILE` in `build.py` (SVG pieces and straight runs along reflowing text). Each piece draws as it crosses the same point on screen. The arrows over the water photos are `M_ARROWS`.
+
+## Privacy
+
+The form has a required consent box that links to the Política de privacidad (Ley 1581 de 2012), a dialog at the end of `index.src.html` (`#privacidad`), also linked from the footer.
 - If you change a section's height or move a pill, change `SECTIONS` or the route in `build.py` too. The build checks that each section's `--h` matches.
 
 ## Before going live

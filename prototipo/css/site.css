@@ -77,6 +77,9 @@ button.pill:hover, a.pill:hover, .cta:hover { filter: brightness(1.08); transfor
   stroke-dashoffset: calc(var(--l) * 1px - clamp(0px, (var(--rl) - var(--a)) * var(--k) * 1px, var(--l) * 1px)); }
 .river .rv-case { stroke: var(--niebla); stroke-width: calc(var(--rw, 27.6) * 1px + 10px); }
 .river-ref { position: absolute; left: 0; top: 0; visibility: hidden; pointer-events: none; }
+/* Phone-only pieces (the phone river, the scroll bars) and wrappers that only phones lay out */
+.m-only, .mr { display: none; }
+.donde-map, .hs, .hs-in { display: contents; }
 
 /* ---------- Inicio ---------- */
 .hero { background: var(--niebla); }
@@ -106,6 +109,7 @@ button.pill:hover, a.pill:hover, .cta:hover { filter: brightness(1.08); transfor
 /* ---------- Secciones ---------- */
 .intro { background: var(--niebla); }
 .intro .fade { background: linear-gradient(to bottom, var(--niebla) 0%, rgba(228, 238, 245, .1) 27.944%); }
+.intro-t { position: absolute; width: 1px; height: 1px; margin: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }  /* shown on phones */
 
 .trae { background: var(--lima); }
 .trae .hl { color: var(--bosque); }
@@ -131,11 +135,15 @@ button.pill:hover, a.pill:hover, .cta:hover { filter: brightness(1.08); transfor
 
 .agua { background: #233322; }
 .agua .shade { background: linear-gradient(rgba(9, 29, 21, .25), rgba(9, 29, 21, .35) 60%, rgba(9, 29, 21, .55)); }
-.agua h3, .agua article p { z-index: 1; color: #fff; }
+.agua h3, .agua article p, .agua-labels li { z-index: 1; color: #fff; }
 
 .vive { background: var(--niebla); }
 .vive .hl { color: var(--bosque); }
 .vive .rect { background: var(--bg); }
+/* The corners the strokes turn round (build.py) are rounded to the stroke's inner edge: R 80 minus half of 27.6 */
+.zona-l .rect { border-top-right-radius: calc(66 * var(--u)); }
+.zona-r .rect { border-top-left-radius: calc(66 * var(--u)); }
+.vive .ph-turn { border-bottom-right-radius: calc(66 * var(--u)); }
 .vive .ph img { object-fit: cover; }
 .zh { margin: 0; }
 .zn { font: 600 calc(90 * var(--u)) / .333 var(--josefin); letter-spacing: -.05em; color: var(--bosque); }
@@ -178,6 +186,22 @@ button.pill:hover, a.pill:hover, .cta:hover { filter: brightness(1.08); transfor
 .form .pill { min-height: 52px; padding: 0 28px; border-radius: 26px; font-size: 20px; }
 .form-close { padding: 12px 8px; font-weight: 500; text-decoration: underline; text-underline-offset: .2em; }
 .form-ok { margin: 0; padding: 14px 16px; border-radius: 14px; background: var(--lima); color: var(--bosque); font-weight: 500; }
+.form .form-consent { display: flex; gap: 10px; align-items: flex-start; font-weight: 400; font-size: 14px; line-height: 1.35; }
+.form .form-consent input { flex: none; width: 20px; height: 20px; margin: 0; padding: 0; accent-color: var(--azul); }
+.priv-link { color: var(--azul); text-decoration: underline; text-underline-offset: .15em; }
+.ftr .priv-link { color: #000; text-decoration: none; }
+
+/* ---------- Política de privacidad ---------- */
+.priv-dlg { width: min(760px, calc(100vw - 32px)); max-height: calc(100dvh - 48px); overflow: auto; }
+.priv { padding: 32px; font: 400 16px / 1.45 var(--grotesk); }
+.priv h2 { margin: 0 0 14px; font: 600 34px / 1.05 var(--josefin); letter-spacing: -.03em; color: var(--azul); }
+.priv h3 { margin: 24px 0 6px; font: 600 20px / 1.2 var(--josefin); letter-spacing: -.02em; color: var(--noche); }
+.priv p { margin: 0 0 10px; }
+.priv ul { list-style: disc; margin: 0 0 10px; padding-left: 22px; }
+.priv li { margin: 4px 0; }
+.priv a { color: var(--azul); }
+.priv-actions { margin-top: 24px; }
+.priv-actions .pill { min-height: 52px; padding: 0 28px; border-radius: 26px; font-size: 20px; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -190,10 +214,34 @@ button.pill:hover, a.pill:hover, .cta:hover { filter: brightness(1.08); transfor
   .sec { height: auto; padding: 72px 20px; }
   .a, .pl { position: relative; left: auto; top: auto; width: auto; height: auto; }
   .deco { display: none !important; }
-  /* The river becomes a thin line down the left edge that draws as you scroll */
-  main { position: relative; }
-  main::after { content: ""; position: absolute; left: 7px; top: 0; bottom: 0; z-index: 5; width: 4px;
-    background: var(--mline, var(--tinta)); clip-path: inset(0 0 calc((1 - var(--mp)) * 100%) 0 round 2px); pointer-events: none; }
+  /* Phones follow the Figma frames "iPhone 16 & 17 Pro" 11 to 27: --m is one Figma px of the 402 px frame */
+  .page { --m: calc(100cqw / 402); }
+  .m-only { display: block; }
+  /* The river: pieces in phone units (build.py), each drawn from its own place on screen (--p, js/site.js) */
+  .mr { display: block; position: absolute; left: 0; top: 0; z-index: 5; width: 100%; height: calc(var(--mh) * var(--m)); overflow: visible; pointer-events: none; }
+  .js .page .mr { --p: 0; }
+  .mr path { fill: none; stroke: var(--mc); stroke-width: 14; stroke-linecap: round; stroke-linejoin: round;
+    stroke-dasharray: 1 2; stroke-dashoffset: calc(1 - var(--p, 1)); opacity: clamp(0, var(--p, 1) * 40, 1); }
+  .mr.mr-end { top: auto; bottom: 0; }
+  .mr-run { left: calc((var(--mx) - 7) * var(--m)); top: calc(var(--mt) * var(--m)); bottom: calc(var(--mb) * var(--m)); width: calc(14 * var(--m)); height: auto;
+    background: var(--mc); clip-path: inset(0 0 calc((1 - var(--p, 1)) * 100%) 0); }
+  /* Figma frames inside a phone section keep their desktop layout, scaled (--u set per frame) */
+  .sec .frame .a, .sec .frame .pl { position: absolute; margin: 0; max-width: none; aspect-ratio: auto;
+    left: calc(var(--x) * var(--u)); top: calc(var(--y) * var(--u)); width: calc(var(--w) * var(--u)); height: calc(var(--h) * var(--u)); }
+  .sec .frame .deco { display: block !important; }
+  .sec .frame .river { display: none !important; }
+  .sec .frame ul { display: block; margin: 0; padding: 0; }
+  .sec .frame .lbl { padding: 0; border-radius: 0; background: none; color: #fff; font-size: calc(20 * var(--u)); line-height: 1; }
+  .sec .frame .lbl-agua { color: var(--cielo); }
+  .sec .frame br { display: inline; }
+  /* Sideways scrollers (render, water) with a bar that shows where you are */
+  .hs { display: block; position: relative; height: 100%; overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; scrollbar-width: none; }
+  .hs::-webkit-scrollbar { display: none; }
+  .hs-in { display: block; position: relative; height: 100%; }
+  .hs-bar { position: absolute; left: 50%; bottom: calc(24 * var(--m)); z-index: 6; width: calc(120 * var(--m)); height: 4px; margin-left: calc(-60 * var(--m));
+    border-radius: 2px; background: rgba(255, 255, 255, .4); overflow: hidden; pointer-events: none; }
+  .hs-bar span { display: block; width: calc(var(--hw, .3) * 100%); height: 100%; border-radius: 2px; background: #fff;
+    translate: calc(var(--hp, 0) * (1 / var(--hw, .3) - 1) * 100%) 0; }
   .stat { font-size: clamp(88px, 28vw, 140px); }
   .hl { font-size: clamp(40px, 11vw, 58px); }
   .p30 { font-size: 18px; line-height: 1.32; }
@@ -207,60 +255,104 @@ button.pill:hover, a.pill:hover, .cta:hover { filter: brightness(1.08); transfor
   .ph .pl { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
   img.ph { display: block; width: calc(100% + 40px); max-width: none; object-fit: cover; }
 
-  .hero { padding: 0 0 12vh; background: var(--panel); }
-  .hdr { display: flex; align-items: center; justify-content: space-between; padding: 18px 20px; }
-  .hdr-logo { width: 92px; }
+  /* Frame 11 · Inicio */
+  .hero { height: calc(874 * var(--m)); padding: 0; background: var(--niebla); }
+  .hdr { position: absolute; inset: 0 0 auto; z-index: 2; display: flex; align-items: flex-start; justify-content: space-between;
+    padding: calc(19 * var(--m)) calc(22 * var(--m)) 0 calc(19 * var(--m)); }
+  .hdr-logo { width: calc(86 * var(--m)); }
   .hdr-nav { display: none; }
-  .burger { width: 44px; height: 30px; }
-  .burger span:not(.sr) { width: 44px; height: 3px; }
-  .burger span:nth-child(1) { top: 3px; }
-  .burger span:nth-child(2) { top: 13px; }
-  .burger span:nth-child(3) { top: 23px; }
-  .hero-logo { width: min(84vw, 520px); margin: 7vh auto 0; }
+  .burger { width: calc(44 * var(--m)); height: calc(30 * var(--m)); margin-top: calc(8 * var(--m)); }
+  .burger span:not(.sr) { width: 100%; height: 3px; }
+  .burger span:nth-child(1) { top: 0; }
+  .burger span:nth-child(2) { top: calc(12 * var(--m)); }
+  .burger span:nth-child(3) { top: calc(24 * var(--m)); }
+  .hero .hero-logo { position: absolute; left: calc(43 * var(--m)); top: calc(300 * var(--m)); width: calc(316 * var(--m)); margin: 0; }
 
-  .intro { padding: 0; }
-  .intro .ph { --ar: 4 / 5; margin: 0; }
-  .intro .fade { position: absolute; inset: 0; }
+  /* Frame 12 · the walk photo, the river's two loops and the sentence */
+  .intro { height: calc(874 * var(--m)); padding: 0; }
+  .intro .ph { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; aspect-ratio: auto; }
+  .intro .ph .pl { object-position: 8% 50%; }
+  .intro .fade { display: none; }
+  .intro .intro-t { left: calc(64 * var(--m)); top: calc(250 * var(--m)); z-index: 6; width: calc(236 * var(--m)); height: auto; overflow: visible; clip-path: none; white-space: normal;
+    font: 600 calc(29 * var(--m)) / 1 var(--josefin); letter-spacing: -.045em; color: var(--tinta); }
 
-  .trae .hl { margin-bottom: 32px; }
-  .trae-opts { display: grid; gap: 12px; margin-bottom: 12px; }
-  .trae .pill, .trae .cta { width: 100%; }
-  .trae .cta { margin-top: 12px; }
+  /* Frame 13 · ¿Qué te trae por aquí? */
+  .trae { height: calc(874 * var(--m)); padding: 0; }
+  .trae .hl { position: absolute; left: calc(64 * var(--m)); top: calc(72 * var(--m)); width: calc(300 * var(--m)); margin: 0; font-size: calc(40 * var(--m)); }
+  .trae-opts li { display: contents; }
+  .trae .pill, .trae .cta { position: absolute; left: calc(95 * var(--m)); width: calc(211 * var(--m)); height: calc(59 * var(--m)); min-height: 0; margin: 0;
+    padding: 0 calc(12 * var(--m)); border-radius: 999px; font-size: calc(17 * var(--m)); line-height: 1.02; z-index: 6; }
+  .trae .cta { padding: 0 calc(34 * var(--m)) 0 calc(12 * var(--m)); font-size: calc(17 * var(--m)); }
+  .trae .cta span { right: calc(16 * var(--m)); font-size: calc(20 * var(--m)); }
+  .trae [data-interes="Busco mi casa"] { top: calc(285 * var(--m)); }
+  .trae [data-interes="Quiero ser aliado"] { top: calc(429 * var(--m)); }
+  .trae [data-interes="Quiero conocer el proyecto"] { top: calc(573 * var(--m)); }
+  .trae .cta-electrico { top: calc(687 * var(--m)); }
+  .trae .cta-rosa { top: calc(764 * var(--m)); }
+  .trae img.deco { display: block !important; position: absolute; }
+  .trae img[src*="icon-casas"] { left: calc(133 * var(--m)); top: calc(205 * var(--m)); width: calc(136 * var(--m)); height: calc(61 * var(--m)); }
+  .trae img[src*="icon-aliado"] { left: calc(176 * var(--m)); top: calc(360 * var(--m)); width: calc(49 * var(--m)); height: calc(55 * var(--m)); }
+  .trae img[src*="icon-lupa"] { left: calc(169 * var(--m)); top: calc(519 * var(--m)); width: calc(64 * var(--m)); height: calc(37 * var(--m)); }
 
-  .donde { min-height: 88svh; display: flex; flex-direction: column; justify-content: flex-start; padding-top: 96px; }
-  .donde .ph.bg { position: absolute; inset: 0; margin: 0; aspect-ratio: auto; z-index: -2; }
-  .donde::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(rgba(9, 29, 21, .55), rgba(9, 29, 21, .15) 70%); }
-  .donde .lead { margin-top: 20px; line-height: 1.32; }
+  /* Frame 14 · ¿Dónde estamos? The desktop map (photo, lines, labels) at 0.74 of its size, as in Figma */
+  .donde { height: calc(874 * var(--m)); padding: 0; }
+  .donde-map { display: block; position: absolute; --u: calc(.74 * var(--m)); left: calc(-609 * var(--m)); top: calc(43.5 * var(--m));
+    width: calc(1920 * var(--u)); height: calc(1080 * var(--u)); }
+  .donde .ph.bg { overflow: clip; }
+  .sec .donde-map .scrim { display: none !important; }
+  .donde::after { content: ""; position: absolute; inset: 0 0 auto; z-index: 1; height: calc(430 * var(--m)); pointer-events: none;
+    background: linear-gradient(rgba(9, 29, 21, .62), rgba(9, 29, 21, 0)); }
+  .donde .hl { position: absolute; left: calc(64 * var(--m)); top: calc(64 * var(--m)); z-index: 2; width: calc(320 * var(--m)); font-size: calc(44 * var(--m)); }
+  .donde .lead { position: absolute; left: calc(64 * var(--m)); top: calc(168 * var(--m)); z-index: 2; width: calc(312 * var(--m)); font-size: calc(16 * var(--m)); line-height: 1.32; }
+  .sec .donde-map .map-here { font-size: calc(35 * var(--u)); line-height: .857; color: var(--lima); }
+  .map-labels li:nth-child(1) { --x: 1113 !important; --y: 493 !important; --w: 170 !important; }
+  .map-labels li:nth-child(2) { --x: 1235 !important; --y: 563 !important; --h: 40 !important; rotate: -90deg; text-align: center; }
 
+  .ha { padding: 72px 24px 72px calc(64 * var(--m)); }
   .ha .copy { margin-top: 20px; }
 
-  .usos { padding: 0 0 40px; }
-  .usos img.ph { margin: 0; width: 100%; aspect-ratio: 4 / 3; }
-  .usos-list { display: flex; flex-wrap: wrap; gap: 8px; padding: 24px 20px 0; }
-  .usos-list .lbl { padding: 9px 14px 7px; border-radius: 99px; background: var(--niebla); color: var(--tinta); }
-  .usos-list .lbl-agua { background: var(--cielo); }
-  .usos-list br, .agua-labels br { display: none; }
+  /* Frame 16 · the render, sideways instead of turned (the desktop frame at the phone frame's height) */
+  .usos { height: calc(874 * var(--m)); padding: 0; }
+  .usos .hs-in { --u: calc(874 * var(--m) / 1080); width: calc(1920 * var(--u)); overflow: clip; }
 
+  .porque { padding: calc(190 * var(--m)) calc(64 * var(--m)) 72px 24px; }
   .porque .copy { margin-top: 20px; }
 
-  .agua { padding: 0; }
-  .agua article { position: relative; isolation: isolate; min-height: 82svh; display: flex; flex-direction: column; justify-content: flex-end; padding: 40px 20px; }
-  .agua .ph.bg { position: absolute; inset: 0; margin: 0; width: 100%; height: 100%; aspect-ratio: auto; z-index: -2; }
-  .agua article::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(to top, rgba(9, 29, 21, .8), rgba(9, 29, 21, .1) 65%); }
-  .agua article p { margin-top: 14px; }
-  .agua-labels { display: flex; flex-wrap: wrap; gap: 8px; padding: 24px 20px 32px; }
-  .agua-labels .lbl { padding: 9px 14px 7px; border-radius: 99px; background: rgba(255, 255, 255, .14); }
+  /* Frames 26 and 27 · the two water photos, one screen each, side by side */
+  .agua { height: calc(874 * var(--m)); padding: 0; }
+  .agua .hs { scroll-snap-type: x mandatory; }
+  .agua .hs-in { display: flex; width: calc(804 * var(--m)); }
+  .agua article { position: relative; isolation: isolate; flex: none; width: calc(402 * var(--m)); height: 100%; overflow: clip; scroll-snap-align: start; }
+  .agua .ph.bg { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; margin: 0; aspect-ratio: auto; }
+  .agua article::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(to top, rgba(9, 29, 21, .78), rgba(9, 29, 21, .12) 45%, rgba(9, 29, 21, .3)); }
+  .agua article h3 { position: absolute; left: calc(64 * var(--m)); top: calc(734 * var(--m)); width: calc(320 * var(--m)); font-size: calc(32 * var(--m)); }
+  .agua article p { position: absolute; left: calc(64 * var(--m)); top: calc(772 * var(--m)); width: calc(300 * var(--m)); font-size: calc(15 * var(--m)); line-height: 1.3; }
+  .agua-b h3 br { display: none; }
+  .agua .agua-b h3 { top: calc(614 * var(--m)); font-size: calc(30 * var(--m)); }
+  .agua .agua-b p { top: calc(652 * var(--m)); }
+  .agua-labels { margin: 0; }
+  .agua-labels li { position: absolute; left: calc(var(--mx) * var(--m)); top: calc(var(--my) * var(--m)); width: calc(var(--mw) * var(--m)); z-index: 3;
+    font: 400 calc(16 * var(--m)) / 1.05 var(--josefin); letter-spacing: .03em; }
+  .agua-labels .ma-c { text-align: center; }
+  .agua-labels .ma-r { text-align: right; }
+  .m-arrows { position: absolute; inset: 0; z-index: 2; width: 100%; height: 100%; pointer-events: none; }
+  .m-arrows path { fill: none; stroke: #fff; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+  .m-arrows .dash { stroke-dasharray: 5 5; }
 
-  .vive { padding: 72px 0 0; }
-  .vive .hl, .vive-intro { margin: 0 20px; }
+  /* ¿Cómo se vive? (frame 19: the river down the left edge, then into the Siete Raíces stem) */
+  .vive { padding: 72px 0 calc(170 * var(--m)); }
+  .vive .hl, .vive-intro { margin: 0 24px 0 calc(64 * var(--m)); }
   .vive-intro { margin-top: 20px; }
   .vive .rect { display: none; }
-  .zona { position: relative; margin-top: 40px; padding: 32px 20px 0; background: var(--bg); }
+  .zona { position: relative; margin-top: 40px; padding: 32px 24px 0 calc(64 * var(--m)); background: var(--bg); }
   .zona + .zona { margin-top: 0; }   /* the zones stack edge to edge, no strips of background between them */
   .zh { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
   .zn { font-size: 64px; line-height: 1; }
   .zname { font-size: 24px; line-height: 1; }
-  .zona .ph { margin: 24px -20px 0; }
+  .zona .ph { margin: 24px -24px 0 calc(-64 * var(--m)); border-radius: 0; }
+
+  .priv { padding: 24px 22px; }
+  .priv h2 { font-size: 28px; }
 
   .grp { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 32px; }
   .grp .pill { display: inline-flex; }
