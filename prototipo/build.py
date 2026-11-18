@@ -9,7 +9,7 @@ here = pathlib.Path(__file__).resolve().parent
 root = here.parent
 SVG = 'img/svg/'
 # Final domain is not decided yet: canonical, Open Graph, JSON-LD, robots.txt and sitemap.xml use this
-SITE = 'https://www.caminosdelagua.co'
+SITE = 'https://www.caminosdelagua.com.co'
 
 
 def num(v):

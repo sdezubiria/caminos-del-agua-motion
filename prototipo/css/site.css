@@ -271,7 +271,7 @@ button.pill:hover, a.pill:hover, .cta:hover { filter: brightness(1.08); transfor
   /* Frame 12 · the walk photo, the river's two loops and the sentence */
   .intro { height: calc(874 * var(--m)); padding: 0; }
   .intro .ph { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; aspect-ratio: auto; }
-  .intro .ph .pl { object-position: 8% 50%; }
+  .intro .ph .pl { object-position: 32% 50%; }
   .intro .fade { display: none; }
   .intro .intro-t { left: calc(64 * var(--m)); top: calc(250 * var(--m)); z-index: 6; width: calc(236 * var(--m)); height: auto; overflow: visible; clip-path: none; white-space: normal;
     font: 600 calc(29 * var(--m)) / 1 var(--josefin); letter-spacing: -.045em; color: var(--tinta); }

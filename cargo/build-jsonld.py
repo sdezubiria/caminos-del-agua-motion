@@ -12,7 +12,7 @@ HERE = Path(__file__).parent
 PROTO = HERE.parent / 'prototipo' / 'index.html'
 OUT = HERE / 'jsonld.html'
 
-CARGO = 'https://449156.cargo.site'
+CARGO = 'https://www.caminosdelagua.com.co'
 # Images uploaded in Cargo's Publish Settings (preview image) on 2026-11-17
 OG_IMAGE = 'https://freight.cargo.site/w/1200/i/E3235483773140029999971861867770/og-image.jpg'
 

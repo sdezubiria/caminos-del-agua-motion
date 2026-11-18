@@ -69,7 +69,7 @@ fonts = re.search(r'<link rel="stylesheet" href="(https://fonts\.googleapis\.com
 
 # Structured data from the prototype's <head>, pointed at the Cargo address (files at jsDelivr)
 PROTO_SITE = re.search(r"^SITE = '([^']+)'", (proto / 'build.py').read_text(), re.M).group(1)
-CARGO_SITE = 'https://449156.cargo.site'
+CARGO_SITE = 'https://www.caminosdelagua.com.co'   # the client's domain; connect it in Cargo > Settings > Domain
 ld = json.loads(re.search(r'<script type="application/ld\+json">(.*?)</script>', head, re.S).group(1))
 ld = json.loads(json.dumps(ld, ensure_ascii=False)
                 .replace(PROTO_SITE + '/favicon.svg', BASE + 'favicon.svg')

@@ -2,4 +2,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.caminosdelagua.co/sitemap.xml
+Sitemap: https://www.caminosdelagua.com.co/sitemap.xml

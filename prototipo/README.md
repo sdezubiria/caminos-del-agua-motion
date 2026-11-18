@@ -39,7 +39,7 @@ The form has a required consent box that links to the Política de privacidad (L
 
 ## Before going live
 
-- **Domain.** `SITE` in `build.py` is set to `https://www.caminosdelagua.co` as a placeholder. Change it, along with the URLs in `robots.txt` and `sitemap.xml`, then rebuild.
+- **Domain.** `SITE` in `build.py` (and `CARGO_SITE` in `../cargo/build-web.py`) is `https://www.caminosdelagua.com.co`, the client's domain. On 18 Nov it still showed a GoDaddy parking page: point it at Cargo (Cargo > Settings > Domain) so the canonical, Open Graph and JSON-LD URLs lead to the site. `robots.txt` and `sitemap.xml` use it too.
 - **Font.** The design uses Aktiv Grotesk (Adobe Fonts). Hanken Grotesk stands in for now. Add the Adobe Fonts kit to `<head>` and Aktiv Grotesk takes over automatically.
 - **Form.** "Formulario", "¡Únete a nuestro proyecto!" and the three "¿Qué te trae por aquí?" buttons open the form, but it doesn't send anything yet.
 - **Placeholders.** Team and ally tiles have no photos yet. The allies are still "John Doe" as in the template.
