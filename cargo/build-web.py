@@ -11,7 +11,9 @@ Images and the Siete Raíces script load from jsDelivr, which serves the GitHub 
 Rebuild after `python3 prototipo/build.py`, and push the prototype first if images changed.
 
 Cargo saves the page's live HTML and turns runs of spaces into non-breaking spaces, so the output has no
-indentation and no double spaces outside <pre>. Run: python3 cargo/build-web.py [commit]
+indentation and no double spaces outside <pre>. Run: python3 cargo/build-web.py [commit] [--site ID]
+--site builds the same page for another Cargo site: the form sends with that site's id (Cargo mails it to the
+recipient set in that site's Publish Settings > Contact Form) and the output is web-ID.html.
 """
 import hashlib
 import html as html_lib
@@ -25,7 +27,14 @@ here = Path(__file__).resolve().parent
 root = here.parent
 proto = root / 'prototipo'
 
-commit = sys.argv[1] if len(sys.argv) > 1 else subprocess.run(
+DEFAULT_SITE = 3758984   # 449156.cargo.site
+args = sys.argv[1:]
+site_id = DEFAULT_SITE
+if '--site' in args:
+    i = args.index('--site')
+    site_id = int(args[i + 1])
+    del args[i:i + 2]
+commit = args[0] if args else subprocess.run(
     ['git', '-C', str(root), 'rev-parse', 'origin/prototipo-web'], capture_output=True, text=True, check=True).stdout.strip()
 BASE = f'https://cdn.jsdelivr.net/gh/sdezubiria/caminos-del-agua-motion@{commit}/prototipo/'
 
@@ -157,9 +166,12 @@ css_loader = ('<script>(function(){var s=document.getElementById("cda-web-css")|
               'if(!s.parentNode)document.head.appendChild(s);})();</script>')
 assert '</' not in css
 page = f'<link rel="stylesheet" href="{fonts}">\n{jsonld}\n{css_loader}\n<div class="cda-web">\n{no_space_before_breaks(squeeze(body))}\n</div>'
+assert 'const SITE_ID = 3758984;' in js
+js = js.replace('const SITE_ID = 3758984;', f'const SITE_ID = {site_id};')
 version = hashlib.sha1((page + js + BASE).encode()).hexdigest()[:10]
 js = js.replace('@VERSION@', version).replace('@BASE@', BASE)
 assert '  ' not in page and '\t' not in page, 'double spaces left in the markup'
 out = f'{page}\n<script>\n{squeeze(js)}\n</script>\n'
-(here / 'web.html').write_text(out)
-print(f'web.html {len(out.encode())} bytes · version {version} · {BASE}')
+name = 'web.html' if site_id == DEFAULT_SITE else f'web-{site_id}.html'
+(here / name).write_text(out)
+print(f'{name} {len(out.encode())} bytes · site {site_id} · version {version} · {BASE}')
