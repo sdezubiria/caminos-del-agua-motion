@@ -78,13 +78,19 @@ fonts = re.search(r'<link rel="stylesheet" href="(https://fonts\.googleapis\.com
 
 # Structured data from the prototype's <head>, pointed at the Cargo address (files at jsDelivr)
 PROTO_SITE = re.search(r"^SITE = '([^']+)'", (proto / 'build.py').read_text(), re.M).group(1)
-CARGO_SITE = 'https://www.caminosdelagua.com.co'   # the client's domain; connect it in Cargo > Settings > Domain
+CARGO_SITE = 'https://caminosdelagua.com.co'   # the client's domain, as connected in Cargo (www and the cargo.site subdomain serve the same page, hence the canonical below)
 ld = json.loads(re.search(r'<script type="application/ld\+json">(.*?)</script>', head, re.S).group(1))
 ld = json.loads(json.dumps(ld, ensure_ascii=False)
                 .replace(PROTO_SITE + '/favicon.svg', BASE + 'favicon.svg')
                 .replace(PROTO_SITE + '/img/', BASE + 'img/')
                 .replace(PROTO_SITE, CARGO_SITE))
 jsonld = '<script type="application/ld+json">' + json.dumps(ld, ensure_ascii=False, separators=(',', ':')) + '</script>'
+# Cargo outputs no <link rel="canonical"> and its Meta Tags field takes only <meta>. The same page answers on
+# the apex, www and the cargo.site subdomain (all 200), so a script puts the canonical in <head>; Google reads
+# it when it renders the page.
+canonical = ('<script>(function(){var l=document.querySelector("link[rel=canonical]")||document.createElement("link");'
+             'l.rel="canonical";l.href="' + CARGO_SITE + '/";if(!l.parentNode)document.head.appendChild(l);})();</script>')
+jsonld += '\n' + canonical
 
 
 def squeeze(s):
